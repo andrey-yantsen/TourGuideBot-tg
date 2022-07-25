@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "tour_guide_bot"
+version = "0.0.1"
+description = ""
+authors = ["Andrey Yantsen <andrey@janzen.su>"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+python-telegram-bot = "^13.13"
+SQLAlchemy = "^1.4.39"
+psycopg2-binary = "^2.9.3"
+Babel = "^2.10.3"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "^1.5.7"
+
+[tool.poetry.scripts]
+bot = 'tour_guide_bot.cli:run'
+
+[build-system]
+requires = ["setuptools >= 40.6.0", "wheel", "poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
