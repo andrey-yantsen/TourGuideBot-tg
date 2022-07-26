@@ -1,0 +1,30 @@
+# Translations template for tour_guide_bot.
+# Copyright (C) 2022 Andrey Yantsen
+# This file is distributed under the same license as the tour_guide_bot
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: tour_guide_bot 3bbe140\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-07-26 11:33+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: tour_guide_bot/cli.py:12
+msgctxt "cli"
+msgid "Tour Guide bot [telegram]"
+msgstr "Tour Guide bot [telegram]"
+
+#: tour_guide_bot/cli.py:13
+msgctxt "cli"
+msgid "Enable debug logging."
+msgstr "Включить отладочное логирование."
+
