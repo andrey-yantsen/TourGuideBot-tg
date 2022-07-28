@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: tour_guide_bot 3bbe140\n"
+"Project-Id-Version: tour_guide_bot c3db83a\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-26 11:33+0100\n"
+"POT-Creation-Date: 2022-07-28 14:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,13 +18,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: tour_guide_bot/cli.py:12
+#: tour_guide_bot/cli.py:14
 msgctxt "cli"
 msgid "Tour Guide bot [telegram]"
 msgstr ""
 
-#: tour_guide_bot/cli.py:13
+#: tour_guide_bot/cli.py:15
 msgctxt "cli"
 msgid "Enable debug logging."
+msgstr ""
+
+#: tour_guide_bot/cli.py:16
+msgctxt "cli"
+msgid "Comma-separated list of available languages."
+msgstr ""
+
+#: tour_guide_bot/cli.py:18
+msgctxt "cli"
+msgid "Default language."
+msgstr ""
+
+#: tour_guide_bot/cli.py:20
+msgctxt "cli"
+msgid "Telegram Bot token for the Guide Bot."
+msgstr ""
+
+#: tour_guide_bot/cli.py:22
+msgctxt "cli"
+msgid "Telegram Bot token for the Admin Bot."
+msgstr ""
+
+#: tour_guide_bot/cli.py:24
+msgctxt "cli"
+msgid "SQLAlchemy engine URL"
+msgstr ""
+
+#: tour_guide_bot/cli.py:29
+msgctxt "cli"
+msgid "at least one of --guide-bot-token or --admin-bot-token is required"
 msgstr ""
 

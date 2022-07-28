@@ -3,9 +3,15 @@ import gettext
 import os
 from typing import Optional
 
-log = logging.getLogger('tour_guide_bot')
+log = logging.getLogger(__package__)
 
 __translations = {}
+fallback_locale = 'en'
+
+
+def set_fallback_locale(locale: str):
+    global fallback_locale
+    fallback_locale = locale
 
 
 def t(locale: Optional[str] = None) -> gettext.NullTranslations:
@@ -15,9 +21,9 @@ def t(locale: Optional[str] = None) -> gettext.NullTranslations:
     if locale is None:
         languages = None
     else:
-        languages = [locale, 'en']
+        languages = [locale, fallback_locale, 'en-GB']
 
     __translations[locale] = gettext.translation(__package__, os.path.dirname(
-        os.path.realpath(__file__)) + '/locales', languages=languages)
+        os.path.realpath(__file__)) + '/locales', fallback=True, languages=languages)
 
     return __translations[locale]
