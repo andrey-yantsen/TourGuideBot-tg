@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: English\n"
 "Language: en_US\n"
-"PO-Revision-Date: 2022-07-29 16:25\n"
+"PO-Revision-Date: 2022-07-29 20:11\n"
 
 #: tour_guide_bot/cli.py:14
 msgctxt "cli"
@@ -95,7 +95,7 @@ msgstr "I don't recognise you! Please send me your phone number."
 #: tour_guide_bot/helpers/language.py:38
 msgctxt "any-bot"
 msgid "The language has been changed to {0}."
-msgstr "The language has been changed to {0}."
+msgstr ""
 
 #: tour_guide_bot/helpers/language.py:40
 msgctxt "any-bot"
