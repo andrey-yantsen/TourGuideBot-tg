@@ -12,6 +12,7 @@ Babel = "^2.10.3"
 SQLAlchemy = {extras = ["asyncio", "aiomysql", "aiosqlite", "postgresql_asyncpg"], version = "^1.4.39"}
 alembic = "^1.8.1"
 greenlet = "*"
+psycopg2-binary = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.6.0"
