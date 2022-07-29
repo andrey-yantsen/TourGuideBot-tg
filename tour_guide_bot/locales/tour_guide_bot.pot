@@ -43,12 +43,12 @@ msgctxt "cli"
 msgid "the default language must be in the list of enabled languages"
 msgstr ""
 
-#: tour_guide_bot/admin/start.py:30
+#: tour_guide_bot/admin/start.py:32
 msgctxt "admin-bot-start"
 msgid "Share phone number"
 msgstr ""
 
-#: tour_guide_bot/admin/start.py:39
+#: tour_guide_bot/admin/start.py:41
 msgctxt "admin-bot-start"
 msgid "Please send me your contact number and not somebody else's."
 msgstr ""
@@ -82,5 +82,26 @@ msgstr ""
 #: tour_guide_bot/admin/start.py:97
 msgctxt "admin-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
+msgstr ""
+
+#: tour_guide_bot/helpers/language.py:38
+#, python-format
+msgctxt "any-bot"
+msgid "The language has been changed to %s."
+msgstr ""
+
+#: tour_guide_bot/helpers/language.py:40
+msgctxt "any-bot"
+msgid "Something went wrong, please try again."
+msgstr ""
+
+#: tour_guide_bot/helpers/language.py:48
+msgctxt "any-bot"
+msgid "Unfortunately, you can`t change the language — this bot supports only one."
+msgstr ""
+
+#: tour_guide_bot/helpers/language.py:70
+msgctxt "any-bot"
+msgid "Please select the language you prefer"
 msgstr ""
 
