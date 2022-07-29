@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: English\n"
 "Language: en_US\n"
-"PO-Revision-Date: 2022-07-29 16:19\n"
+"PO-Revision-Date: 2022-07-29 16:25\n"
 
 #: tour_guide_bot/cli.py:14
 msgctxt "cli"
@@ -55,7 +55,7 @@ msgstr "at least one of --guide-bot-token or --admin-bot-token is required"
 #: tour_guide_bot/cli.py:32
 msgctxt "cli"
 msgid "the default language must be in the list of enabled languages"
-msgstr ""
+msgstr "the default language must be in the list of enabled languages"
 
 #: tour_guide_bot/admin/start.py:32
 msgctxt "admin-bot-start"
@@ -96,20 +96,20 @@ msgstr "I don't recognise you! Please send me your phone number."
 #, python-format
 msgctxt "any-bot"
 msgid "The language has been changed to %s."
-msgstr ""
+msgstr "The language has been changed to %s."
 
 #: tour_guide_bot/helpers/language.py:40
 msgctxt "any-bot"
 msgid "Something went wrong, please try again."
-msgstr ""
+msgstr "Something went wrong. Please try again."
 
 #: tour_guide_bot/helpers/language.py:48
 msgctxt "any-bot"
 msgid "Unfortunately, you can`t change the language — this bot supports only one."
-msgstr ""
+msgstr "Unfortunately, you can`t change the language — this bot supports only one."
 
 #: tour_guide_bot/helpers/language.py:70
 msgctxt "any-bot"
 msgid "Please select the language you prefer"
-msgstr ""
+msgstr "Please select the language you prefer"
 
