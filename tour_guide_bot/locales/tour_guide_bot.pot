@@ -85,9 +85,8 @@ msgid "I don't recognize you! Please send me your phone number."
 msgstr ""
 
 #: tour_guide_bot/helpers/language.py:38
-#, python-format
 msgctxt "any-bot"
-msgid "The language has been changed to %s."
+msgid "The language has been changed to {0}."
 msgstr ""
 
 #: tour_guide_bot/helpers/language.py:40

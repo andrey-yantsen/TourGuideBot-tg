@@ -35,7 +35,7 @@ class LanguageHandler(BaseHandler):
             await self.db_session.commit()
 
             await update.callback_query.answer('')
-            await update.callback_query.edit_message_text(t(data[1]).pgettext('any-bot', 'The language has been changed to %s.') % (Locale.parse(data[1]).get_language_name(data[1]), ))
+            await update.callback_query.edit_message_text(t(data[1]).pgettext('any-bot', 'The language has been changed to {0}.').format(Locale.parse(data[1]).get_language_name(data[1])))
         else:
             await update.callback_query.answer(t(current_language).pgettext('any-bot', 'Something went wrong, please try again.'))
 
