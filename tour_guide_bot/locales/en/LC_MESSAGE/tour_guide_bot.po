@@ -10,80 +10,80 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: English\n"
 "Language: en_US\n"
-"PO-Revision-Date: 2022-07-29 11:34\n"
+"PO-Revision-Date: 2022-07-29 11:46\n"
 
 #: tour_guide_bot/cli.py:14
 msgctxt "cli"
 msgid "Tour Guide bot [telegram]"
-msgstr ""
+msgstr "Tour Guide bot [telegram]"
 
 #: tour_guide_bot/cli.py:15
 msgctxt "cli"
 msgid "Enable debug logging."
-msgstr ""
+msgstr "Enable debug logging."
 
 #: tour_guide_bot/cli.py:16
 msgctxt "cli"
 msgid "Comma-separated list of available languages."
-msgstr ""
+msgstr "Comma-separated list of available languages."
 
 #: tour_guide_bot/cli.py:18
 msgctxt "cli"
 msgid "Default language."
-msgstr ""
+msgstr "Default language."
 
 #: tour_guide_bot/cli.py:20
 msgctxt "cli"
 msgid "Telegram Bot token for the Guide Bot."
-msgstr ""
+msgstr "Telegram Bot token for the Guide Bot."
 
 #: tour_guide_bot/cli.py:22
 msgctxt "cli"
 msgid "Telegram Bot token for the Admin Bot."
-msgstr ""
+msgstr "Telegram Bot token for the Admin Bot."
 
 #: tour_guide_bot/cli.py:24
 msgctxt "cli"
 msgid "SQLAlchemy engine URL"
-msgstr ""
+msgstr "SQLAlchemy engine URL"
 
 #: tour_guide_bot/cli.py:29
 msgctxt "cli"
 msgid "at least one of --guide-bot-token or --admin-bot-token is required"
-msgstr ""
+msgstr "at least one of --guide-bot-token or --admin-bot-token is required"
 
 #: tour_guide_bot/admin/start.py:30
 msgctxt "admin-bot-start"
 msgid "Share phone number"
-msgstr ""
+msgstr "Share phone number"
 
 #: tour_guide_bot/admin/start.py:39
 msgctxt "admin-bot-start"
 msgid "Please send me your contact number and not somebody else's."
-msgstr ""
+msgstr "Please send me your contact number and not somebody else's."
 
 #: tour_guide_bot/admin/start.py:58 tour_guide_bot/admin/start.py:79
 msgctxt "admin-bot-start"
 msgid "Admin permissions confirmed! Use /help command if you need further help."
-msgstr ""
+msgstr "Admin permissions confirmed! Use /help command if you need further help."
 
 #: tour_guide_bot/admin/start.py:63 tour_guide_bot/admin/start.py:102
 msgctxt "admin-bot-start"
 msgid "I don't think you're in the right place. Please send me the token to confirm ownership."
-msgstr ""
+msgstr "I don't think you're in the right place. Please send me the token to confirm ownership."
 
 #: tour_guide_bot/admin/start.py:82
 msgctxt "admin-bot-start"
 msgid "I still don't recognize you, sorry. Try saying /start again when you're ready."
-msgstr ""
+msgstr "I still don't recognise you, sorry. Try saying /start again when you're ready."
 
 #: tour_guide_bot/admin/start.py:93
 msgctxt "admin-bot-start"
 msgid "You are recognized as an administrator. Please use /help command if you need further help."
-msgstr ""
+msgstr "You are recognised as an administrator. Please use /help command if you need further help."
 
 #: tour_guide_bot/admin/start.py:97
 msgctxt "admin-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
-msgstr ""
+msgstr "I don't recognise you! Please send me your phone number."
 
