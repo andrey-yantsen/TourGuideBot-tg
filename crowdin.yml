@@ -1,3 +1,6 @@
 files:
   - source: /tour_guide_bot/locales/tour_guide_bot.pot
     translation: /tour_guide_bot/locales/%two_letters_code%/LC_MESSAGES/tour_guide_bot.po
+pull_request_title: "Crowdin translation updates"
+commit_message: "chrore(translation): update %language%"
+append_commit_message: false
