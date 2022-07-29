@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: English\n"
 "Language: en_US\n"
-"PO-Revision-Date: 2022-07-29 12:16\n"
+"PO-Revision-Date: 2022-07-29 16:19\n"
 
 #: tour_guide_bot/cli.py:14
 msgctxt "cli"
@@ -52,12 +52,17 @@ msgctxt "cli"
 msgid "at least one of --guide-bot-token or --admin-bot-token is required"
 msgstr "at least one of --guide-bot-token or --admin-bot-token is required"
 
-#: tour_guide_bot/admin/start.py:30
+#: tour_guide_bot/cli.py:32
+msgctxt "cli"
+msgid "the default language must be in the list of enabled languages"
+msgstr ""
+
+#: tour_guide_bot/admin/start.py:32
 msgctxt "admin-bot-start"
 msgid "Share phone number"
 msgstr "Share phone number"
 
-#: tour_guide_bot/admin/start.py:39
+#: tour_guide_bot/admin/start.py:41
 msgctxt "admin-bot-start"
 msgid "Please send me your contact number and not somebody else's."
 msgstr "Please send me your contact number and not somebody else's."
@@ -67,7 +72,7 @@ msgctxt "admin-bot-start"
 msgid "Admin permissions confirmed! Use /help command if you need further help."
 msgstr "Admin permissions confirmed! Use /help command if you need further help."
 
-#: tour_guide_bot/admin/start.py:63 tour_guide_bot/admin/start.py:102
+#: tour_guide_bot/admin/start.py:63 tour_guide_bot/admin/start.py:113
 msgctxt "admin-bot-start"
 msgid "I don't think you're in the right place. Please send me the token to confirm ownership."
 msgstr "I don't think you're in the right place. Please send me the token to confirm ownership."
@@ -77,7 +82,7 @@ msgctxt "admin-bot-start"
 msgid "I still don't recognize you, sorry. Try saying /start again when you're ready."
 msgstr "I still don't recognise you, sorry. Try saying /start again when you're ready."
 
-#: tour_guide_bot/admin/start.py:93
+#: tour_guide_bot/admin/start.py:93 tour_guide_bot/admin/start.py:109
 msgctxt "admin-bot-start"
 msgid "You are recognized as an administrator. Please use /help command if you need further help."
 msgstr "You are recognised as an administrator. Please use /help command if you need further help."
@@ -86,4 +91,25 @@ msgstr "You are recognised as an administrator. Please use /help command if you 
 msgctxt "admin-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr "I don't recognise you! Please send me your phone number."
+
+#: tour_guide_bot/helpers/language.py:38
+#, python-format
+msgctxt "any-bot"
+msgid "The language has been changed to %s."
+msgstr ""
+
+#: tour_guide_bot/helpers/language.py:40
+msgctxt "any-bot"
+msgid "Something went wrong, please try again."
+msgstr ""
+
+#: tour_guide_bot/helpers/language.py:48
+msgctxt "any-bot"
+msgid "Unfortunately, you can`t change the language — this bot supports only one."
+msgstr ""
+
+#: tour_guide_bot/helpers/language.py:70
+msgctxt "any-bot"
+msgid "Please select the language you prefer"
+msgstr ""
 
