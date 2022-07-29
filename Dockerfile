@@ -9,6 +9,6 @@ ENV PATH=/home/tg/.poetry/bin:$PATH \
 COPY poetry.lock pyproject.toml /home/tg/app/
 RUN python -c 'from urllib.request import urlopen; f = urlopen("https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"); print(f.read().decode("utf-8"))' | python -u - \
   && source $HOME/.poetry/env && poetry install --no-dev --no-interaction --no-root
-RUN poetry run pybabel compile -f --domain=tour_guide_bot --directory=tour_guide_bot/locales
 COPY . /home/tg/app/
+RUN poetry run pybabel compile -f --domain=tour_guide_bot --directory=tour_guide_bot/locales
 ENTRYPOINT [ "./docker_entrypoint.sh" ]
