@@ -6,7 +6,7 @@ from tour_guide_bot import log, t, set_fallback_locale
 from tour_guide_bot.admin.app import AdminBot
 from tour_guide_bot.guide.app import GuideBot
 import asyncio
-from telegram.ext import Application
+from telegram.ext import Application, PicklePersistence
 from sqlalchemy.ext.asyncio import create_async_engine
 
 
@@ -46,7 +46,21 @@ def run():
     loop = asyncio.get_event_loop()
 
     async def init_bot(app: Application):
+        from os.path import dirname
+        from os import mkdir
+
         app.db_engine = engine
+
+        parent_path = dirname(dirname(__file__))
+        destination_path = parent_path + '/persistent'
+
+        try:
+            mkdir(destination_path)
+        except OSError:
+            pass
+
+        app.persistence = PicklePersistence(
+            destination_path + '/' + app.__class__.__name__ + '_storage.pickle', update_interval=10)
 
         await app.initialize()
         await app.updater.start_polling()

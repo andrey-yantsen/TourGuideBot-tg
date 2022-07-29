@@ -19,7 +19,9 @@ class StartCommandHandler(BaseHandler):
                 cls.STATE_CONTACT: [MessageHandler(filters.CONTACT, cls.partial(app, db, 'contact'))],
                 cls.STATE_TOKEN: [MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(app, db, 'token'))],
             },
-            fallbacks=[]
+            fallbacks=[],
+            name='admin-init',
+            persistent=True
         )
 
     @staticmethod

@@ -10,5 +10,6 @@ class AdminBot(Application):
         return builder
 
     async def initialize(self) -> None:
-        await super().initialize()
         self.add_handler(StartCommandHandler.get_handler(self, self.db_engine))
+
+        await super().initialize()

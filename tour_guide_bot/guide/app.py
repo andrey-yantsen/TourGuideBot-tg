@@ -10,5 +10,5 @@ class GuideBot(Application):
         return builder
 
     async def initialize(self) -> None:
-        await super().initialize()
         self.add_handler(CommandHandler("start", StartCommandHandler(self.db_engine)))
+        await super().initialize()
