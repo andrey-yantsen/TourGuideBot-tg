@@ -6,7 +6,7 @@ USER tg
 WORKDIR /home/tg/app
 ENV PATH=/home/tg/.poetry/bin:$PATH \
     PYTHONUNBUFFERED=1
-COPY poetry.lock pyproject.toml /home/tg/app/
+COPY --chown=tg:tg poetry.lock pyproject.toml /home/tg/app/
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -u - \
   && source $HOME/.poetry/env && poetry install --no-dev --no-interaction --no-root
 COPY --chown=tg:tg . /home/tg/app/
