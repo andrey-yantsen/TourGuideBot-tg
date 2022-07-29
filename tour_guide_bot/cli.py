@@ -76,7 +76,14 @@ def run():
         guide_bot = GuideBot.builder().token(args.guide_bot_token).build()
         loop.run_until_complete(init_bot(guide_bot))
 
-    loop.run_forever()
+    try:
+        loop.run_forever()
+    finally:
+        if args.admin_bot_token:
+            loop.run_until_complete(admin_bot.update_persistence())
+
+        if args.guide_bot_token:
+            loop.run_until_complete(guide_bot.update_persistence())
 
 
 if __name__ == '__main__':
