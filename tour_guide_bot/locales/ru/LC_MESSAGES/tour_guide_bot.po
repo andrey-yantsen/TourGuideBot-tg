@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2022-07-29 16:19\n"
+"PO-Revision-Date: 2022-07-29 16:25\n"
 
 #: tour_guide_bot/cli.py:14
 msgctxt "cli"
@@ -55,7 +55,7 @@ msgstr "хотя бы один аргумент из --guide-bot-token или --
 #: tour_guide_bot/cli.py:32
 msgctxt "cli"
 msgid "the default language must be in the list of enabled languages"
-msgstr ""
+msgstr "язык по умолчанию должен быть в списке доступных языков"
 
 #: tour_guide_bot/admin/start.py:32
 msgctxt "admin-bot-start"
@@ -96,20 +96,20 @@ msgstr "Я вас не узнаю! Пожалуйста, отправьте мн
 #, python-format
 msgctxt "any-bot"
 msgid "The language has been changed to %s."
-msgstr ""
+msgstr "Язык был изменён на %s."
 
 #: tour_guide_bot/helpers/language.py:40
 msgctxt "any-bot"
 msgid "Something went wrong, please try again."
-msgstr ""
+msgstr "Что-то пошло не так. Пожалуйста, попытайтесь еще раз."
 
 #: tour_guide_bot/helpers/language.py:48
 msgctxt "any-bot"
 msgid "Unfortunately, you can`t change the language — this bot supports only one."
-msgstr ""
+msgstr "К сожалению, вы не можете изменить язык — этот бот поддерживает только один."
 
 #: tour_guide_bot/helpers/language.py:70
 msgctxt "any-bot"
 msgid "Please select the language you prefer"
-msgstr ""
+msgstr "Пожалуйста, выберите предпочитаемый язык"
 
