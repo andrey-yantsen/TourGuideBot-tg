@@ -1,0 +1,43 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:13-alpine'
+    volumes:
+      - 'tour_guide_bot-pg:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_USER: tour_guide_bot
+      POSTGRES_PASSWORD: tour_guide_bot
+      POSTGRES_DB: tour_guide_bot
+
+  admin_bot:
+    image: 'ghcr.io/andrey-yantsen/tourguidebot-tg:latest'
+    build: ./
+    restart: unless-stopped
+    command:
+      - '-a'
+      - '<telegram_bot_token_admin_bot>'
+      - '--db'
+      - 'postgresql+asyncpg://tour_guide_bot:tour_guide_bot@postgres/tour_guide_bot'
+    volumes:
+      - 'tour_guide_bot-persistent:/home/tg/app/persistent'
+    depends_on:
+      - postgres
+
+  guide_bot:
+    image: 'ghcr.io/andrey-yantsen/tourguidebot-tg:latest'
+    build: ./
+    restart: unless-stopped
+    command:
+      - '-g'
+      - '<telegram_bot_token_guide_bot>'
+      - '--db'
+      - 'postgresql+asyncpg://tour_guide_bot:tour_guide_bot@postgres/tour_guide_bot'
+    volumes:
+      - 'tour_guide_bot-persistent:/home/tg/app/persistent'
+    depends_on:
+      - postgres
+      - admin_bot # try to avoid multiple db migrations at the same time
+
+volumes:
+  tour_guide_bot-pg:
+  tour_guide_bot-persistent:
