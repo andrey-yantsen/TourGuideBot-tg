@@ -20,13 +20,12 @@ do
     elif [[ "$v" == "--db="* ]]
     then
         db="${v#--db=}"
-        db="${db//+*:\/\//://}"
     fi
 done
 
 if ! [ "$db" == 'next' ] && ! [ -z "$db" ]
 then
-    poetry run alembic -x db="$db" upgrade head
+    poetry run alembic -x db="${db//+*:\/\//://}" upgrade head
 fi
 
 poetry run bot "$@"
