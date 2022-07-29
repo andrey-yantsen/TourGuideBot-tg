@@ -32,7 +32,7 @@ class StartCommandHandler(BaseHandler):
         )]], one_time_keyboard=True)
 
     async def contact(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        log.debug('Got contact: %s, context: %s' % (update, context))
+        log.debug('Got contact: %s' % (update, ))
         user = await self.get_user(update)
 
         if update.message.contact.user_id != update.message.from_user.id:
@@ -66,7 +66,7 @@ class StartCommandHandler(BaseHandler):
             return self.STATE_TOKEN
 
     async def token(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        log.debug('Got token: %s, context: %s' % (update, context))
+        log.debug('Got token: %s' % (update, ))
         user = await self.get_user(update)
 
         if update.message.text == self.app.bot.token:
@@ -85,7 +85,7 @@ class StartCommandHandler(BaseHandler):
         return ConversationHandler.END
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        log.debug('Got start command: %s, context: %s' % (update, context))
+        log.debug('Got start command: %s' % (update, ))
 
         user = await self.get_user(update)
 

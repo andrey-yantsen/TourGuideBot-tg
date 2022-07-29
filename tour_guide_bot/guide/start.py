@@ -17,4 +17,4 @@ class StartCommandHandler:
             user = session.scalar(stmt)
             print(user)
 
-        log.debug('Got start command: %s, context: %s' % (update, context))
+        log.debug('Got start command: %s' % (update, ))
