@@ -28,6 +28,9 @@ def run():
     if not args.guide_bot_token and not args.admin_bot_token:
         parser.error(t().pgettext('cli', 'at least one of --guide-bot-token or --admin-bot-token is required'))
 
+    if args.default_language not in args.enabled_languages:
+        parser.error(t().pgettext('cli', 'the default language must be in the list of enabled languages'))
+
     set_fallback_locale(args.default_language)
 
     log.setLevel(logging.INFO)

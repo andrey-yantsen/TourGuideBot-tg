@@ -32,7 +32,13 @@ class BaseHandler:
         user = await self.db_session.scalar(stmt)
 
         if not user:
-            user = TelegramUser(id=update.message.from_user.id, language=update.message.from_user.language_code)
+            user = TelegramUser(id=update.message.from_user.id)
+
+            if update.message.from_user.language_code in self.app.enabled_languages:
+                user.language = update.message.from_user.language_code
+            else:
+                user.language = self.app.default_language
+
             self.db_session.add(user)
             await self.db_session.commit()
 

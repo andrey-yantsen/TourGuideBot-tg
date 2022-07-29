@@ -99,6 +99,17 @@ class StartCommandHandler(BaseHandler):
                 reply_markup=self.request_contact(user.language))
             return self.STATE_CONTACT
         else:
-            await update.message.reply_text(t(user.language).pgettext(
-                "admin-bot-start", "I don't think you're in the right place. Please send me the token to confirm ownership."))
-            return self.STATE_TOKEN
+            stmt = select(Admin).where(Admin.phone == user.phone)
+            admin = await self.db_session.scalar(stmt)
+
+            if admin:
+                user.admin = admin
+                self.db_session.add(user)
+                await self.db_session.commit()
+                await update.message.reply_text(t(user.language).pgettext(
+                    "admin-bot-start", "You are recognized as an administrator. Please use /help command if you need further help."))
+                return ConversationHandler.END
+            else:
+                await update.message.reply_text(t(user.language).pgettext(
+                    "admin-bot-start", "I don't think you're in the right place. Please send me the token to confirm ownership."))
+                return self.STATE_TOKEN

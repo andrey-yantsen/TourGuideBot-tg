@@ -38,6 +38,11 @@ msgctxt "cli"
 msgid "at least one of --guide-bot-token or --admin-bot-token is required"
 msgstr ""
 
+#: tour_guide_bot/cli.py:32
+msgctxt "cli"
+msgid "the default language must be in the list of enabled languages"
+msgstr ""
+
 #: tour_guide_bot/admin/start.py:30
 msgctxt "admin-bot-start"
 msgid "Share phone number"
@@ -53,7 +58,7 @@ msgctxt "admin-bot-start"
 msgid "Admin permissions confirmed! Use /help command if you need further help."
 msgstr ""
 
-#: tour_guide_bot/admin/start.py:63 tour_guide_bot/admin/start.py:102
+#: tour_guide_bot/admin/start.py:63 tour_guide_bot/admin/start.py:113
 msgctxt "admin-bot-start"
 msgid ""
 "I don't think you're in the right place. Please send me the token to "
@@ -67,7 +72,7 @@ msgid ""
 "ready."
 msgstr ""
 
-#: tour_guide_bot/admin/start.py:93
+#: tour_guide_bot/admin/start.py:93 tour_guide_bot/admin/start.py:109
 msgctxt "admin-bot-start"
 msgid ""
 "You are recognized as an administrator. Please use /help command if you "
