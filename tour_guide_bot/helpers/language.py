@@ -13,29 +13,28 @@ class LanguageHandler(BaseHandler):
     def get_handlers(cls, db):
         return [
             CommandHandler('language', cls.partial(db, 'start')),
-            CallbackQueryHandler(cls.partial(db, 'set_language'), '^change_language:'),
+            CallbackQueryHandler(cls.partial(db, 'set_language'), '^change_language:(.*)$'),
         ]
 
     async def set_language(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         log.debug('Got set_language callback: %s' % (update, ))
 
-        data = update.callback_query.data.split(':')
-
+        required_language = context.matches[0].group(1)
         current_language = await self.get_language(update, context)
 
-        if len(data) == 2 and data[1] in context.application.enabled_languages:
+        if required_language in context.application.enabled_languages:
             user = await self.get_user(update, context)
 
             if self.is_admin_app:
-                user.admin.language = data[1]
+                user.admin.language = required_language
                 self.db_session.add(user.admin)
             else:
-                user.guest.language = data[1]
+                user.guest.language = required_language
                 self.db_session.add(user.guest)
             await self.db_session.commit()
 
             await update.callback_query.answer('')
-            await update.callback_query.edit_message_text(t(data[1]).pgettext('any-bot', 'The language has been changed to {0}.').format(Locale.parse(data[1]).get_language_name(data[1])))
+            await update.callback_query.edit_message_text(t(required_language).pgettext('any-bot', 'The language has been changed to {0}.').format(Locale.parse(required_language).get_language_name(required_language)))
         else:
             await update.callback_query.answer(t(current_language).pgettext('any-bot', 'Something went wrong, please try again.'))
 
