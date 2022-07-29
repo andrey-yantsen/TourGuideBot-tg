@@ -12,13 +12,13 @@ class StartCommandHandler(BaseHandler):
     STATE_TOKEN = 2
 
     @classmethod
-    def get_handlers(cls, app, db):
+    def get_handlers(cls, db):
         return [
             ConversationHandler(
-                entry_points=[CommandHandler("start", cls.partial(app, db, 'start'))],
+                entry_points=[CommandHandler("start", cls.partial(db, 'start'))],
                 states={
-                    cls.STATE_CONTACT: [MessageHandler(filters.CONTACT, cls.partial(app, db, 'contact'))],
-                    cls.STATE_TOKEN: [MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(app, db, 'token'))],
+                    cls.STATE_CONTACT: [MessageHandler(filters.CONTACT, cls.partial(db, 'contact'))],
+                    cls.STATE_TOKEN: [MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(db, 'token'))],
                 },
                 fallbacks=[],
                 name='admin-init',
@@ -35,7 +35,7 @@ class StartCommandHandler(BaseHandler):
 
     async def contact(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         log.debug('Got contact: %s' % (update, ))
-        user = await self.get_user(update)
+        user = await self.get_user(update, context)
 
         if update.message.contact.user_id != update.message.from_user.id:
             await update.message.reply_text(t(user.admin_language).pgettext(
@@ -67,10 +67,9 @@ class StartCommandHandler(BaseHandler):
 
     async def token(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         log.debug('Got token: %s' % (update, ))
-        user = await self.get_user(update)
+        user = await self.get_user(update, context)
 
-        if update.message.text == self.app.bot.token:
-            user = await self.get_user(update)
+        if update.message.text == context.application.bot.token:
             admin = Admin(phone=user.phone, language=user.admin_language, permissions=AdminPermissions.full)
             user.admin = admin
             self.db_session.add_all([admin, user])
@@ -87,7 +86,7 @@ class StartCommandHandler(BaseHandler):
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         log.debug('Got start command: %s' % (update, ))
 
-        user = await self.get_user(update)
+        user = await self.get_user(update, context)
 
         if user.admin:
             await update.message.reply_text(t(user.admin_language).pgettext(

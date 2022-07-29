@@ -10,10 +10,10 @@ from . import log
 
 class LanguageHandler(BaseHandler):
     @classmethod
-    def get_handlers(cls, app, db):
+    def get_handlers(cls, db):
         return [
-            CommandHandler('language', cls.partial(app, db, 'start')),
-            CallbackQueryHandler(cls.partial(app, db, 'set_language'), '^change_language:'),
+            CommandHandler('language', cls.partial(db, 'start')),
+            CallbackQueryHandler(cls.partial(db, 'set_language'), '^change_language:'),
         ]
 
     async def set_language(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -21,10 +21,10 @@ class LanguageHandler(BaseHandler):
 
         data = update.callback_query.data.split(':')
 
-        current_language = await self.get_language(update)
+        current_language = await self.get_language(update, context)
 
-        if len(data) == 2 and data[1] in self.app.enabled_languages:
-            user = await self.get_user(update)
+        if len(data) == 2 and data[1] in context.application.enabled_languages:
+            user = await self.get_user(update, context)
 
             if self.is_admin_app:
                 user.admin.language = data[1]
@@ -42,15 +42,15 @@ class LanguageHandler(BaseHandler):
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         log.debug('Got language command: %s' % (update, ))
 
-        current_language = await self.get_language(update)
+        current_language = await self.get_language(update, context)
 
-        if len(self.app.enabled_languages) == 1:
+        if len(context.application.enabled_languages) == 1:
             await update.message.reply_text(t(current_language).pgettext(
                 'any-bot', 'Unfortunately, you can`t change the language — this bot supports only one.'))
         else:
             keyboard = [[]]
 
-            for locale_name in self.app.enabled_languages:
+            for locale_name in context.application.enabled_languages:
                 if len(keyboard[len(keyboard) - 1]) == 1:
                     keyboard.append([])
 

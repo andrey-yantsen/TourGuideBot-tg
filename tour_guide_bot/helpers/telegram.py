@@ -8,38 +8,37 @@ from sqlalchemy.orm import selectinload
 
 
 class BaseHandler:
-    def __init__(self, app, db_session):
+    def __init__(self, db_session):
         self.db_session = db_session
-        self.app = app
         self.user = None
 
     @classmethod
-    def get_handlers(cls, app, db):
+    def get_handlers(cls, db):
         raise NotImplementedError()
 
     @classmethod
-    async def build_and_run(cls, app, db, callback_name, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def build_and_run(cls, db, callback_name, update: Update, context: ContextTypes.DEFAULT_TYPE):
         async with AsyncSession(db, expire_on_commit=False) as session:
-            handler = cls(app, session)
+            handler = cls(session)
             return await getattr(handler, callback_name)(update, context)
 
     @classmethod
-    def partial(cls, app, db, callback_name):
-        return partial(cls.build_and_run, app, db, callback_name)
+    def partial(cls, db, callback_name):
+        return partial(cls.build_and_run, db, callback_name)
 
-    @property
-    def is_admin_app(self) -> bool:
-        return self.app.__class__.__name__ == 'AdminBot'
+    @staticmethod
+    def is_admin_app(context: ContextTypes.DEFAULT_TYPE) -> bool:
+        return context.application.__class__.__name__ == 'AdminBot'
 
-    async def get_language(self, update: Update) -> str:
-        user = await self.get_user(update)
+    async def get_language(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+        user = await self.get_user(update, context)
 
-        if self.is_admin_app:
+        if self.is_admin_app(context):
             return user.admin_language
         else:
             return user.guest_language
 
-    async def get_user(self, update: Update) -> TelegramUser:
+    async def get_user(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> TelegramUser:
         if self.user:
             return self.user
 
@@ -50,10 +49,10 @@ class BaseHandler:
         if not user:
             user = TelegramUser(id=update.effective_user.id)
 
-            if update.effective_user.language_code in self.app.enabled_languages:
+            if update.effective_user.language_code in context.application.enabled_languages:
                 user.language = update.effective_user.language_code
             else:
-                user.language = self.app.default_language
+                user.language = context.application.default_language
 
             self.db_session.add(user)
             await self.db_session.commit()
