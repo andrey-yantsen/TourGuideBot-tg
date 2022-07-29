@@ -406,7 +406,7 @@ test = ["pytest-mock (>=3.3)", "pytest (>=4.3)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "7a2fcb7d2bf93a8a378e8bd3b1b24385f7000f1040d06a86d14f29ec65b75a7b"
+content-hash = "43fd1743d782cdd6c2337feef556b66193e3dea38e04ba0e3a4b391f708e4eae"
 
 [metadata.files]
 aiomysql = [
