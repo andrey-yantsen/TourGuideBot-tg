@@ -1,0 +1,3 @@
+files:
+  - source: /tour_guide_bot/locales/tour_guide_bot.pot
+    translation: /tour_guide_bot/locales/%two_letters_code%/LC_MESSAGE/tour_guide_bot.po
