@@ -1,3 +1,12 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: TourGuideBot-tg\n"
+"Language: en\n"
+
 #: tour_guide_bot/cli.py:14
 msgctxt "cli"
 msgid "Tour Guide bot [telegram]"
@@ -55,23 +64,17 @@ msgstr "Admin permissions confirmed! Use /help command if you need further help.
 
 #: tour_guide_bot/admin/start.py:63 tour_guide_bot/admin/start.py:102
 msgctxt "admin-bot-start"
-msgid ""
-"I don't think you're in the right place. Please send me the token to "
-"confirm ownership."
+msgid "I don't think you're in the right place. Please send me the token to confirm ownership."
 msgstr "I don't think you're in the right place. Please send me the token to confirm ownership."
 
 #: tour_guide_bot/admin/start.py:82
 msgctxt "admin-bot-start"
-msgid ""
-"I still don't recognize you, sorry. Try saying /start again when you're "
-"ready."
+msgid "I still don't recognize you, sorry. Try saying /start again when you're ready."
 msgstr "I still don't recognise you, sorry. Try saying /start again when you're ready."
 
 #: tour_guide_bot/admin/start.py:93
 msgctxt "admin-bot-start"
-msgid ""
-"You are recognized as an administrator. Please use /help command if you "
-"need further help."
+msgid "You are recognized as an administrator. Please use /help command if you need further help."
 msgstr "You are recognised as an administrator. Please use /help command if you need further help."
 
 #: tour_guide_bot/admin/start.py:97
