@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: tour_guide_bot 7d55e03\n"
+"Project-Id-Version: tour_guide_bot 5c82ede\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-29 11:02+0100\n"
+"POT-Creation-Date: 2022-07-29 11:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,7 +90,7 @@ msgstr ""
 #: tour_guide_bot/admin/start.py:93
 msgctxt "admin-bot-start"
 msgid ""
-"You are recognized as an admistrator. Please use /help command if you "
+"You are recognized as an administrator. Please use /help command if you "
 "need further help."
 msgstr ""
 

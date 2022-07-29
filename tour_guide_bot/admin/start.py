@@ -91,7 +91,7 @@ class StartCommandHandler(BaseHandler):
 
         if user.admin:
             await update.message.reply_text(t(user.language).pgettext(
-                "admin-bot-start", "You are recognized as an admistrator. Please use /help command if you need further help."))
+                "admin-bot-start", "You are recognized as an administrator. Please use /help command if you need further help."))
             return ConversationHandler.END
         elif not user.phone:
             await update.message.reply_text(t(user.language).pgettext(
