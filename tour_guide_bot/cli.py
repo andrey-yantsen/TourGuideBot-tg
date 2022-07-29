@@ -47,12 +47,14 @@ def run():
 
     async def init_bot(app: Application):
         from os.path import dirname
-        from os import mkdir
+        from os import mkdir, pathsep
 
         app.db_engine = engine
+        app.enabled_languages = args.enabled_languages
+        app.default_language = args.default_language
 
         parent_path = dirname(dirname(__file__))
-        destination_path = parent_path + '/persistent'
+        destination_path = parent_path + pathsep + 'persistent'
 
         try:
             mkdir(destination_path)
@@ -60,7 +62,7 @@ def run():
             pass
 
         app.persistence = PicklePersistence(
-            destination_path + '/' + app.__class__.__name__ + '_storage.pickle', update_interval=10)
+            destination_path + pathsep + app.__class__.__name__ + '_storage.pickle', update_interval=10)
 
         await app.initialize()
         await app.updater.start_polling()

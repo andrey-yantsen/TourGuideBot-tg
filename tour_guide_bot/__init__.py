@@ -21,7 +21,7 @@ def t(locale: Optional[str] = None) -> gettext.NullTranslations:
     if locale is None:
         languages = None
     else:
-        languages = [locale, fallback_locale, 'en-GB']
+        languages = [locale, fallback_locale, 'en']
 
     __translations[locale] = gettext.translation(__package__, os.path.dirname(
         os.path.realpath(__file__)) + '/locales', fallback=True, languages=languages)
