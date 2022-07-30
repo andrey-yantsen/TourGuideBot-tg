@@ -29,18 +29,18 @@ class BaseHandlerCallback:
         self.user = None
 
     @classmethod
-    def get_handlers(cls, db):
+    def get_handlers(cls):
         raise NotImplementedError()
 
     @classmethod
-    async def build_and_run(cls, db, callback_name, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        async with AsyncSession(db, expire_on_commit=False) as session:
+    async def build_and_run(cls, callback, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        async with AsyncSession(context.application.db_engine, expire_on_commit=False) as session:
             handler = cls(session)
-            return await getattr(handler, callback_name)(update, context)
+            return await callback(handler, update, context)
 
     @classmethod
-    def partial(cls, db, callback_name):
-        return partial(cls.build_and_run, db, callback_name)
+    def partial(cls, callback):
+        return partial(cls.build_and_run, callback)
 
     @staticmethod
     def is_admin_app(context: ContextTypes.DEFAULT_TYPE) -> bool:

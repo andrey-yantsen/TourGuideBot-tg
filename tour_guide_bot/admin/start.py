@@ -11,13 +11,13 @@ class StartCommandHandler(BaseHandlerCallback):
     STATE_TOKEN = 2
 
     @classmethod
-    def get_handlers(cls, db):
+    def get_handlers(cls):
         return [
             ConversationHandler(
-                entry_points=[CommandHandler("start", cls.partial(db, 'start'))],
+                entry_points=[CommandHandler("start", cls.partial(cls.start))],
                 states={
-                    cls.STATE_CONTACT: [MessageHandler(filters.CONTACT, cls.partial(db, 'contact'))],
-                    cls.STATE_TOKEN: [MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(db, 'token'))],
+                    cls.STATE_CONTACT: [MessageHandler(filters.CONTACT, cls.partial(cls.contact))],
+                    cls.STATE_TOKEN: [MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(cls.token))],
                 },
                 fallbacks=[],
                 name='admin-init',

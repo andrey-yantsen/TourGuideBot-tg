@@ -7,10 +7,10 @@ from tour_guide_bot import t
 
 class LanguageHandler(BaseHandlerCallback):
     @classmethod
-    def get_handlers(cls, db):
+    def get_handlers(cls):
         return [
-            CommandHandler('language', cls.partial(db, 'start')),
-            CallbackQueryHandler(cls.partial(db, 'set_language'), '^change_language:(.*)$'),
+            CommandHandler('language', cls.partial(cls.start)),
+            CallbackQueryHandler(cls.partial(cls.set_language), '^change_language:(.*)$'),
         ]
 
     async def set_language(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
