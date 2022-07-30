@@ -4,12 +4,11 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRe
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from tour_guide_bot import t
-from tour_guide_bot.helpers import language
-from tour_guide_bot.helpers.telegram import BaseHandlerCallback
+from tour_guide_bot.admin import AdminProtectedBaseHandlerCallback
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 
-class ConfigureCommandHandler(BaseHandlerCallback):
+class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
     STATE_INIT = 1
     STATE_WELCOME_MESSAGE_LANGUAGE = 2
     STATE_WELCOME_MESSAGE = 3
