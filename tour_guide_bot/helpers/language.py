@@ -4,8 +4,6 @@ from sqlalchemy import select
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes, CallbackQueryHandler, CommandHandler
 from tour_guide_bot import t
-from tour_guide_bot.models.admin import Admin, AdminPermissions
-from . import log
 
 
 class LanguageHandler(BaseHandler):
@@ -17,8 +15,6 @@ class LanguageHandler(BaseHandler):
         ]
 
     async def set_language(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        log.debug('Got set_language callback: %s' % (update, ))
-
         required_language = context.matches[0].group(1)
         current_language = await self.get_language(update, context)
 
@@ -39,8 +35,6 @@ class LanguageHandler(BaseHandler):
             await update.callback_query.answer(t(current_language).pgettext('any-bot', 'Something went wrong, please try again.'))
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        log.debug('Got language command: %s' % (update, ))
-
         current_language = await self.get_language(update, context)
 
         if len(context.application.enabled_languages) == 1:

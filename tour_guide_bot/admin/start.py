@@ -4,7 +4,6 @@ from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, Mess
 from tour_guide_bot import t
 from tour_guide_bot.helpers.telegram import BaseHandler
 from tour_guide_bot.models.admin import Admin, AdminPermissions
-from . import log
 
 
 class StartCommandHandler(BaseHandler):
@@ -34,7 +33,6 @@ class StartCommandHandler(BaseHandler):
         )]], one_time_keyboard=True)
 
     async def contact(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        log.debug('Got contact: %s' % (update, ))
         user = await self.get_user(update, context)
 
         if update.message.contact.user_id != update.message.from_user.id:
@@ -66,7 +64,6 @@ class StartCommandHandler(BaseHandler):
             return self.STATE_TOKEN
 
     async def token(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        log.debug('Got token: %s' % (update, ))
         user = await self.get_user(update, context)
 
         if update.message.text == context.application.bot.token:
@@ -84,8 +81,6 @@ class StartCommandHandler(BaseHandler):
         return ConversationHandler.END
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        log.debug('Got start command: %s' % (update, ))
-
         user = await self.get_user(update, context)
 
         if user.admin:
