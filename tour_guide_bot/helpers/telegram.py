@@ -1,5 +1,6 @@
 from functools import partial
-from telegram import Update
+from babel import Locale
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from tour_guide_bot.models.telegram import TelegramUser
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -76,3 +77,24 @@ class BaseHandlerCallback:
         self.user = user
 
         return self.user
+
+    def get_language_select_inline_keyboard(self, current_language: str, context: ContextTypes.DEFAULT_TYPE, callback_data_prefix: str = 'language:'):
+        keyboard = [[]]
+
+        for locale_name in context.application.enabled_languages:
+            if len(keyboard[len(keyboard) - 1]) == 1:
+                keyboard.append([])
+
+            locale = Locale.parse(locale_name)
+
+            if locale_name != current_language:
+                locale_text = "%s (%s)" % (locale.get_language_name(current_language),
+                                           locale.get_language_name(locale_name))
+            else:
+                locale_text = locale.get_language_name(locale_name)
+
+            keyboard[len(keyboard) - 1].append(
+                InlineKeyboardButton(locale_text.title(), callback_data="%s%s" % (callback_data_prefix, locale_name))
+            )
+
+        return InlineKeyboardMarkup(inline_keyboard=keyboard)

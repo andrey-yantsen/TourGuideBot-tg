@@ -1,6 +1,6 @@
 from babel import Locale
 from .telegram import BaseHandlerCallback
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import Update
 from telegram.ext import ContextTypes, CallbackQueryHandler, CommandHandler
 from tour_guide_bot import t
 
@@ -10,7 +10,7 @@ class LanguageHandler(BaseHandlerCallback):
     def get_handlers(cls):
         return [
             CommandHandler('language', cls.partial(cls.start)),
-            CallbackQueryHandler(cls.partial(cls.set_language), '^change_language:(.*)$'),
+            CallbackQueryHandler(cls.partial(cls.set_language), '^change_user_language:(.*)$'),
         ]
 
     async def set_language(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -40,24 +40,5 @@ class LanguageHandler(BaseHandlerCallback):
             await update.message.reply_text(t(current_language).pgettext(
                 'any-bot', 'Unfortunately, you can`t change the language — this bot supports only one.'))
         else:
-            keyboard = [[]]
-
-            for locale_name in context.application.enabled_languages:
-                if len(keyboard[len(keyboard) - 1]) == 1:
-                    keyboard.append([])
-
-                locale = Locale.parse(locale_name)
-
-                if locale_name != current_language:
-                    locale_text = "%s (%s)" % (locale.get_language_name(current_language),
-                                               locale.get_language_name(locale_name))
-                else:
-                    locale_text = locale.get_language_name(locale_name)
-
-                keyboard[len(keyboard) - 1].append(
-                    InlineKeyboardButton(locale_text.title(), callback_data="change_language:%s" % locale_name)
-                )
-
-            reply_markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
             await update.message.reply_text(t(current_language).pgettext(
-                'any-bot', 'Please select the language you prefer'), reply_markup=reply_markup)
+                'any-bot', 'Please select the language you prefer'), reply_markup=self.get_language_select_inline_keyboard(current_language, context, 'change_user_language:'))
