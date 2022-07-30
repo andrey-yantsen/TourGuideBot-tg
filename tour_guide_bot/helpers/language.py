@@ -1,12 +1,11 @@
 from babel import Locale
-from .telegram import BaseHandler
-from sqlalchemy import select
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+from .telegram import BaseHandlerCallback
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, CallbackQueryHandler, CommandHandler
 from tour_guide_bot import t
 
 
-class LanguageHandler(BaseHandler):
+class LanguageHandler(BaseHandlerCallback):
     @classmethod
     def get_handlers(cls, db):
         return [

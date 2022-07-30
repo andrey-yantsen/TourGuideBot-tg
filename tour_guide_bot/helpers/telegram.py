@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 
-class BaseHandler:
+class BaseHandlerCallback:
     def __init__(self, db_session):
         self.db_session = db_session
         self.user = None

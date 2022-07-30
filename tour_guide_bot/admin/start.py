@@ -2,11 +2,11 @@ from sqlalchemy import select
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, MessageHandler, filters
 from tour_guide_bot import t
-from tour_guide_bot.helpers.telegram import BaseHandler
+from tour_guide_bot.helpers.telegram import BaseHandlerCallback
 from tour_guide_bot.models.admin import Admin, AdminPermissions
 
 
-class StartCommandHandler(BaseHandler):
+class StartCommandHandler(BaseHandlerCallback):
     STATE_CONTACT = 1
     STATE_TOKEN = 2
 
