@@ -1,4 +1,4 @@
-from tour_guide_bot.helpers.application import Application
+from tour_guide_bot.helpers.telegram import Application
 from tour_guide_bot.helpers.language import LanguageHandler
 from .start import StartCommandHandler
 
