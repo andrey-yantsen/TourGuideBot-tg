@@ -27,7 +27,7 @@ class TourTranslation(Base):
     tour_id = Column(Integer, ForeignKey("tour.id"), nullable=False)
     title = Column(String, nullable=False)
     tour = relationship("Tour", back_populates="translation")
-    section = relationship("TourSection", cascade="all, delete-orphan")
+    section = relationship("TourSection", cascade="all, delete-orphan", order_by="TourSection.position")
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
 
@@ -40,6 +40,7 @@ class MessageType(enum.Enum):
     video = 5
     video_note = 6
     photo = 7
+    media_group = 8
 
 
 class TourSection(Base):
@@ -50,7 +51,7 @@ class TourSection(Base):
     tour_translation_id = Column(Integer, ForeignKey("tour_translation.id"), nullable=False)
     tour_translation = relationship("TourTranslation", back_populates="section")
     position = Column(SmallInteger, nullable=False)
-    content = relationship("TourSectionContent", cascade="all, delete-orphan")
+    content = relationship("TourSectionContent", cascade="all, delete-orphan", order_by="TourSectionContent.position")
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
 

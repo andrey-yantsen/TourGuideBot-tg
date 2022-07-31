@@ -146,6 +146,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                     file = {
                         'file_id': file_id,
                         'message_id': update.message.message_id,
+                        'type': message_type,
                     }
 
                     if file_caption:
@@ -164,8 +165,11 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                 is_first = True
                 content = TourSectionContent()
                 content.tour_section_id = context.user_data['tour_section_id']
-                content.message_type = message_type
-                content.media_group_id = update.message.media_group_id
+                if update.message.media_group_id:
+                    content.media_group_id = update.message.media_group_id
+                    content.message_type = MessageType.media_group
+                else:
+                    content.message_type = message_type
                 content.position = context.user_data.get('tour_section_content_position', 0)
 
                 if file_id:
