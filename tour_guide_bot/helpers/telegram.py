@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from telegram.ext import ContextTypes, TypeHandler, Application as BotApplication
+from tour_guide_bot.models.tour import Tour
 from . import log
 
 
@@ -122,3 +123,35 @@ class BaseHandlerCallback:
                 'bot-generic', 'Abort'), callback_data='cancel')])
 
         return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+    @staticmethod
+    def get_tour_title(tour: Tour, current_language: str, context: ContextTypes.DEFAULT_TYPE) -> str:
+        default_language = context.application.default_language
+
+        if len(tour.translation) == 0:
+            title = 'Unnamed tour #%d' % tour.id
+            log.warning(t().pgettext('bot-generic', "Tour #{0} doesn't have any translations.".format(tour.id)))
+        elif len(tour.translation) == 1:
+            title = tour.translation[0].title
+
+            if tour.translation[0].language != default_language:
+                log.error(t().pgettext(
+                    'bot-generic', "Tour #{0} doesn't have a translation for the default language ({1}).".format(tour.id,
+                                                                                                                 default_language)))
+        else:
+            translations = {
+                translation.language: translation
+                for translation in tour.translation
+            }
+
+            if current_language in translations:
+                title = translations[current_language]
+            elif default_language in translations:
+                title = translations[default_language]
+            else:
+                log.warning(t().pgettext(
+                    'bot-generic', "Tour #{0} doesn't have a translation for the default language ({1}).".format(tour.id,
+                                                                                                                 default_language)))
+                title = translations[0].title
+
+        return title

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Index, Integer, String, DateTime, Table, func
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, func
 from sqlalchemy.orm import relationship
 from . import Base
 from .tour import Tour as _
@@ -13,6 +13,7 @@ class BoughtTours(Base):
     guest = relationship("Guest")
     tour_id = Column(Integer, ForeignKey("tour.id"), nullable=False)
     tour = relationship("Tour")
+    is_user_notified = Column(Boolean, nullable=False, default=False)
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
     expire_ts = Column(DateTime, nullable=False)

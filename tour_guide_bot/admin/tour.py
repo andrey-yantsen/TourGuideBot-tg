@@ -1,8 +1,6 @@
-from gettext import translation
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove, Update
-from telegram.constants import ParseMode
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from tour_guide_bot import t
 from tour_guide_bot.admin import AdminProtectedBaseHandlerCallback
@@ -305,38 +303,6 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         await update.message.reply_text(t(language).pgettext('admin-tours', 'Unsupported message! Please send me one of the'
                                                              ' following, to add it to the tour section: location, text,'
                                                              ' photo, audio, video, voice or video note.'))
-
-    @staticmethod
-    def get_tour_title(tour: Tour, current_language: str, context: ContextTypes.DEFAULT_TYPE) -> str:
-        default_language = context.application.default_language
-
-        if len(tour.translation) == 0:
-            title = 'Unnamed tour #%d' % tour.id
-            log.warning(t().pgettext('admin-tour-log', "Tour #{0} doesn't have any translations.".format(tour.id)))
-        elif len(tour.translation) == 1:
-            title = tour.translation[0].title
-
-            if tour.translation[0].language != default_language:
-                log.error(t().pgettext(
-                    'admin-tour-log', "Tour #{0} doesn't have a translation for the default language ({1}).".format(tour.id,
-                                                                                                                    default_language)))
-        else:
-            translations = {
-                translation.language: translation
-                for translation in tour.translation
-            }
-
-            if current_language in translations:
-                title = translations[current_language]
-            elif default_language in translations:
-                title = translations[default_language]
-            else:
-                log.warning(t().pgettext(
-                    'admin-tour-log', "Tour #{0} doesn't have a translation for the default language ({1}).".format(tour.id,
-                                                                                                                    default_language)))
-                title = translations[0].title
-
-        return title
 
     async def delete_tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
