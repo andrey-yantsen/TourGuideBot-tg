@@ -20,7 +20,7 @@ class LanguageHandler(BaseHandlerCallback):
         if required_language in context.application.enabled_languages:
             user = await self.get_user(update, context)
 
-            if self.is_admin_app:
+            if self.is_admin_app(context):
                 user.admin.language = required_language
                 self.db_session.add(user.admin)
             else:
