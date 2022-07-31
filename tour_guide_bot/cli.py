@@ -73,6 +73,7 @@ def run():
 
     if args.admin_bot_token:
         admin_bot = AdminBot.builder().token(args.admin_bot_token).build()
+        admin_bot.content_add_lock = asyncio.Lock()
         loop.run_until_complete(init_bot(admin_bot))
 
     if args.guide_bot_token:

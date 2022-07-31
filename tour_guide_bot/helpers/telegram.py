@@ -1,6 +1,7 @@
 from functools import partial
 from babel import Locale
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from tour_guide_bot import t
 from tour_guide_bot.models.telegram import TelegramUser
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -32,6 +33,29 @@ class BaseHandlerCallback:
     @classmethod
     def get_handlers(cls):
         raise NotImplementedError()
+
+    @staticmethod
+    async def edit_or_reply_text(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str, **kwargs):
+        if update.callback_query:
+            return await update.callback_query.edit_message_text(text, **kwargs)
+        else:
+            return await BaseHandlerCallback.reply_text(update, context, text, **kwargs)
+
+    @staticmethod
+    async def reply_text(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str, **kwargs):
+        async def _reply(*args, **kwargs):
+            return await context.application.bot.send_message(update.effective_chat.id, *args, **kwargs)
+
+        if update.message:
+            reply = update.message.reply_text
+        else:
+            reply = _reply
+
+        return await reply(text, **kwargs)
+
+    async def unknown_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        language = await self.get_language(update, context)
+        await update.message.reply_text(t(language).pgettext('bot-generic', 'Unknown command.'))
 
     @classmethod
     async def build_and_run(cls, callback, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -78,13 +102,10 @@ class BaseHandlerCallback:
 
         return self.user
 
-    def get_language_select_inline_keyboard(self, current_language: str, context: ContextTypes.DEFAULT_TYPE, callback_data_prefix: str = 'language:'):
-        keyboard = [[]]
+    def get_language_select_inline_keyboard(self, current_language: str, context: ContextTypes.DEFAULT_TYPE, callback_data_prefix: str = 'language:', with_abort: bool = False):
+        keyboard = []
 
         for locale_name in context.application.enabled_languages:
-            if len(keyboard[len(keyboard) - 1]) == 1:
-                keyboard.append([])
-
             locale = Locale.parse(locale_name)
 
             if locale_name != current_language:
@@ -93,8 +114,11 @@ class BaseHandlerCallback:
             else:
                 locale_text = locale.get_language_name(locale_name)
 
-            keyboard[len(keyboard) - 1].append(
-                InlineKeyboardButton(locale_text.title(), callback_data="%s%s" % (callback_data_prefix, locale_name))
-            )
+            keyboard.append([InlineKeyboardButton(locale_text.title(), callback_data="%s%s" %
+                            (callback_data_prefix, locale_name))])
+
+        if with_abort:
+            keyboard.append([InlineKeyboardButton(t(current_language).pgettext(
+                'bot-generic', 'Abort'), callback_data='cancel')])
 
         return InlineKeyboardMarkup(inline_keyboard=keyboard)

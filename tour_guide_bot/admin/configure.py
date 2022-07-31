@@ -46,16 +46,9 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
 
         user = await self.get_user(update, context)
 
-        language_keyboard = self.get_language_select_inline_keyboard(
-            user.admin_language, context, 'change_welcome_message:')
-        language_keyboard.inline_keyboard += [[
-            InlineKeyboardButton(t(user.admin_language).pgettext(
-                'bot-generic', 'Abort'), callback_data='cancel')
-        ]]
-
         await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
             'admin-configure', 'Please select the language for the welcome-message you want to edit.'),
-            reply_markup=language_keyboard)
+            reply_markup=self.get_language_select_inline_keyboard(user.admin_language, context, 'change_welcome_message:', True))
 
         return self.STATE_WELCOME_MESSAGE_LANGUAGE
 
@@ -68,7 +61,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         if target_language not in context.application.enabled_languages:
             del context.user_data['welcome_message_target_language']
             await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
-                'admin-configure', 'Something went wrong; please try again.'))
+                'bot-generic', 'Something went wrong; please try again.'))
             return ConversationHandler.END
 
         stmt = select(Settings).where((Settings.key == SettingsKey.guide_welcome_message)
@@ -98,7 +91,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
 
         if not target_language:
             await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
-                'admin-configure', 'Something went wrong; please try again.'))
+                'bot-generic', 'Something went wrong; please try again.'))
             return ConversationHandler.END
 
         stmt = select(Settings).where((Settings.key == SettingsKey.guide_welcome_message)
@@ -121,12 +114,8 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
     async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
-        if update.message:
-            await update.message.reply_text(t(user.admin_language).pgettext(
-                'bot-generic', 'Cancelled.'),
-                reply_markup=ReplyKeyboardRemove())
-        elif update.callback_query:
-            await update.callback_query.edit_message_text(t(user.admin_language).pgettext('bot-generic', 'Cancelled.'))
+        await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+            'bot-generic', 'Cancelled.'))
 
         return ConversationHandler.END
 
