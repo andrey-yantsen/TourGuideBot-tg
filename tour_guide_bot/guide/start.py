@@ -1,9 +1,10 @@
-from sqlalchemy import select
+from datetime import datetime
+from sqlalchemy import func, select
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, MessageHandler, filters
 from tour_guide_bot import t
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback
-from tour_guide_bot.models.guest import Guest
+from tour_guide_bot.models.guest import BoughtTours, Guest
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 
@@ -53,10 +54,23 @@ class StartCommandHandler(BaseHandlerCallback):
         self.db_session.add(user)
         await self.db_session.commit()
 
-        await update.message.reply_text(t(user.guest_language).pgettext(
-            "guest-bot-start", "Added guest."),
-            reply_markup=ReplyKeyboardRemove())
+        await self.process_guest(guest, update, context)
         return ConversationHandler.END
+
+    async def process_guest(self, guest: Guest, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        active_tours_cnt = await self.db_session.scalar(select(func.count(BoughtTours.id)).where(
+            (BoughtTours.guest == guest)
+            & (BoughtTours.expire_ts >= datetime.now())
+        ))
+        language = await self.get_language(update, context)
+
+        if active_tours_cnt:
+            await update.message.reply_text(t(language).pgettext('guest-bot-start', 'I see you have some tours available; thank you the support! '
+                                                                 'Send /tours to start exploring!'))
+        else:
+            await update.message.reply_text(t(language).pgettext('guest-bot-start', 'Unfortunately, no tours are available for you at the moment.'
+                                                                 ' Approving somebody for a tour takes a while, but if you feel like a mistake was made'
+                                                                 " don't hesitate contacting me! The bot's profile should provide with all the required info."))
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
@@ -73,8 +87,7 @@ class StartCommandHandler(BaseHandlerCallback):
         await update.message.reply_markdown_v2(welcome_message.value)
 
         if user.guest:
-            await update.message.reply_text(t(user.guest_language).pgettext(
-                "guest-bot-start", "Found guest early."))
+            await self.process_guest(user.guest, update, context)
             return ConversationHandler.END
         elif not user.phone:
             await update.message.reply_text(t(user.guest_language).pgettext(
@@ -88,16 +101,11 @@ class StartCommandHandler(BaseHandlerCallback):
             if guest:
                 user.guest = guest
                 self.db_session.add(user)
-
-                await update.message.reply_text(t(user.guest_language).pgettext(
-                    "guest-bot-start", "Found guest."))
             else:
                 guest = Guest(phone=user.phone, language=user.language)
                 user.guest = guest
                 self.db_session.add_all([guest, user])
 
-                await update.message.reply_text(t(user.guest_language).pgettext(
-                    "guest-bot-start", "No guest."))
-
+            await self.process_guest(guest, update, context)
             await self.db_session.commit()
             return ConversationHandler.END

@@ -389,22 +389,38 @@ msgctxt "admin-tours"
 msgid "Delete a tour"
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:30
+#: tour_guide_bot/guide/start.py:31
 msgctxt "guest-bot-start"
 msgid "Share phone number"
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:38
+#: tour_guide_bot/guide/start.py:39
 msgctxt "guest-bot-start"
 msgid "Please send me your contact number and not somebody else's."
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:70
+#: tour_guide_bot/guide/start.py:68
+msgctxt "guest-bot-start"
+msgid ""
+"I see you have some tours available; thank you the support! Send /tours "
+"to start exploring!"
+msgstr ""
+
+#: tour_guide_bot/guide/start.py:71
+msgctxt "guest-bot-start"
+msgid ""
+"Unfortunately, no tours are available for you at the moment. Approving "
+"somebody for a tour takes a while, but if you feel like a mistake was "
+"made don't hesitate contacting me! The bot's profile should provide with "
+"all the required info."
+msgstr ""
+
+#: tour_guide_bot/guide/start.py:83
 msgctxt "guest-bot-start"
 msgid "The bot is not configured yet; please try again later."
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:80
+#: tour_guide_bot/guide/start.py:93
 msgctxt "guest-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr ""
