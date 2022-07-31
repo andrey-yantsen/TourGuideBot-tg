@@ -3,6 +3,7 @@ from sqlalchemy import func, select
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, MessageHandler, filters
 from tour_guide_bot import t
+from tour_guide_bot.helpers.language import LanguageHandler
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback
 from tour_guide_bot.models.guest import BoughtTours, Guest
 from tour_guide_bot.models.settings import Settings, SettingsKey
@@ -19,7 +20,11 @@ class StartCommandHandler(BaseHandlerCallback):
                 states={
                     cls.STATE_CONTACT: [MessageHandler(filters.CONTACT, cls.partial(cls.contact))],
                 },
-                fallbacks=[],
+                fallbacks=[
+                    MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(cls.unexpected_message))
+                ] + LanguageHandler.get_handlers() + [
+                    MessageHandler(filters.COMMAND, cls.partial(cls.unexpected_command))
+                ],
                 name='guest-init',
                 persistent=True
             )
@@ -31,6 +36,17 @@ class StartCommandHandler(BaseHandlerCallback):
             t(language).pgettext('guest-bot-start', 'Share phone number'),
             request_contact=True
         )]], one_time_keyboard=True)
+
+    async def unexpected_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        user = await self.get_user(update, context)
+        await update.message.reply_text(t(user.guest_language).pgettext('guest-bot-start', 'Please send me your phone'
+                                                                        ' number using the "Share phone number" button.'))
+
+    async def unexpected_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        user = await self.get_user(update, context)
+        await update.message.reply_text(t(user.guest_language).pgettext('guest-bot-start', 'Unexpected command '
+                                                                        'received. At this stage you can only use '
+                                                                        '/language to change the interface language.'))
 
     async def contact(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)

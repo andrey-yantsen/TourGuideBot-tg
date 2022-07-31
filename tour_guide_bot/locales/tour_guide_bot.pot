@@ -389,24 +389,36 @@ msgctxt "admin-tours"
 msgid "Delete a tour"
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:31
+#: tour_guide_bot/guide/start.py:36
 msgctxt "guest-bot-start"
 msgid "Share phone number"
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:39
+#: tour_guide_bot/guide/start.py:42
+msgctxt "guest-bot-start"
+msgid "Please send me your phone number using the \"Share phone number\" button."
+msgstr ""
+
+#: tour_guide_bot/guide/start.py:47
+msgctxt "guest-bot-start"
+msgid ""
+"Unexpected command received. At this stage you can only use /language to "
+"change the interface language."
+msgstr ""
+
+#: tour_guide_bot/guide/start.py:55
 msgctxt "guest-bot-start"
 msgid "Please send me your contact number and not somebody else's."
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:68
+#: tour_guide_bot/guide/start.py:84
 msgctxt "guest-bot-start"
 msgid ""
 "I see you have some tours available; thank you the support! Send /tours "
 "to start exploring!"
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:71
+#: tour_guide_bot/guide/start.py:87
 msgctxt "guest-bot-start"
 msgid ""
 "Unfortunately, no tours are available for you at the moment. Approving "
@@ -415,32 +427,32 @@ msgid ""
 "all the required info."
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:83
+#: tour_guide_bot/guide/start.py:99
 msgctxt "guest-bot-start"
 msgid "The bot is not configured yet; please try again later."
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:93
+#: tour_guide_bot/guide/start.py:109
 msgctxt "guest-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr ""
 
-#: tour_guide_bot/helpers/language.py:32
+#: tour_guide_bot/helpers/language.py:34
 msgctxt "any-bot"
 msgid "The language has been changed to {0}."
 msgstr ""
 
-#: tour_guide_bot/helpers/language.py:34
+#: tour_guide_bot/helpers/language.py:36
 msgctxt "any-bot"
 msgid "Something went wrong, please try again."
 msgstr ""
 
-#: tour_guide_bot/helpers/language.py:40
+#: tour_guide_bot/helpers/language.py:42
 msgctxt "any-bot"
 msgid "Unfortunately, you can`t change the language — this bot supports only one."
 msgstr ""
 
-#: tour_guide_bot/helpers/language.py:43
+#: tour_guide_bot/helpers/language.py:45
 msgctxt "any-bot"
 msgid "Please select the language you prefer"
 msgstr ""
