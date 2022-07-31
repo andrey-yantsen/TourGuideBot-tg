@@ -4,6 +4,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from tour_guide_bot import t
 from tour_guide_bot.admin import AdminProtectedBaseHandlerCallback
+from tour_guide_bot.helpers.telegram import get_tour_title
 from tour_guide_bot.models.tour import MessageType, Tour, TourSection, TourSectionContent, TourTranslation
 from . import log
 
@@ -316,7 +317,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             await self.cleanup_context(context)
             return ConversationHandler.END
 
-        tour_title = self.get_tour_title(tour, user.admin_language, context)
+        tour_title = get_tour_title(tour, user.admin_language, context)
 
         await self.db_session.delete(tour)
         await self.db_session.commit()
@@ -339,7 +340,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             return ConversationHandler.END
 
         await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
-            'admin-tours', 'Do you really want to delete tour "{0}"?'.format(self.get_tour_title(tour, user.admin_language, context))),
+            'admin-tours', 'Do you really want to delete tour "{0}"?'.format(get_tour_title(tour, user.admin_language, context))),
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [
                     InlineKeyboardButton(t(user.admin_language).pgettext('bot-generic',
@@ -438,7 +439,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         callback_data = update.callback_query.data
 
         for tour in tours:
-            title = self.get_tour_title(tour, user.admin_language, context)
+            title = get_tour_title(tour, user.admin_language, context)
             keyboard.append([InlineKeyboardButton(title, callback_data='%s:%s' % (callback_data, tour.id))])
 
         keyboard.append([InlineKeyboardButton(t(current_language).pgettext(

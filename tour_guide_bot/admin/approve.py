@@ -5,6 +5,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from tour_guide_bot import t
 from tour_guide_bot.admin import AdminProtectedBaseHandlerCallback
+from tour_guide_bot.helpers.telegram import get_tour_title
 from tour_guide_bot.models.guest import BoughtTours, Guest
 from tour_guide_bot.models.tour import Tour
 import re
@@ -90,7 +91,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
 
         await update.message.reply_text(t(user.admin_language).pgettext('admin-approve',
                                                                         "Phone number +{0} was approved for the tour '{1}' until {2}.")
-                                        .format(guest.phone, self.get_tour_title(tour, user.admin_language, context), d.strftime('%Y-%m-%d %H:%M:%S')))
+                                        .format(guest.phone, get_tour_title(tour, user.admin_language, context), d.strftime('%Y-%m-%d %H:%M:%S')))
         return ConversationHandler.END
 
     async def phone_number(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -132,7 +133,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
         current_language = user.admin_language
 
         for tour in tours:
-            title = self.get_tour_title(tour, user.admin_language, context)
+            title = get_tour_title(tour, user.admin_language, context)
             keyboard.append([InlineKeyboardButton(title, callback_data='approve_tour:%s' % (tour.id, ))])
 
         if len(keyboard) == 0:

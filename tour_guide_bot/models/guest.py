@@ -13,7 +13,7 @@ class BoughtTours(Base):
     guest = relationship("Guest")
     tour_id = Column(Integer, ForeignKey("tour.id"), nullable=False)
     tour = relationship("Tour")
-    is_user_notified = Column(Boolean, nullable=False, default=False)
+    is_user_notified = Column(Boolean, nullable=False, default=False, index=True)
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
     expire_ts = Column(DateTime, nullable=False)

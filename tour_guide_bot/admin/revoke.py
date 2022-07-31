@@ -5,6 +5,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from tour_guide_bot import t
 from tour_guide_bot.admin import AdminProtectedBaseHandlerCallback
+from tour_guide_bot.helpers.telegram import get_tour_title
 from tour_guide_bot.models.guest import BoughtTours, Guest
 from tour_guide_bot.models.tour import Tour
 import re
@@ -91,12 +92,13 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
             return ConversationHandler.END
 
         purchase.expire_ts = datetime.datetime.now()
+        purchase.is_user_notified = True
         self.db_session.add(purchase)
         await self.db_session.commit()
 
         await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
             'admin-revoke', 'Access to "{0}" was revoked from +{1}.')
-            .format(self.get_tour_title(tour, user.admin_language, context), guest.phone))
+            .format(get_tour_title(tour, user.admin_language, context), guest.phone))
 
         return ConversationHandler.END
 
@@ -142,7 +144,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
 
         await update.message.reply_text(t(user.admin_language).pgettext('admin-revoke',
                                                                         'Are you sure you want to revoke the access to "{0}" from +{1}?')
-                                        .format(self.get_tour_title(tour, user.admin_language, context), phone_number),
+                                        .format(get_tour_title(tour, user.admin_language, context), phone_number),
                                         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                                             [
                                                 InlineKeyboardButton(t(user.admin_language).pgettext('bot-generic',
@@ -173,7 +175,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         current_language = user.admin_language
 
         for tour in tours:
-            title = self.get_tour_title(tour, user.admin_language, context)
+            title = get_tour_title(tour, user.admin_language, context)
             keyboard.append([InlineKeyboardButton(title, callback_data='revoke_tour:%s' % (tour.id, ))])
 
         if len(keyboard) == 0:
