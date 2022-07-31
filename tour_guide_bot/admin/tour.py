@@ -429,7 +429,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         context.user_data['tour_language'] = target_language
 
         await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext('admin-tour', 'Please send me the'
-                                                                                       ' title for the tour, or send / cancel to abort.'))
+                                                                                       ' title for the tour, or send /cancel to abort.'))
 
         return self.STATE_TOUR_SAVE_TITLE
 
