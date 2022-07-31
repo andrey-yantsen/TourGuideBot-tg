@@ -137,6 +137,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             keyboard.append([InlineKeyboardButton(title, callback_data='approve_tour:%s' % (tour.id, ))])
 
         if len(keyboard) == 0:
+            await update.message.reply_text(t(user.admin_language).pgettext('admin-approve', "Unfortunately, you don't have any tours available for the guests."))
             return ConversationHandler.END
 
         keyboard.append([InlineKeyboardButton(t(current_language).pgettext(

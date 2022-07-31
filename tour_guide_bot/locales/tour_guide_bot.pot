@@ -86,15 +86,20 @@ msgid ""
 " to abort."
 msgstr ""
 
-#: tour_guide_bot/admin/approve.py:142 tour_guide_bot/admin/configure.py:133
-#: tour_guide_bot/admin/revoke.py:152 tour_guide_bot/admin/revoke.py:184
+#: tour_guide_bot/admin/approve.py:140
+msgctxt "admin-approve"
+msgid "Unfortunately, you don't have any tours available for the guests."
+msgstr ""
+
+#: tour_guide_bot/admin/approve.py:143 tour_guide_bot/admin/configure.py:133
+#: tour_guide_bot/admin/revoke.py:152 tour_guide_bot/admin/revoke.py:185
 #: tour_guide_bot/admin/tour.py:348 tour_guide_bot/admin/tour.py:445
 #: tour_guide_bot/admin/tour.py:493 tour_guide_bot/helpers/telegram.py:122
 msgctxt "bot-generic"
 msgid "Abort"
 msgstr ""
 
-#: tour_guide_bot/admin/approve.py:145
+#: tour_guide_bot/admin/approve.py:146
 msgctxt "admin-approve"
 msgid "Please select the tour."
 msgstr ""
@@ -186,7 +191,12 @@ msgctxt "bot-generic"
 msgid "Yes"
 msgstr ""
 
-#: tour_guide_bot/admin/revoke.py:187
+#: tour_guide_bot/admin/revoke.py:182
+msgctxt "admin-revoke"
+msgid "Unfortunately, you don't have any tours available for the guests."
+msgstr ""
+
+#: tour_guide_bot/admin/revoke.py:188
 msgctxt "admin-revoke"
 msgid "Please select the tour."
 msgstr ""
