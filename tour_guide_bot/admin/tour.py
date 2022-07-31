@@ -28,7 +28,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
     def get_handlers(cls):
         return [
             ConversationHandler(
-                entry_points=[CommandHandler('tour', cls.partial(cls.start))],
+                entry_points=[CommandHandler('tours', cls.partial(cls.start))],
                 states={
                     cls.STATE_SELECT_ACTION: [
                         CallbackQueryHandler(cls.partial(cls.request_tour_language), '^%s$' %
