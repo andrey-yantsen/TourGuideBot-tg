@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: English\n"
 "Language: en_US\n"
-"PO-Revision-Date: 2022-08-01 18:15\n"
+"PO-Revision-Date: 2022-08-01 18:40\n"
 
 #: tour_guide_bot/cli.py:15
 msgctxt "cli"
@@ -213,7 +213,7 @@ msgstr "I still don't recognise you, sorry. Try saying /admin again when you're 
 #: tour_guide_bot/bot/admin/start.py:103
 msgctxt "admin-bot-start"
 msgid "You're in guest mode now, bye!"
-msgstr ""
+msgstr "You're in guest mode now, bye!"
 
 #: tour_guide_bot/bot/admin/start.py:111 tour_guide_bot/bot/admin/start.py:127
 msgctxt "admin-bot-start"
