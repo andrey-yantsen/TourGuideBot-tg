@@ -2,6 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from tour_guide_bot import t
+from tour_guide_bot.guide.tours import ToursCommandHandler
 from tour_guide_bot.helpers.telegram import Application, get_tour_title
 from tour_guide_bot.helpers.language import LanguageHandler
 from telegram.ext import ContextTypes
@@ -14,6 +15,7 @@ from .start import StartCommandHandler
 class GuideBot(Application):
     async def initialize(self) -> None:
         self.add_handlers(StartCommandHandler.get_handlers())
+        self.add_handlers(ToursCommandHandler.get_handlers())
         self.add_handlers(LanguageHandler.get_handlers())
 
         self.job_queue.run_repeating(self.check_new_approved_tours, 60)

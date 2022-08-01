@@ -50,6 +50,7 @@ msgstr ""
 
 #: tour_guide_bot/admin/approve.py:53 tour_guide_bot/admin/configure.py:117
 #: tour_guide_bot/admin/revoke.py:53 tour_guide_bot/admin/tour.py:131
+#: tour_guide_bot/guide/tours.py:43
 msgctxt "bot-generic"
 msgid "Cancelled."
 msgstr ""
@@ -435,8 +436,8 @@ msgid ""
 "to start exploring!"
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:87
-msgctxt "guest-bot-start"
+#: tour_guide_bot/guide/start.py:87 tour_guide_bot/guide/tours.py:66
+msgctxt "guest-bot"
 msgid ""
 "Unfortunately, no tours are available for you at the moment. Approving "
 "somebody for a tour takes a while, but if you feel like a mistake was "
@@ -444,12 +445,12 @@ msgid ""
 "all the required info."
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:99
+#: tour_guide_bot/guide/start.py:100
 msgctxt "guest-bot-start"
 msgid "The bot is not configured yet; please try again later."
 msgstr ""
 
-#: tour_guide_bot/guide/start.py:109
+#: tour_guide_bot/guide/start.py:110
 msgctxt "guest-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr ""

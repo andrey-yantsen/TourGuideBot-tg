@@ -82,11 +82,12 @@ class StartCommandHandler(BaseHandlerCallback):
 
         if active_tours_cnt:
             await update.message.reply_text(t(language).pgettext('guest-bot-start', 'I see you have some tours available; thank you the support! '
-                                                                 'Send /tours to start exploring!'))
+                                                                 'Send /tours to start exploring!'), reply_markup=ReplyKeyboardRemove())
         else:
-            await update.message.reply_text(t(language).pgettext('guest-bot-start', 'Unfortunately, no tours are available for you at the moment.'
+            await update.message.reply_text(t(language).pgettext('guest-tour', 'Unfortunately, no tours are available for you at the moment.'
                                                                  ' Approving somebody for a tour takes a while, but if you feel like a mistake was made'
-                                                                 " don't hesitate contacting me! The bot's profile should provide with all the required info."))
+                                                                 " don't hesitate contacting me! The bot's profile should provide with all the required info."),
+                                            reply_markup=ReplyKeyboardRemove())
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
