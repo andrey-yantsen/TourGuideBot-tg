@@ -1,7 +1,7 @@
-from typing import Optional, Union
+from typing import Optional
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
-from telegram import Audio, InlineKeyboardButton, InlineKeyboardMarkup, PhotoSize, Update, Video, VideoNote, Voice
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from tour_guide_bot import t
 from tour_guide_bot.admin import AdminProtectedBaseHandlerCallback
@@ -133,7 +133,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         return ConversationHandler.END
 
     async def translation_section_content_add(self, update: Update, context: ContextTypes.DEFAULT_TYPE, message_type: MessageType, text=None,
-                                              media: Optional[Union[Video, Audio, Voice, PhotoSize, VideoNote]] = None, file_caption=None, location=None):
+                                              file_id: Optional[str] = None, file_caption=None, location=None):
         is_first = True
         async with context.application.content_add_lock:
             if update.message.media_group_id:
@@ -145,7 +145,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                     is_first = False
 
                     file = {
-                        'object_data': media.to_dict(),
+                        'file_id': file_id,
                         'message_id': update.message.message_id,
                         'type': message_type.name,
                     }
@@ -153,12 +153,10 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                     if file_caption:
                         file['caption'] = file_caption
 
-                    content.content['files'].append(file)
-
-                    content.content = {'files': list(sorted(
-                        content.content['files'],
+                    content.content['files'] = list(sorted(
+                        content.content.pop('files'),
                         key=lambda file: file['message_id']
-                    ))}
+                    ))
 
                     self.db_session.add(content)
 
@@ -174,9 +172,9 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
                 content.position = context.user_data.get('tour_section_content_position', 0)
 
-                if media:
+                if file_id:
                     file = {
-                        'object_data': media.to_dict(),
+                        'file_id': file_id,
                         'message_id': update.message.message_id,
                         'type': message_type.name,
                     }
@@ -221,7 +219,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
     async def translation_section_content_add_voice(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         await self.translation_section_content_add(update, context, MessageType.voice,
-                                                   media=update.message.voice,
+                                                   file_id=update.message.voice.file_id,
                                                    file_caption=update.message.caption_markdown_v2_urled)
 
         language = await self.get_language(update, context)
@@ -233,7 +231,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
     async def translation_section_content_add_video_note(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         await self.translation_section_content_add(update, context, MessageType.video_note,
-                                                   media=update.message.video_note,
+                                                   file_id=update.message.video_note.file_id,
                                                    file_caption=update.message.caption_markdown_v2_urled)
 
         language = await self.get_language(update, context)
@@ -245,7 +243,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
     async def translation_section_content_add_audio(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         is_first = await self.translation_section_content_add(update, context, MessageType.audio,
-                                                              media=update.message.audio,
+                                                              file_id=update.message.audio.file_id,
                                                               file_caption=update.message.caption_markdown_v2_urled)
 
         if is_first:
@@ -264,7 +262,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
     async def translation_section_content_add_video(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         is_first = await self.translation_section_content_add(update, context, MessageType.video,
-                                                              media=update.message.video,
+                                                              file_id=update.message.video.file_id,
                                                               file_caption=update.message.caption_markdown_v2_urled)
 
         if is_first:
@@ -286,10 +284,9 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             sorted(update.message.photo,
                    key=lambda photo: photo['width'] * photo['height'],
                    reverse=True))
-        best_photo = sorted_photos[0]
 
         is_first = await self.translation_section_content_add(update, context, MessageType.photo,
-                                                              media=best_photo,
+                                                              file_id=sorted_photos[0].file_id,
                                                               file_caption=update.message.caption_markdown_v2_urled)
 
         if is_first:
