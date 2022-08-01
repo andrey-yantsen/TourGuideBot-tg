@@ -103,9 +103,9 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
                                                                                 "doesn't have a phone number; please try again."))
                 return self.STATE_PHONE_NUMBER
         else:
-            phone_number = re.sub('\D+', '', update.message.text)
+            phone_number = update.message.text
 
-        context.user_data['phone_number'] = phone_number
+        context.user_data['phone_number'] = re.sub('\D+', '', phone_number)
 
         await update.message.reply_text(t(user.admin_language).pgettext('admin-approve',
                                                                         'When the access should expire? Enter something like "in 6 months", "in 1 week" and so on.'))

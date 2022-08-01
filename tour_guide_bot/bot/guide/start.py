@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 from sqlalchemy import func, select
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, MessageHandler, filters
@@ -57,7 +58,7 @@ class StartCommandHandler(BaseHandlerCallback):
                 reply_markup=self.request_contact(user.guest_language))
             return self.STATE_CONTACT
 
-        user.phone = str(update.message.contact.phone_number)
+        user.phone = re.sub('\D+', '', update.message.contact.phone_number)
 
         stmt = select(Guest).where(Guest.phone == user.phone)
         guest = await self.db_session.scalar(stmt)

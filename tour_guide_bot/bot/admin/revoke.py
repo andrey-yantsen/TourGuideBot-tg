@@ -105,7 +105,9 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
                                                                                 "doesn't have a phone number; please try again."))
                 return self.STATE_PHONE_NUMBER
         else:
-            phone_number = re.sub('\D+', '', update.message.text)
+            phone_number = update.message.text
+
+        phone_number = re.sub('\D+', '', phone_number)
 
         guest = await self.db_session.scalar(select(Guest).where(Guest.phone == phone_number))
 
