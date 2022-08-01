@@ -152,8 +152,8 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         user = await self.get_user(update, context)
         await update.callback_query.edit_message_text(t(user.admin_language).pgettext('admin-revoke',
                                                                                       'Enter the phone number from which you want to revoke'
-                                                                                      ' access to the tour (with country code), or share the contact.'
-                                                                                      ' Send /cancel at any time if you want to cancel.'))
+                                                                                      ' access to the tour (with country code) or share the contact.'
+                                                                                      ' Send /cancel at any time if you wish to cancel.'))
         context.user_data['tour_id'] = context.matches[0].group(1)
         return self.STATE_PHONE_NUMBER
 
