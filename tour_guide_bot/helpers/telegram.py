@@ -6,24 +6,11 @@ from tour_guide_bot.models.telegram import TelegramUser
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from telegram.ext import ContextTypes, TypeHandler, Application as BotApplication
-from tour_guide_bot.models.tour import Tour
+from telegram.ext import ConversationHandler, ContextTypes
+from tour_guide_bot.models.guide import Tour
+from tour_guide_bot import t
+from sqlalchemy.ext.asyncio import AsyncSession
 from . import log
-
-
-class Application(BotApplication):
-    @classmethod
-    def builder(cls):
-        builder = super().builder()
-        builder.application_class(cls)
-        return builder
-
-    async def initialize(self) -> None:
-        self.add_handler(TypeHandler(object, self.debug_log_handler), -1)
-        await super().initialize()
-
-    async def debug_log_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        log.debug('[{0}] received update: {1}'.format(context.application.__class__.__name__, update))
 
 
 class BaseHandlerCallback:
@@ -123,6 +110,21 @@ class BaseHandlerCallback:
                 'bot-generic', 'Abort'), callback_data='cancel')])
 
         return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+
+class AdminProtectedBaseHandlerCallback(BaseHandlerCallback):
+    @classmethod
+    async def build_and_run(cls, callback, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        async with AsyncSession(context.application.db_engine, expire_on_commit=False) as session:
+            handler = cls(session)
+
+            user = await handler.get_user(update, context)
+
+            if not user.admin:
+                await cls.edit_or_reply_text(update, context, t(user.language).pgettext('admin-bot', 'Access denied.'))
+                return ConversationHandler.END
+
+            return await callback(handler, update, context)
 
 
 def get_tour_title(tour: Tour, current_language: str, context: ContextTypes.DEFAULT_TYPE) -> str:

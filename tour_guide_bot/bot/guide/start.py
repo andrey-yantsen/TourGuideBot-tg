@@ -5,7 +5,7 @@ from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, Mess
 from tour_guide_bot import t
 from tour_guide_bot.helpers.language import LanguageHandler
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback
-from tour_guide_bot.models.guest import BoughtTours, Guest
+from tour_guide_bot.models.guide import BoughtTours, Guest
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 

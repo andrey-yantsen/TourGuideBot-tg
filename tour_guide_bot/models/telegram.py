@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, func
 from sqlalchemy.orm import relationship
 from . import Base
-from .guest import Guest as _
+from .guide import Guest as _
 from .admin import Admin as _
 
 

@@ -5,20 +5,35 @@
 Project allows you to create, manage and share virtual guided tours,
 viewable over Telegram.
 
-At this moment you need to manually approve users for your tours using the admin-bot.
+At this moment you need to manually approve users for your tours using the
+admin-mode in the bot.
+
+# Bot commands
+
+## Guide mode (default)
+
+* `/start` — initialize the bot. It will greet you, ask for the phone number
+             and check if you have any tours approved.
+* `/tours` — list the available tours and start one of them.
+* `/language` - change the interface language.
+* `/admin` — switch to the admin mode.
+
+## Admin mode
+
+* `/guest` — exit the admin mode.
+* `/language` - change the interface language.
+* `/configure` — change the bot's settings.
+* `/tours` — manage your tours.
+* `/approve` — allow somebody to access a tour.
+* `/revoke` — revoke access to a tour.
 
 # Running
 
 ## Preparation
 
-First of all you need to register two bots with [BotFather](https://t.me/BotFather):
+First of all you need to register a bot with [BotFather](https://t.me/BotFather).
 
-1. admin_bot — the bot where you'll be configuring your tours, manage
-   generic settings and approve users for the tours.
-2. guide_bot — the bot that will be visible for your users, where they'll
-   see the tours.
-
-Have the received tokens ready and don't share them anywhere.
+Have the received token ready and don't share it anywhere.
 
 ## Database
 
@@ -36,13 +51,11 @@ an async dialect for the connection, e.g. aiosqlite or asyncpg.
 $ docker run --restart=unless-stopped -d \
     -v $(pwd)/persistent:/home/tg/app/persistent \
     ghcr.io/andrey-yantsen/tourguidebot-tg:latest \
-        -g <telegram_bot_token_guide_bot> \
-        -a <telegram_bot_token_admin_bot> \
+        -g <telegram_bot_token> \
         --db=sqlite+aiosqlite:////home/tg/app/persistent/tour_guide_bot.sqlite3
 ```
 
-Do not forget to replace `<telegram_bot_token_guide_bot>` and `<telegram_bot_token_admin_bot>`
-with the correct token values.
+Do not forget to replace `<telegram_bot_token>` with the correct token value.
 
 This command will start a single process for both admin_bot and guide_bot.
 This may cause delays in processing requests on high load.
@@ -50,10 +63,10 @@ This may cause delays in processing requests on high load.
 ## Recommended way
 
 Copy included `docker-compose.yml.example` into `docker-compose.yml`, and
-replace `<telegram_bot_token_guide_bot>` and `<telegram_bot_token_admin_bot>`
-with the correct token values.
+replace `<telegram_bot_token>` with the correct token value.
 
-After that, you should be able to start everything required with the following command:
+After that, you should be able to start everything required with the following
+command:
 
 ```
 docker-compose up

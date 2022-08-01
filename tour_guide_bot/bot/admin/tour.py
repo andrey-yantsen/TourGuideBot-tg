@@ -4,9 +4,8 @@ from sqlalchemy.orm import selectinload
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from tour_guide_bot import t
-from tour_guide_bot.admin import AdminProtectedBaseHandlerCallback
-from tour_guide_bot.helpers.telegram import get_tour_title
-from tour_guide_bot.models.tour import MessageType, Tour, TourSection, TourSectionContent, TourTranslation
+from tour_guide_bot.helpers.telegram import get_tour_title, AdminProtectedBaseHandlerCallback
+from tour_guide_bot.models.guide import MessageType, Tour, TourSection, TourSectionContent, TourTranslation
 from . import log
 
 
@@ -153,8 +152,11 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                     if file_caption:
                         file['caption'] = file_caption
 
+                    files = content.content.pop('files')
+                    files.append(file)
+
                     content.content['files'] = list(sorted(
-                        content.content.pop('files'),
+                        files,
                         key=lambda file: file['message_id']
                     ))
 

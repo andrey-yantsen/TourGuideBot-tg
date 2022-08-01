@@ -1,7 +1,7 @@
+from . import Base
 from sqlalchemy.ext.mutable import MutableDict
-from sqlalchemy import JSON, Column, Enum, ForeignKey, Index, Integer, SmallInteger, DateTime, String, func
+from sqlalchemy import Boolean, JSON, Column, Enum, ForeignKey, Index, Integer, SmallInteger, DateTime, String, func
 from sqlalchemy.orm import relationship, object_session
-from tour_guide_bot.models import Base
 import enum
 
 
@@ -11,6 +11,7 @@ class Tour(Base):
 
     id = Column(Integer, primary_key=True)
     translation = relationship("TourTranslation", back_populates="tour", cascade="all, delete-orphan")
+    purchases = relationship("BoughtTours", cascade="all, delete-orphan")
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
 
@@ -78,3 +79,29 @@ class TourSectionContent(Base):
         Index('ix_tour_section_content_secion_id_media_group',
               'tour_section_id', 'message_type', 'media_group_id', unique=True),
     )
+
+
+class BoughtTours(Base):
+    __tablename__ = 'bought_tours'
+    __mapper_args__ = {"eager_defaults": True}
+
+    id = Column(Integer, primary_key=True)
+    guest_id = Column(Integer, ForeignKey("guest.id"), nullable=False, index=True)
+    guest = relationship("Guest")
+    tour_id = Column(Integer, ForeignKey("tour.id"), nullable=False)
+    tour = relationship("Tour")
+    is_user_notified = Column(Boolean, nullable=False, default=False, index=True)
+    created_ts = Column(DateTime, nullable=False, server_default=func.now())
+    updated_ts = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
+    expire_ts = Column(DateTime, nullable=False)
+
+
+class Guest(Base):
+    __tablename__ = 'guest'
+    __mapper_args__ = {"eager_defaults": True}
+
+    id = Column(Integer, primary_key=True)
+    phone = Column(String, index=True, unique=True, nullable=False)
+    language = Column(String)
+    created_ts = Column(DateTime, nullable=False, server_default=func.now())
+    updated_ts = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())

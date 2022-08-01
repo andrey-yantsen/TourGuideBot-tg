@@ -2,6 +2,10 @@ from sqlalchemy import select
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, MessageHandler, filters
 from tour_guide_bot import t
+from tour_guide_bot.bot.admin.approve import ApproveCommandHandler
+from tour_guide_bot.bot.admin.configure import ConfigureCommandHandler
+from tour_guide_bot.bot.admin.revoke import RevokeCommandHandler
+from tour_guide_bot.bot.admin.tour import TourCommandHandler
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback
 from tour_guide_bot.models.admin import Admin, AdminPermissions
 
@@ -9,17 +13,26 @@ from tour_guide_bot.models.admin import Admin, AdminPermissions
 class StartCommandHandler(BaseHandlerCallback):
     STATE_CONTACT = 1
     STATE_TOKEN = 2
+    STATE_ADMIN_MODE_ACTIVE = 3
 
     @classmethod
     def get_handlers(cls):
+        all_admin_handlers = ApproveCommandHandler.get_handlers()
+        all_admin_handlers += ConfigureCommandHandler.get_handlers()
+        all_admin_handlers += RevokeCommandHandler.get_handlers()
+        all_admin_handlers += TourCommandHandler.get_handlers()
+
         return [
             ConversationHandler(
-                entry_points=[CommandHandler("start", cls.partial(cls.start))],
+                entry_points=[CommandHandler("admin", cls.partial(cls.start))],
                 states={
                     cls.STATE_CONTACT: [MessageHandler(filters.CONTACT, cls.partial(cls.contact))],
                     cls.STATE_TOKEN: [MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(cls.token))],
+                    cls.STATE_ADMIN_MODE_ACTIVE: all_admin_handlers,
                 },
-                fallbacks=[],
+                fallbacks=[
+                    CommandHandler('guest', cls.partial(cls.exit_admin_mode))
+                ],
                 name='admin-init',
                 persistent=True
             )
@@ -56,7 +69,9 @@ class StartCommandHandler(BaseHandlerCallback):
             await update.message.reply_text(t(user.admin_language).pgettext(
                 "admin-bot-start", "Admin permissions confirmed! Use /help command if you need further help."),
                 reply_markup=ReplyKeyboardRemove())
-            return ConversationHandler.END
+
+            context.user_data['is_admin_mode'] = True
+            return self.STATE_ADMIN_MODE_ACTIVE
         else:
             await update.message.reply_text(t(user.admin_language).pgettext(
                 "admin-bot-start", "I don't think you're in the right place. Please send me the token to confirm ownership."),
@@ -74,19 +89,28 @@ class StartCommandHandler(BaseHandlerCallback):
 
             await update.message.reply_text(t(user.admin_language).pgettext(
                 "admin-bot-start", "Admin permissions confirmed! Use /help command if you need further help."))
+
+            context.user_data['is_admin_mode'] = True
+            return self.STATE_ADMIN_MODE_ACTIVE
         else:
             await update.message.reply_text(t(user.admin_language).pgettext(
-                "admin-bot-start", "I still don't recognize you, sorry. Try saying /start again when you're ready."))
+                "admin-bot-start", "I still don't recognize you, sorry. Try saying /admin again when you're ready."))
 
+            return ConversationHandler.END
+
+    async def exit_admin_mode(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        user = await self.get_user(update, context)
+        await update.message.reply_text(t(user.admin_language).pgettext("admin-bot-start", "You're in the guest-mode now, bye!"))
+        del context.user_data['is_admin_mode']
         return ConversationHandler.END
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
         if user.admin:
-            await update.message.reply_text(t(user.admin_language).pgettext(
-                "admin-bot-start", "You are recognized as an administrator. Please use /help command if you need further help."))
-            return ConversationHandler.END
+            await update.message.reply_text(t(user.admin_language).pgettext("admin-bot-start", "Welcome to the admin mode!"))
+            context.user_data['is_admin_mode'] = True
+            return self.STATE_ADMIN_MODE_ACTIVE
         elif not user.phone:
             await update.message.reply_text(t(user.admin_language).pgettext(
                 "admin-bot-start", "I don't recognize you! Please send me your phone number."),
@@ -100,9 +124,9 @@ class StartCommandHandler(BaseHandlerCallback):
                 user.admin = admin
                 self.db_session.add(user)
                 await self.db_session.commit()
-                await update.message.reply_text(t(user.admin_language).pgettext(
-                    "admin-bot-start", "You are recognized as an administrator. Please use /help command if you need further help."))
-                return ConversationHandler.END
+                await update.message.reply_text(t(user.admin_language).pgettext("admin-bot-start", "Welcome to the admin mode!"))
+                context.user_data['is_admin_mode'] = True
+                return self.STATE_ADMIN_MODE_ACTIVE
             else:
                 await update.message.reply_text(t(user.admin_language).pgettext(
                     "admin-bot-start", "I don't think you're in the right place. Please send me the token to confirm ownership."))

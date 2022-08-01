@@ -4,7 +4,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from tour_guide_bot import t
-from tour_guide_bot.admin import AdminProtectedBaseHandlerCallback
+from tour_guide_bot.helpers.telegram import AdminProtectedBaseHandlerCallback
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 

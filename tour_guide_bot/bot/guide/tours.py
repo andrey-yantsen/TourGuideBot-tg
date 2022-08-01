@@ -3,13 +3,12 @@ from typing import Optional
 from regex import E
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from telegram import Audio, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaAudio, InputMediaPhoto, InputMediaVideo, PhotoSize, Update, Video, VideoNote, Voice
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaAudio, InputMediaPhoto, InputMediaVideo, Update
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler
 from tour_guide_bot import t
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback, get_tour_title
-from tour_guide_bot.models.guest import BoughtTours
-from tour_guide_bot.models.tour import MessageType, Tour, TourSection, TourTranslation
+from tour_guide_bot.models.guide import BoughtTours, MessageType, Tour, TourSection, TourTranslation
 from . import log
 
 
@@ -83,19 +82,19 @@ class ToursCommandHandler(BaseHandlerCallback):
                     await bot.send_location(chat_id, content.content['latitude'], content.content['longitude'])
 
                 case MessageType.voice:
-                    await bot.send_voice(chat_id, content.content['files'][0]['file_id'], caption=content.content['files'][0].get('caption'))
+                    await bot.send_voice(chat_id, content.content['files'][0]['file_id'], caption=content.content['files'][0].get('caption'), parse_mode=ParseMode.MARKDOWN_V2)
 
                 case MessageType.video_note:
-                    await bot.send_video_note(chat_id, content.content['files'][0]['file_id'], caption=content.content['files'][0].get('caption'))
+                    await bot.send_video_note(chat_id, content.content['files'][0]['file_id'], caption=content.content['files'][0].get('caption'), parse_mode=ParseMode.MARKDOWN_V2)
 
                 case MessageType.audio:
-                    await bot.send_audio(chat_id, content.content['files'][0]['file_id'], caption=content.content['files'][0].get('caption'))
+                    await bot.send_audio(chat_id, content.content['files'][0]['file_id'], caption=content.content['files'][0].get('caption'), parse_mode=ParseMode.MARKDOWN_V2)
 
                 case MessageType.video:
-                    await bot.send_video(chat_id, content.content['files'][0]['file_id'], caption=content.content['files'][0].get('caption'))
+                    await bot.send_video(chat_id, content.content['files'][0]['file_id'], caption=content.content['files'][0].get('caption'), parse_mode=ParseMode.MARKDOWN_V2)
 
                 case MessageType.photo:
-                    await bot.send_photo(chat_id, content.content['files'][0]['file_id'], caption=content.content['files'][0].get('caption'))
+                    await bot.send_photo(chat_id, content.content['files'][0]['file_id'], caption=content.content['files'][0].get('caption'), parse_mode=ParseMode.MARKDOWN_V2)
 
                 case MessageType.media_group:
                     media_group = []
@@ -111,8 +110,6 @@ class ToursCommandHandler(BaseHandlerCallback):
                             case MessageType.photo:
                                 media_group.append(InputMediaPhoto(
                                     f['file_id'], caption=f.get('caption'), parse_mode=ParseMode.MARKDOWN_V2))
-
-                    print(media_group)
 
                     await bot.send_media_group(chat_id, media_group)
 
@@ -202,6 +199,12 @@ class ToursCommandHandler(BaseHandlerCallback):
             keyboard.append([InlineKeyboardButton(title, callback_data='start_tour:%s:%s' %
                             (bought_tour.tour_id, language))])
             last_tour = bought_tour.tour
+
+            if not bought_tour.is_user_notified:
+                bought_tour.is_user_notified = True
+                self.db_session.add(bought_tour)
+
+        await self.db_session.commit()
 
         if len(keyboard) == 0:
             await update.message.reply_text(t(language).pgettext('guide-tour', 'Unfortunately, no tours are available for you at the moment.'

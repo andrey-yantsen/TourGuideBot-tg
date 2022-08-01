@@ -2,18 +2,30 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from tour_guide_bot import t
-from tour_guide_bot.guide.tours import ToursCommandHandler
-from tour_guide_bot.helpers.telegram import Application, get_tour_title
+from tour_guide_bot.bot.guide.tours import ToursCommandHandler
+from tour_guide_bot.helpers.telegram import get_tour_title
 from tour_guide_bot.helpers.language import LanguageHandler
-from telegram.ext import ContextTypes
-from tour_guide_bot.models.guest import BoughtTours, Guest
+from telegram import Update
+from telegram.ext import ContextTypes, TypeHandler, Application as BaseApplication
+from tour_guide_bot.models.guide import BoughtTours, Guest, Tour
 from tour_guide_bot.models.telegram import TelegramUser
-from tour_guide_bot.models.tour import Tour
-from .start import StartCommandHandler
+from .guide.start import StartCommandHandler
+from .admin.start import StartCommandHandler as AdminStartCommandHandler
+from . import log
 
 
-class GuideBot(Application):
+class Application(BaseApplication):
+    @classmethod
+    def builder(cls):
+        builder = super().builder()
+        builder.application_class(cls)
+        return builder
+
     async def initialize(self) -> None:
+        self.add_handler(TypeHandler(object, self.debug_log_handler), -1)
+
+        self.add_handlers(AdminStartCommandHandler.get_handlers())
+
         self.add_handlers(StartCommandHandler.get_handlers())
         self.add_handlers(ToursCommandHandler.get_handlers())
         self.add_handlers(LanguageHandler.get_handlers())
@@ -21,6 +33,9 @@ class GuideBot(Application):
         self.job_queue.run_repeating(self.check_new_approved_tours, 60)
 
         await super().initialize()
+
+    async def debug_log_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        log.debug('[{0}] received update: {1}'.format(context.application.__class__.__name__, update))
 
     async def check_new_approved_tours(self, context: ContextTypes.DEFAULT_TYPE) -> None:
         # TODO: Improve the logic
