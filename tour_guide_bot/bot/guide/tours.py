@@ -123,6 +123,9 @@ class ToursCommandHandler(BaseHandlerCallback):
                 ]))
             return self.STATE_TOUR_IN_PROGRESS
 
+        if update.callback_query:
+            await update.callback_query.answer()
+
         return ConversationHandler.END
 
     async def display_first_section(self, tour: Tour, update: Update, context: ContextTypes.DEFAULT_TYPE):
