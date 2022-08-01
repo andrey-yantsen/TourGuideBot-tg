@@ -308,7 +308,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
     async def translation_unknown_content(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         language = (await self.get_user(update, context)).admin_language
         await update.message.reply_text(t(language).pgettext('admin-tours', 'Unsupported message! Please send me one of the'
-                                                             ' following, to add it to the tour section: location, text,'
+                                                             ' following to add to the tour section: location, text,'
                                                              ' photo, audio, video, voice or video note.'))
 
     async def delete_tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -346,7 +346,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             return ConversationHandler.END
 
         await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
-            'admin-tours', 'Do you really want to delete tour "{0}"?'.format(get_tour_title(tour, user.admin_language, context))),
+            'admin-tours', 'Do you really want to delete the tour "{0}"?'.format(get_tour_title(tour, user.admin_language, context))),
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [
                     InlineKeyboardButton(t(user.admin_language).pgettext('bot-generic',
@@ -456,7 +456,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         elif callback_data == self.CALLBACK_DATA_DELETE_TOUR:
             message = t(current_language).pgettext('admin-tours', 'Please select the tour you want to delete.')
         else:
-            log.warning(t().pgettext('admin-tours',
+            log.warning(t().pgettext('cli',
                         'Unexpected callback data received in select_tour(): "{0}"').format(callback_data))
             await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))

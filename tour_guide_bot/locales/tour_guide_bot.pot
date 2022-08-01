@@ -92,7 +92,7 @@ msgstr ""
 #: tour_guide_bot/bot/admin/revoke.py:144
 #: tour_guide_bot/bot/admin/revoke.py:177 tour_guide_bot/bot/admin/tour.py:354
 #: tour_guide_bot/bot/admin/tour.py:451 tour_guide_bot/bot/admin/tour.py:499
-#: tour_guide_bot/bot/guide/tours.py:121 tour_guide_bot/bot/guide/tours.py:218
+#: tour_guide_bot/bot/guide/tours.py:121 tour_guide_bot/bot/guide/tours.py:220
 #: tour_guide_bot/helpers/telegram.py:109
 msgctxt "bot-generic"
 msgid "Abort"
@@ -183,8 +183,8 @@ msgstr ""
 msgctxt "admin-revoke"
 msgid ""
 "Enter the phone number from which you want to revoke access to the tour "
-"(with country code), or share the contact. Send /cancel at any time if "
-"you want to cancel."
+"(with country code) or share the contact. Send /cancel at any time if you"
+" wish to cancel."
 msgstr ""
 
 #: tour_guide_bot/bot/admin/start.py:44
@@ -218,7 +218,7 @@ msgstr ""
 
 #: tour_guide_bot/bot/admin/start.py:103
 msgctxt "admin-bot-start"
-msgid "You're in the guest-mode now, bye!"
+msgid "You're in guest mode now, bye!"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/start.py:111 tour_guide_bot/bot/admin/start.py:127
@@ -310,9 +310,8 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour.py:310
 msgctxt "admin-tours"
 msgid ""
-"Unsupported message! Please send me one of the following, to add it to "
-"the tour section: location, text, photo, audio, video, voice or video "
-"note."
+"Unsupported message! Please send me one of the following to add to the "
+"tour section: location, text, photo, audio, video, voice or video note."
 msgstr ""
 
 #: tour_guide_bot/bot/admin/tour.py:332
@@ -322,7 +321,7 @@ msgstr ""
 
 #: tour_guide_bot/bot/admin/tour.py:349
 msgctxt "admin-tours"
-msgid "Do you really want to delete tour \"{0}\"?"
+msgid "Do you really want to delete the tour \"{0}\"?"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/tour.py:389
@@ -359,7 +358,7 @@ msgid "Please select the tour you want to delete."
 msgstr ""
 
 #: tour_guide_bot/bot/admin/tour.py:459
-msgctxt "admin-tours"
+msgctxt "cli"
 msgid "Unexpected callback data received in select_tour(): \"{0}\""
 msgstr ""
 
@@ -401,8 +400,8 @@ msgstr ""
 #: tour_guide_bot/bot/guide/start.py:47
 msgctxt "guest-bot-start"
 msgid ""
-"Unexpected command received. At this stage you can only use /language to "
-"change the interface language."
+"Unexpected command received. You can only use /language to change the "
+"interface language at this stage."
 msgstr ""
 
 #: tour_guide_bot/bot/guide/start.py:55
@@ -413,25 +412,25 @@ msgstr ""
 #: tour_guide_bot/bot/guide/start.py:84
 msgctxt "guest-bot-start"
 msgid ""
-"I see you have some tours available; thank you the support! Send /tours "
-"to start exploring!"
+"I see you have some tours available; thank you for the support! Send "
+"/tours to start exploring!"
 msgstr ""
 
-#: tour_guide_bot/bot/guide/start.py:87
+#: tour_guide_bot/bot/guide/start.py:88 tour_guide_bot/bot/guide/tours.py:210
 msgctxt "guest-tour"
 msgid ""
 "Unfortunately, no tours are available for you at the moment. Approving "
 "somebody for a tour takes a while, but if you feel like a mistake was "
-"made don't hesitate contacting me! The bot's profile should provide with "
-"all the required info."
+"made, don't hesitate to contact me! The bot's profile should provide all "
+"the required info."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/start.py:100
+#: tour_guide_bot/bot/guide/start.py:103
 msgctxt "guest-bot-start"
 msgid "The bot is not configured yet; please try again later."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/start.py:110
+#: tour_guide_bot/bot/guide/start.py:113
 msgctxt "guest-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr ""
@@ -461,16 +460,7 @@ msgctxt "guide-tour"
 msgid "Unfortunately, you don't have access to the requested tour."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/tours.py:210
-msgctxt "guide-tour"
-msgid ""
-"Unfortunately, no tours are available for you at the moment. Approving "
-"somebody for a tour takes a while, but if you feel like a mistake was "
-"made don't hesitate contacting me! The bot's profile should provide with "
-"all the required info."
-msgstr ""
-
-#: tour_guide_bot/bot/guide/tours.py:220
+#: tour_guide_bot/bot/guide/tours.py:222
 msgctxt "guide-tour"
 msgid "Please select a tour you want to start."
 msgstr ""

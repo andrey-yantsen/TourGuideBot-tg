@@ -100,7 +100,7 @@ class StartCommandHandler(BaseHandlerCallback):
 
     async def exit_admin_mode(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
-        await update.message.reply_text(t(user.admin_language).pgettext("admin-bot-start", "You're in the guest-mode now, bye!"))
+        await update.message.reply_text(t(user.admin_language).pgettext("admin-bot-start", "You're in guest mode now, bye!"))
         del context.user_data['is_admin_mode']
         return ConversationHandler.END
 

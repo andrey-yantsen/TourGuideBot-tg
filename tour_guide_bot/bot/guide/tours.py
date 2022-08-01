@@ -207,9 +207,11 @@ class ToursCommandHandler(BaseHandlerCallback):
         await self.db_session.commit()
 
         if len(keyboard) == 0:
-            await update.message.reply_text(t(language).pgettext('guide-tour', 'Unfortunately, no tours are available for you at the moment.'
-                                                                 ' Approving somebody for a tour takes a while, but if you feel like a mistake was made'
-                                                                 " don't hesitate contacting me! The bot's profile should provide with all the required info."))
+            await update.message.reply_text(t(language).pgettext('guest-tour', "Unfortunately, no tours are available for"
+                                                                 " you at the moment. Approving somebody for a tour takes"
+                                                                 " a while, but if you feel like a mistake was made, don't"
+                                                                 " hesitate to contact me! The bot's profile should provide"
+                                                                 " all the required info."))
 
             return ConversationHandler.END
         elif len(keyboard) == 1:
