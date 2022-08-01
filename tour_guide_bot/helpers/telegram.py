@@ -145,9 +145,9 @@ def get_tour_title(tour: Tour, current_language: str, context: ContextTypes.DEFA
         }
 
         if current_language in translations:
-            title = translations[current_language]
+            title = translations[current_language].title
         elif default_language in translations:
-            title = translations[default_language]
+            title = translations[default_language].title
         else:
             log.warning(t().pgettext(
                 'bot-generic', "Tour #{0} doesn't have a translation for the default language ({1}).".format(tour.id,
