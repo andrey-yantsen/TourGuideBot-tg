@@ -99,8 +99,8 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             if update.message.contact.phone_number:
                 phone_number = update.message.contact.phone_number
             else:
-                await update.message.reply_text(t(user.admin_language).pgettext('admin-approve', "The contact you sent me "
-                                                                                "doesn't have a phone number, please try again."))
+                await update.message.reply_text(t(user.admin_language).pgettext('admin-generic', "The contact you sent me "
+                                                                                "doesn't have a phone number; please try again."))
                 return self.STATE_PHONE_NUMBER
         else:
             phone_number = re.sub('\D+', '', update.message.text)
@@ -135,13 +135,13 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             keyboard.append([InlineKeyboardButton(title, callback_data='approve_tour:%s' % (tour.id, ))])
 
         if len(keyboard) == 0:
-            await update.message.reply_text(t(user.admin_language).pgettext('admin-approve', "Unfortunately, you don't have any tours available for the guests."))
+            await update.message.reply_text(t(user.admin_language).pgettext('admin-generic', "Unfortunately, you don't have any tours available for the guests."))
             return ConversationHandler.END
 
         keyboard.append([InlineKeyboardButton(t(current_language).pgettext(
             'bot-generic', 'Abort'), callback_data='cancel')])
 
-        await update.message.reply_text(t(user.admin_language).pgettext('admin-approve', 'Please select the tour.'),
+        await update.message.reply_text(t(user.admin_language).pgettext('admin-generic', 'Please select the tour.'),
                                         reply_markup=InlineKeyboardMarkup(keyboard))
 
         return self.STATE_TOUR

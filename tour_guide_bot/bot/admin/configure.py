@@ -47,7 +47,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         user = await self.get_user(update, context)
 
         await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
-            'admin-configure', 'Please select the language for the welcome-message you want to edit.'),
+            'admin-configure', 'Please select the language for the welcome message you want to edit.'),
             reply_markup=self.get_language_select_inline_keyboard(user.admin_language, context, 'change_welcome_message:', True))
 
         return self.STATE_WELCOME_MESSAGE_LANGUAGE
@@ -70,7 +70,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
 
         if welcome_message:
             await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
-                'admin-configure', 'The bot currently have the following welcome message. Please send me a new one if you want to change it, or send /cancel to abort the modification.'))
+                'admin-configure', 'The bot currently has the following welcome message. Please send me a new one if you want to change it, or send /cancel to abort the modification.'))
 
             await context.application.bot.send_message(update.effective_chat.id, welcome_message.value, disable_web_page_preview=True, parse_mode=ParseMode.MARKDOWN_V2)
         else:
@@ -82,7 +82,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
     async def incorrect_welcome_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
         await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
-            'admin-configure', "You can use only text as bot's welcome message."))
+            'admin-configure', "You can use only text as the bot's welcome message."))
         return self.STATE_WELCOME_MESSAGE
 
     async def change_welcome_message_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE):

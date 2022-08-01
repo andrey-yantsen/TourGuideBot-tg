@@ -57,7 +57,7 @@ class Application(BaseApplication):
                     elif telegram_user.language:
                         language = telegram_user.language
 
-                    await self.bot.send_message(telegram_user.id, t(language).pgettext('guide-bot-notification', 'Hey! You have a new your available — "{0}".'
+                    await self.bot.send_message(telegram_user.id, t(language).pgettext('guide-bot-notification', 'Hey! You have a new tour available — "{0}".'
                                                                                        ' Send /tours to start the journey!').format(get_tour_title(purchase.tour, language, context)))
 
                     purchase.is_user_notified = True

@@ -63,11 +63,6 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
                 'bot-generic', 'Something went wrong; please try again.'))
             return ConversationHandler.END
 
-        await update.callback_query.edit_message_text(t(user.admin_language).pgettext('admin-revoke',
-                                                                                      'Enter the phone number which which you want to revoke '
-                                                                                      ' access to the tour (with country code), or share the contact.'
-                                                                                      ' Send /cancel at any time if you want to abort.'))
-
         guest = await self.db_session.scalar(select(Guest).where(Guest.id == guest_id))
 
         if not guest:
@@ -106,8 +101,8 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
             if update.message.contact.phone_number:
                 phone_number = update.message.contact.phone_number
             else:
-                await update.message.reply_text(t(user.admin_language).pgettext('admin-revoke', "The contact you sent me "
-                                                                                "doesn't have a phone number, please try again."))
+                await update.message.reply_text(t(user.admin_language).pgettext('admin-generic', "The contact you sent me "
+                                                                                "doesn't have a phone number; please try again."))
                 return self.STATE_PHONE_NUMBER
         else:
             phone_number = re.sub('\D+', '', update.message.text)
@@ -116,7 +111,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
 
         if not guest:
             await update.message.reply_text(t(user.admin_language).pgettext('admin-revoke',
-                                                                            "I don't see anybody with that phone number in the database, please send another one."))
+                                                                            "I don't see anybody with that phone number in the database; please send another one."))
             return
 
         tour = await self.db_session.scalar(select(Tour)
@@ -156,9 +151,9 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
     async def tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
         await update.callback_query.edit_message_text(t(user.admin_language).pgettext('admin-revoke',
-                                                                                      'Enter the phone number which which you want to revoke '
+                                                                                      'Enter the phone number from which you want to revoke'
                                                                                       ' access to the tour (with country code), or share the contact.'
-                                                                                      ' Send /cancel at any time if you want to abort.'))
+                                                                                      ' Send /cancel at any time if you want to cancel.'))
         context.user_data['tour_id'] = context.matches[0].group(1)
         return self.STATE_PHONE_NUMBER
 
@@ -176,13 +171,13 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
             keyboard.append([InlineKeyboardButton(title, callback_data='revoke_tour:%s' % (tour.id, ))])
 
         if len(keyboard) == 0:
-            await update.message.reply_text(t(user.admin_language).pgettext('admin-revoke', "Unfortunately, you don't have any tours available for the guests."))
+            await update.message.reply_text(t(user.admin_language).pgettext('admin-generic', "Unfortunately, you don't have any tours available for the guests."))
             return ConversationHandler.END
 
         keyboard.append([InlineKeyboardButton(t(current_language).pgettext(
             'bot-generic', 'Abort'), callback_data='cancel')])
 
-        await update.message.reply_text(t(user.admin_language).pgettext('admin-revoke', 'Please select the tour.'),
+        await update.message.reply_text(t(user.admin_language).pgettext('admin-generic', 'Please select the tour.'),
                                         reply_markup=InlineKeyboardMarkup(keyboard))
 
         return self.STATE_TOUR
