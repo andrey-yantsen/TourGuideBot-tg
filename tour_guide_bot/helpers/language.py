@@ -20,15 +20,7 @@ class LanguageHandler(BaseHandlerCallback):
         if required_language in context.application.enabled_languages:
             user = await self.get_user(update, context)
             user.language = required_language
-
-            if self.is_admin_app(context):
-                if user.admin:
-                    user.admin.language = required_language
-                    self.db_session.add(user.admin)
-            else:
-                if user.guest:
-                    user.guest.language = required_language
-                    self.db_session.add(user.guest)
+            self.db_session.add(user)
             await self.db_session.commit()
 
             await update.callback_query.edit_message_text(t(required_language).pgettext('any-bot', 'The language has been changed to {0}.').format(Locale.parse(required_language).get_language_name(required_language)))

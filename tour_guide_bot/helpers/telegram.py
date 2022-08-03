@@ -60,12 +60,7 @@ class BaseHandlerCallback:
         return context.application.__class__.__name__ == 'AdminBot'
 
     async def get_language(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-        user = await self.get_user(update, context)
-
-        if self.is_admin_app(context):
-            return user.admin_language
-        else:
-            return user.guest_language
+        return (await self.get_user(update, context)).language
 
     async def get_user(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> TelegramUser:
         if self.user:

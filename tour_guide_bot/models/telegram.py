@@ -18,17 +18,3 @@ class TelegramUser(Base):
     admin = relationship("Admin")
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
-
-    @property
-    def admin_language(self):
-        if self.admin and self.admin.language:
-            return self.admin.language
-        else:
-            return self.language
-
-    @property
-    def guest_language(self):
-        if self.guest and self.guest.language:
-            return self.guest.language
-        else:
-            return self.language

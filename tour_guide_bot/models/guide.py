@@ -102,6 +102,5 @@ class Guest(Base):
 
     id = Column(Integer, primary_key=True)
     phone = Column(String, index=True, unique=True, nullable=False)
-    language = Column(String)
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())

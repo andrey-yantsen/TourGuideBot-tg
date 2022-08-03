@@ -42,7 +42,7 @@ class ToursCommandHandler(BaseHandlerCallback):
     async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
-        await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+        await self.edit_or_reply_text(update, context, t(user.language).pgettext(
             'bot-generic', 'Cancelled.'))
 
         return ConversationHandler.END
@@ -64,7 +64,7 @@ class ToursCommandHandler(BaseHandlerCallback):
         user = await self.get_user(update, context)
 
         if position < 0 or len(translation.section) <= position:
-            await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+            await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
             return
 
@@ -114,11 +114,11 @@ class ToursCommandHandler(BaseHandlerCallback):
                     await bot.send_media_group(chat_id, media_group)
 
         if position < len(translation.section) - 1:
-            await self.reply_text(update, context, t(user.guest_language).pgettext(
+            await self.reply_text(update, context, t(user.language).pgettext(
                 'guide-tour', 'Are you ready to continue?'), reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton(t(user.guest_language).pgettext(
+                    [InlineKeyboardButton(t(user.language).pgettext(
                         'guide-tour', 'Next section'), callback_data='tour_change_section:%d:%d' % (translation.id, position + 1))],
-                    [InlineKeyboardButton(t(user.guest_language).pgettext(
+                    [InlineKeyboardButton(t(user.language).pgettext(
                         'bot-generic', 'Abort'), callback_data='cancel')],
                 ]))
             return self.STATE_TOUR_IN_PROGRESS
@@ -136,19 +136,19 @@ class ToursCommandHandler(BaseHandlerCallback):
 
         user = await self.get_user(update, context)
 
-        if user.guest_language not in translations:
+        if user.language not in translations:
             log.warning(t().pgettext('cli', "Tour #{0} doesn't have a language {1} preferred by the user {2}.".format(
-                tour.id, user.guest_language, user.id)))
+                tour.id, user.language, user.id)))
             if context.application.default_language not in translations:
                 log.error(t().pgettext('cli', "Tour #{0} doesn't have a default app language {1}.".format(
                     tour.id, context.application.default_language)))
-                await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+                await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                     'bot-generic', 'Something went wrong; please try again.'))
                 return ConversationHandler.END
             else:
                 translation = translations[context.application.default_language]
         else:
-            translation = translations[user.guest_language]
+            translation = translations[user.language]
 
         return await self.display_section(translation, 0, update, context)
 
@@ -157,7 +157,7 @@ class ToursCommandHandler(BaseHandlerCallback):
 
         bought_tour = await self.get_tour(user.guest_id, int(context.matches[0].gorup(1)))
         if not bought_tour:
-            await self.edit_or_reply_text(update, context, t(user.guest_language).pgettext(
+            await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                 'guide-tour', "Unfortunately, you don't have access to the requested tour."))
 
             return ConversationHandler.END
@@ -169,13 +169,13 @@ class ToursCommandHandler(BaseHandlerCallback):
 
         translation = await self.db_session.scalar(select(TourTranslation).options(selectinload(TourTranslation.section).selectinload(TourSection.content)))
         if not translation:
-            await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+            await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
             return
 
         bought_tour = await self.get_tour(user.guest_id, translation.tour_id)
         if not bought_tour:
-            await self.edit_or_reply_text(update, context, t(user.guest_language).pgettext(
+            await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                 'guide-tour', "Unfortunately, you don't have access to the requested tour."))
 
             return ConversationHandler.END
@@ -184,7 +184,7 @@ class ToursCommandHandler(BaseHandlerCallback):
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
-        language = user.guest_language
+        language = user.language
 
         # TODO: rewrite this
         # Currently done in the stupidiest way possible for self.display_first_section()

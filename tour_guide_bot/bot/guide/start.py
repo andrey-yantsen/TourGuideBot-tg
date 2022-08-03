@@ -40,22 +40,22 @@ class StartCommandHandler(BaseHandlerCallback):
 
     async def unexpected_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
-        await update.message.reply_text(t(user.guest_language).pgettext('guest-bot-start', 'Please send me your phone'
-                                                                        ' number using the "Share phone number" button.'))
+        await update.message.reply_text(t(user.language).pgettext('guest-bot-start', 'Please send me your phone'
+                                                                  ' number using the "Share phone number" button.'))
 
     async def unexpected_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
-        await update.message.reply_text(t(user.guest_language).pgettext('guest-bot-start', 'Unexpected command received.'
-                                                                        ' You can only use /language to change the'
-                                                                        ' interface language at this stage.'))
+        await update.message.reply_text(t(user.language).pgettext('guest-bot-start', 'Unexpected command received.'
+                                                                  ' You can only use /language to change the'
+                                                                  ' interface language at this stage.'))
 
     async def contact(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
         if update.message.contact.user_id != update.message.from_user.id:
-            await update.message.reply_text(t(user.guest_language).pgettext(
+            await update.message.reply_text(t(user.language).pgettext(
                 "guest-bot-start", "Please send me your contact number and not somebody else's."),
-                reply_markup=self.request_contact(user.guest_language))
+                reply_markup=self.request_contact(user.language))
             return self.STATE_CONTACT
 
         user.phone = re.sub('\D+', '', update.message.contact.phone_number)
@@ -64,7 +64,7 @@ class StartCommandHandler(BaseHandlerCallback):
         guest = await self.db_session.scalar(stmt)
 
         if not guest:
-            guest = Guest(phone=user.phone, language=user.language)
+            guest = Guest(phone=user.phone)
             self.db_session.add(guest)
 
         user.guest = guest
@@ -97,11 +97,11 @@ class StartCommandHandler(BaseHandlerCallback):
         user = await self.get_user(update, context)
 
         stmt = select(Settings).where((Settings.key == SettingsKey.guide_welcome_message)
-                                      & (Settings.language == user.guest_language))
+                                      & (Settings.language == user.language))
         welcome_message = await self.db_session.scalar(stmt)
 
         if not welcome_message:
-            await update.message.reply_text(t(user.guest_language).pgettext(
+            await update.message.reply_text(t(user.language).pgettext(
                 "guest-bot-start", "The bot is not configured yet; please try again later."))
             return ConversationHandler.END
 
@@ -111,9 +111,9 @@ class StartCommandHandler(BaseHandlerCallback):
             await self.process_guest(user.guest, update, context)
             return ConversationHandler.END
         elif not user.phone:
-            await update.message.reply_text(t(user.guest_language).pgettext(
+            await update.message.reply_text(t(user.language).pgettext(
                 "guest-bot-start", "I don't recognize you! Please send me your phone number."),
-                reply_markup=self.request_contact(user.guest_language))
+                reply_markup=self.request_contact(user.language))
             return self.STATE_CONTACT
         else:
             stmt = select(Guest).where(Guest.phone == user.phone)
@@ -123,7 +123,7 @@ class StartCommandHandler(BaseHandlerCallback):
                 user.guest = guest
                 self.db_session.add(user)
             else:
-                guest = Guest(phone=user.phone, language=user.language)
+                guest = Guest(phone=user.phone)
                 user.guest = guest
                 self.db_session.add_all([guest, user])
 

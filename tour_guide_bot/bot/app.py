@@ -51,11 +51,7 @@ class Application(BaseApplication):
                     .where((BoughtTours.guest_id == telegram_user.guest_id) & (BoughtTours.is_user_notified == False))
                 bought_tours = await session.scalars(stmt)
                 for purchase in bought_tours:
-                    language = self.default_language
-                    if purchase.guest.language:
-                        language = purchase.guest.language
-                    elif telegram_user.language:
-                        language = telegram_user.language
+                    language = telegram_user.language
 
                     await self.bot.send_message(telegram_user.id, t(language).pgettext('guide-bot-notification', 'Hey! You have a new tour available — "{0}".'
                                                                                        ' Send /tours to start the journey!').format(get_tour_title(purchase.tour, language, context)))

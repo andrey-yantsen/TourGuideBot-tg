@@ -112,7 +112,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
         if position == 0:
             await self.cleanup_context(context)
-            await update.message.reply_text(t(user.admin_language).pgettext('admin-tours', "Done!"))
+            await update.message.reply_text(t(user.language).pgettext('admin-tours', "Done!"))
             return ConversationHandler.END
 
         tour_section = TourSection(
@@ -122,13 +122,13 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         context.user_data['tour_section_id'] = tour_section.id
         context.user_data['tour_section_position'] = tour_section_position + 1
 
-        await update.message.reply_text(t(user.admin_language).pgettext('admin-tours', "Done! Send more content for the next"
-                                                                        " tour section, or send /done if you're finished."))
+        await update.message.reply_text(t(user.language).pgettext('admin-tours', "Done! Send more content for the next"
+                                                                  " tour section, or send /done if you're finished."))
 
     async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
         await self.cleanup_context(context)
-        await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext('bot-generic', 'Cancelled.'))
+        await self.edit_or_reply_text(update, context, t(user.language).pgettext('bot-generic', 'Cancelled.'))
         return ConversationHandler.END
 
     async def translation_section_content_add(self, update: Update, context: ContextTypes.DEFAULT_TYPE, message_type: MessageType, text=None,
@@ -306,7 +306,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             await update.message.reply_text(message)
 
     async def translation_unknown_content(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        language = (await self.get_user(update, context)).admin_language
+        language = (await self.get_user(update, context)).language
         await update.message.reply_text(t(language).pgettext('admin-tours', 'Unsupported message! Please send me one of the'
                                                              ' following to add to the tour section: location, text,'
                                                              ' photo, audio, video, voice or video note.'))
@@ -318,17 +318,17 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                                             .options(selectinload(Tour.translation)))
 
         if not tour:
-            await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+            await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
             await self.cleanup_context(context)
             return ConversationHandler.END
 
-        tour_title = get_tour_title(tour, user.admin_language, context)
+        tour_title = get_tour_title(tour, user.language, context)
 
         await self.db_session.delete(tour)
         await self.db_session.commit()
 
-        await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
+        await update.callback_query.edit_message_text(t(user.language).pgettext(
             'admin-tours', 'The tour "{0}" was removed.'.format(tour_title)))
         await self.cleanup_context(context)
         return ConversationHandler.END
@@ -340,18 +340,18 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                                             .options(selectinload(Tour.translation)))
 
         if not tour:
-            await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+            await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
             await self.cleanup_context(context)
             return ConversationHandler.END
 
-        await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
-            'admin-tours', 'Do you really want to delete the tour "{0}"?'.format(get_tour_title(tour, user.admin_language, context))),
+        await update.callback_query.edit_message_text(t(user.language).pgettext(
+            'admin-tours', 'Do you really want to delete the tour "{0}"?'.format(get_tour_title(tour, user.language, context))),
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [
-                    InlineKeyboardButton(t(user.admin_language).pgettext('bot-generic',
-                                                                         'Yes'), callback_data='%s:%d' % (self.CALLBACK_DATA_DELETE_TOUR_CONFIRMED, tour.id)),
-                    InlineKeyboardButton(t(user.admin_language).pgettext(
+                    InlineKeyboardButton(t(user.language).pgettext('bot-generic',
+                                                                   'Yes'), callback_data='%s:%d' % (self.CALLBACK_DATA_DELETE_TOUR_CONFIRMED, tour.id)),
+                    InlineKeyboardButton(t(user.language).pgettext(
                         'bot-generic', 'Abort'), callback_data='cancel')
                 ],
             ]))
@@ -386,12 +386,12 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         context.user_data['tour_section_id'] = tour_section.id
 
         if is_new_translation:
-            await update.message.reply_text(t(user.admin_language).pgettext(
+            await update.message.reply_text(t(user.language).pgettext(
                 'admin-tour', "Terrific! Let's add some content now! Send me location, text, photo, audio, video, voice or"
                 " video note messages, and send /done when finished with the section."))
             return self.STATE_TOUR_ADD_CONTENT
 
-        await update.message.reply_text(t(user.admin_language).pgettext(
+        await update.message.reply_text(t(user.language).pgettext(
             'admin-tour', "Great! The title was updated."))
 
         return await self.request_edit_action(self, update, context)
@@ -406,9 +406,9 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
         user = await self.get_user(update, context)
 
-        await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+        await self.edit_or_reply_text(update, context, t(user.language).pgettext(
             'admin-tour', 'Please select the language for the new tour.'),
-            reply_markup=self.get_language_select_inline_keyboard(user.admin_language, context, 'tour_language:', True))
+            reply_markup=self.get_language_select_inline_keyboard(user.language, context, 'tour_language:', True))
 
         return self.STATE_TOUR_ADD_LANGUAGE
 
@@ -423,15 +423,15 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             del context.user_data['tour_language']
 
         if target_language not in context.application.enabled_languages:
-            await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+            await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
             await self.cleanup_context(context)
             return ConversationHandler.END
 
         context.user_data['tour_language'] = target_language
 
-        await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext('admin-tour', 'Please send me the'
-                                                                                       ' title for the tour, or send /cancel to abort.'))
+        await self.edit_or_reply_text(update, context, t(user.language).pgettext('admin-tour', 'Please send me the'
+                                                                                 ' title for the tour, or send /cancel to abort.'))
 
         return self.STATE_TOUR_SAVE_TITLE
 
@@ -440,12 +440,12 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         keyboard = []
 
         user = await self.get_user(update, context)
-        current_language = user.admin_language
+        current_language = user.language
 
         callback_data = update.callback_query.data
 
         for tour in tours:
-            title = get_tour_title(tour, user.admin_language, context)
+            title = get_tour_title(tour, user.language, context)
             keyboard.append([InlineKeyboardButton(title, callback_data='%s:%s' % (callback_data, tour.id))])
 
         keyboard.append([InlineKeyboardButton(t(current_language).pgettext(
@@ -458,7 +458,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         else:
             log.warning(t().pgettext('cli',
                         'Unexpected callback data received in select_tour(): "{0}"').format(callback_data))
-            await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
+            await update.callback_query.edit_message_text(t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
             await self.cleanup_context(context)
             return ConversationHandler.END
@@ -476,27 +476,27 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         tours_count = await self.db_session.scalar(select(func.count(Tour.id)))
 
         if not tours_count:
-            await update.message.reply_text(t(user.admin_language).pgettext(
+            await update.message.reply_text(t(user.language).pgettext(
                 'admin-tours', "You don't have any tours yet; let's add one!"))
             return await self.request_tour_language(update, context)
 
-        await update.message.reply_text(t(user.admin_language).pgettext(
+        await update.message.reply_text(t(user.language).pgettext(
             'admin-tours', 'I see you have some tours already, what do you want to do?'),
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [
-                    InlineKeyboardButton(t(user.admin_language).pgettext('admin-tours',
-                                                                         'Add a new one'), callback_data=self.CALLBACK_DATA_ADD_TOUR)
+                    InlineKeyboardButton(t(user.language).pgettext('admin-tours',
+                                                                   'Add a new one'), callback_data=self.CALLBACK_DATA_ADD_TOUR)
                 ],
                 [
-                    InlineKeyboardButton(t(user.admin_language).pgettext('admin-tours',
-                                                                         'Edit an existing tour'), callback_data=self.CALLBACK_DATA_EDIT_TOUR)
+                    InlineKeyboardButton(t(user.language).pgettext('admin-tours',
+                                                                   'Edit an existing tour'), callback_data=self.CALLBACK_DATA_EDIT_TOUR)
                 ],
                 [
-                    InlineKeyboardButton(t(user.admin_language).pgettext('admin-tours',
-                                                                         'Delete a tour'), callback_data=self.CALLBACK_DATA_DELETE_TOUR)
+                    InlineKeyboardButton(t(user.language).pgettext('admin-tours',
+                                                                   'Delete a tour'), callback_data=self.CALLBACK_DATA_DELETE_TOUR)
                 ],
                 [
-                    InlineKeyboardButton(t(user.admin_language).pgettext(
+                    InlineKeyboardButton(t(user.language).pgettext(
                         'bot-generic', 'Abort'), callback_data='cancel')
                 ],
             ]))

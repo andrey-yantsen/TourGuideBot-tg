@@ -46,9 +46,9 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
 
         user = await self.get_user(update, context)
 
-        await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
+        await update.callback_query.edit_message_text(t(user.language).pgettext(
             'admin-configure', 'Please select the language for the welcome message you want to edit.'),
-            reply_markup=self.get_language_select_inline_keyboard(user.admin_language, context, 'change_welcome_message:', True))
+            reply_markup=self.get_language_select_inline_keyboard(user.language, context, 'change_welcome_message:', True))
 
         return self.STATE_WELCOME_MESSAGE_LANGUAGE
 
@@ -60,7 +60,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
 
         if target_language not in context.application.enabled_languages:
             del context.user_data['welcome_message_target_language']
-            await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
+            await update.callback_query.edit_message_text(t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
             return ConversationHandler.END
 
@@ -69,19 +69,19 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         welcome_message = await self.db_session.scalar(stmt)
 
         if welcome_message:
-            await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
+            await update.callback_query.edit_message_text(t(user.language).pgettext(
                 'admin-configure', 'The bot currently has the following welcome message. Please send me a new one if you want to change it, or send /cancel to abort the modification.'))
 
             await context.application.bot.send_message(update.effective_chat.id, welcome_message.value, disable_web_page_preview=True, parse_mode=ParseMode.MARKDOWN_V2)
         else:
-            await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
+            await update.callback_query.edit_message_text(t(user.language).pgettext(
                 'admin-configure', "The bot currently doesn't have a welcome message. Please send me one."))
 
         return self.STATE_WELCOME_MESSAGE
 
     async def incorrect_welcome_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
-        await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
+        await update.callback_query.edit_message_text(t(user.language).pgettext(
             'admin-configure', "You can use only text as the bot's welcome message."))
         return self.STATE_WELCOME_MESSAGE
 
@@ -90,7 +90,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         user = await self.get_user(update, context)
 
         if not target_language:
-            await update.callback_query.edit_message_text(t(user.admin_language).pgettext(
+            await update.callback_query.edit_message_text(t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
             return ConversationHandler.END
 
@@ -107,14 +107,14 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         await self.db_session.commit()
         del context.user_data['welcome_message_target_language']
 
-        await update.message.reply_text(t(user.admin_language).pgettext('admin-configure', "Bot's welcome message has been changed."))
+        await update.message.reply_text(t(user.language).pgettext('admin-configure', "Bot's welcome message has been changed."))
 
         return ConversationHandler.END
 
     async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
-        await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+        await self.edit_or_reply_text(update, context, t(user.language).pgettext(
             'bot-generic', 'Cancelled.'))
 
         return ConversationHandler.END
@@ -122,15 +122,15 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
-        await update.message.reply_text(t(user.admin_language).pgettext(
+        await update.message.reply_text(t(user.language).pgettext(
             'admin-configure', 'Please select the parameter you want to change.'),
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [
-                    InlineKeyboardButton(t(user.admin_language).pgettext('admin-bot-configure',
-                                                                         'Guide welcome message'), callback_data='change_welcome_message')
+                    InlineKeyboardButton(t(user.language).pgettext('admin-bot-configure',
+                                                                   'Guide welcome message'), callback_data='change_welcome_message')
                 ],
                 [
-                    InlineKeyboardButton(t(user.admin_language).pgettext(
+                    InlineKeyboardButton(t(user.language).pgettext(
                         'bot-generic', 'Abort'), callback_data='cancel')
                 ],
             ]))

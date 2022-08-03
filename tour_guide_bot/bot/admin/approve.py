@@ -48,7 +48,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             if key in context.user_data:
                 del context.user_data[key]
 
-        await self.edit_or_reply_text(update, context, t(user.admin_language).pgettext(
+        await self.edit_or_reply_text(update, context, t(user.language).pgettext(
             'bot-generic', 'Cancelled.'))
 
         return ConversationHandler.END
@@ -61,9 +61,9 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
         now = datetime.datetime.now()
 
         if not d or d < now:
-            await update.message.reply_text(t(user.admin_language).pgettext('admin-approve',
-                                                                            'I\'ve failed to parse your input; please try again.'
-                                                                            ' Enter something like "in 6 months", "in 1 week" and so on.'))
+            await update.message.reply_text(t(user.language).pgettext('admin-approve',
+                                                                      'I\'ve failed to parse your input; please try again.'
+                                                                      ' Enter something like "in 6 months", "in 1 week" and so on.'))
             return self.STATE_DURATION
 
         guest = await self.db_session.scalar(select(Guest).where(Guest.phone == context.user_data['phone_number']))
@@ -87,9 +87,9 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
         self.db_session.add(purchase)
         await self.db_session.commit()
 
-        await update.message.reply_text(t(user.admin_language).pgettext('admin-approve',
-                                                                        "Phone number +{0} was approved for the tour '{1}' until {2}.")
-                                        .format(guest.phone, get_tour_title(tour, user.admin_language, context), d.strftime('%Y-%m-%d %H:%M:%S')))
+        await update.message.reply_text(t(user.language).pgettext('admin-approve',
+                                                                  "Phone number +{0} was approved for the tour '{1}' until {2}.")
+                                        .format(guest.phone, get_tour_title(tour, user.language, context), d.strftime('%Y-%m-%d %H:%M:%S')))
         return ConversationHandler.END
 
     async def phone_number(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -99,25 +99,25 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             if update.message.contact.phone_number:
                 phone_number = update.message.contact.phone_number
             else:
-                await update.message.reply_text(t(user.admin_language).pgettext('admin-generic', "The contact you sent me "
-                                                                                "doesn't have a phone number; please try again."))
+                await update.message.reply_text(t(user.language).pgettext('admin-generic', "The contact you sent me "
+                                                                          "doesn't have a phone number; please try again."))
                 return self.STATE_PHONE_NUMBER
         else:
             phone_number = update.message.text
 
         context.user_data['phone_number'] = re.sub('\D+', '', phone_number)
 
-        await update.message.reply_text(t(user.admin_language).pgettext('admin-approve',
-                                                                        'When the access should expire? Enter something like "in 6 months", "in 1 week" and so on.'))
+        await update.message.reply_text(t(user.language).pgettext('admin-approve',
+                                                                  'When the access should expire? Enter something like "in 6 months", "in 1 week" and so on.'))
 
         return self.STATE_DURATION
 
     async def tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
-        await update.callback_query.edit_message_text(t(user.admin_language).pgettext('admin-approve',
-                                                                                      'Enter the phone number that should be able to'
-                                                                                      ' access the tour (with country code), or share the contact.'
-                                                                                      ' Send /cancel at any time if you want to abort.'))
+        await update.callback_query.edit_message_text(t(user.language).pgettext('admin-approve',
+                                                                                'Enter the phone number that should be able to'
+                                                                                ' access the tour (with country code), or share the contact.'
+                                                                                ' Send /cancel at any time if you want to abort.'))
         context.user_data['tour_id'] = context.matches[0].group(1)
         return self.STATE_PHONE_NUMBER
 
@@ -128,20 +128,20 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
         keyboard = []
 
         user = await self.get_user(update, context)
-        current_language = user.admin_language
+        current_language = user.language
 
         for tour in tours:
-            title = get_tour_title(tour, user.admin_language, context)
+            title = get_tour_title(tour, user.language, context)
             keyboard.append([InlineKeyboardButton(title, callback_data='approve_tour:%s' % (tour.id, ))])
 
         if len(keyboard) == 0:
-            await update.message.reply_text(t(user.admin_language).pgettext('admin-generic', "Unfortunately, you don't have any tours available for the guests."))
+            await update.message.reply_text(t(user.language).pgettext('admin-generic', "Unfortunately, you don't have any tours available for the guests."))
             return ConversationHandler.END
 
         keyboard.append([InlineKeyboardButton(t(current_language).pgettext(
             'bot-generic', 'Abort'), callback_data='cancel')])
 
-        await update.message.reply_text(t(user.admin_language).pgettext('admin-generic', 'Please select the tour.'),
+        await update.message.reply_text(t(user.language).pgettext('admin-generic', 'Please select the tour.'),
                                         reply_markup=InlineKeyboardMarkup(keyboard))
 
         return self.STATE_TOUR
