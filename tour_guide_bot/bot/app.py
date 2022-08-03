@@ -30,7 +30,7 @@ class Application(BaseApplication):
         self.add_handlers(ToursCommandHandler.get_handlers())
         self.add_handlers(LanguageHandler.get_handlers())
 
-        self.job_queue.run_repeating(self.check_new_approved_tours, 60)
+        self.job_queue.run_repeating(self.check_new_approved_tours, 60, job_kwargs={'misfire_grace_time': 30})
 
         await super().initialize()
 
