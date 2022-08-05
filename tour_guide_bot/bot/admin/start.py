@@ -71,7 +71,6 @@ class StartCommandHandler(BaseHandlerCallback):
                 "admin-bot-start", "Admin permissions confirmed! Use /help command if you need further help."),
                 reply_markup=ReplyKeyboardRemove())
 
-            context.user_data['is_admin_mode'] = True
             return self.STATE_ADMIN_MODE_ACTIVE
         else:
             await update.message.reply_text(t(user.language).pgettext(
@@ -91,7 +90,6 @@ class StartCommandHandler(BaseHandlerCallback):
             await update.message.reply_text(t(user.language).pgettext(
                 "admin-bot-start", "Admin permissions confirmed! Use /help command if you need further help."))
 
-            context.user_data['is_admin_mode'] = True
             return self.STATE_ADMIN_MODE_ACTIVE
         else:
             await update.message.reply_text(t(user.language).pgettext(
@@ -102,7 +100,6 @@ class StartCommandHandler(BaseHandlerCallback):
     async def exit_admin_mode(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
         await update.message.reply_text(t(user.language).pgettext("admin-bot-start", "You're in guest mode now, bye!"))
-        del context.user_data['is_admin_mode']
         return ConversationHandler.END
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -110,7 +107,6 @@ class StartCommandHandler(BaseHandlerCallback):
 
         if user.admin:
             await update.message.reply_text(t(user.language).pgettext("admin-bot-start", "Welcome to the admin mode!"))
-            context.user_data['is_admin_mode'] = True
             return self.STATE_ADMIN_MODE_ACTIVE
         elif not user.phone:
             await update.message.reply_text(t(user.language).pgettext(
@@ -126,7 +122,6 @@ class StartCommandHandler(BaseHandlerCallback):
                 self.db_session.add(user)
                 await self.db_session.commit()
                 await update.message.reply_text(t(user.language).pgettext("admin-bot-start", "Welcome to the admin mode!"))
-                context.user_data['is_admin_mode'] = True
                 return self.STATE_ADMIN_MODE_ACTIVE
             else:
                 await update.message.reply_text(t(user.language).pgettext(
