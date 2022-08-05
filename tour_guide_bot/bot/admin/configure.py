@@ -42,7 +42,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
 
     async def change_welcome_message_init(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         if len(context.application.enabled_languages) == 1:
-            return self.change_welcome_message(update, context, context.application.default_language)
+            return await self.change_welcome_message(update, context, context.application.default_language)
 
         user = await self.get_user(update, context)
 
