@@ -17,12 +17,18 @@ def run():
     parser.add_argument('--enabled-languages', help=t().pgettext('cli', 'Comma-separated list of available languages.'),
                         default='en', type=lambda s: [item.strip() for item in s.split(',')])
     parser.add_argument('--default-language', '-l', help=t().pgettext('cli',
-                        'Default language.'), default='en', type=str)
+                        'Default language. If not provided, will be set to the first enabled language.'), default=None, type=str)
     parser.add_argument('--guide-bot-token', '-g', help=t().pgettext('cli',
                         'Telegram Bot token for the Guide Bot.'), type=str, required=True)
     parser.add_argument('--db', help=t().pgettext('cli', 'SQLAlchemy engine URL'), type=str, required=True)
 
     args = parser.parse_args()
+
+    if len(args.enabled_languages) == 0:
+        parser.error(t().pgettext('cli', 'the list of enabled languages must not be empty'))
+
+    if args.default_language is None:
+        args.default_language = args.enabled_languages[0]
 
     if args.default_language not in args.enabled_languages:
         parser.error(t().pgettext('cli', 'the default language must be in the list of enabled languages'))
