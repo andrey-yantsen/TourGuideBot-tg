@@ -196,6 +196,18 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
         context.user_data['tour_section_content_position'] = context.user_data.get(
             'tour_section_content_position', 0) + 1
+
+        if is_first:
+            cnt = await self.db_session.scalar(select(func.count(TourSectionContent.id))
+                                               .where((TourSectionContent.tour_section_id == context.user_data['tour_section_id'])
+                                                      & (TourSectionContent.media_group_id == update.message.media_group_id)))
+
+            if cnt == 6:
+                language = await self.get_language(update, context)
+                self.reply_text(update, context, t(language).pgettext('admin-tours', "Keep in mind: it's recommended to add no more"
+                                                                      " than five messages to a section to avoid hitting Telegram"
+                                                                      " API limits."))
+
         return is_first
 
     async def translation_section_content_add_text(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
