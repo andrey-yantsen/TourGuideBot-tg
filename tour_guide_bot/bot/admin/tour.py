@@ -51,15 +51,22 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                         MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(cls.save_tour_translation)),
                     ],
                     cls.STATE_TOUR_ADD_CONTENT: [
-                        MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(
+                        MessageHandler(filters.TEXT & ~filters.COMMAND & ~filters.UpdateType.EDITED, cls.partial(
                             cls.translation_section_content_add_text)),
-                        MessageHandler(filters.LOCATION, cls.partial(cls.translation_section_content_add_location)),
-                        MessageHandler(filters.AUDIO, cls.partial(cls.translation_section_content_add_audio)),
-                        MessageHandler(filters.VOICE, cls.partial(cls.translation_section_content_add_voice)),
-                        MessageHandler(filters.VIDEO, cls.partial(cls.translation_section_content_add_video)),
-                        MessageHandler(filters.VIDEO_NOTE, cls.partial(cls.translation_section_content_add_video_note)),
-                        MessageHandler(filters.PHOTO, cls.partial(cls.translation_section_content_add_photo)),
-                        MessageHandler(filters.ALL & ~filters.COMMAND, cls.partial(cls.translation_unknown_content)),
+                        MessageHandler(filters.LOCATION & ~filters.UpdateType.EDITED,
+                                       cls.partial(cls.translation_section_content_add_location)),
+                        MessageHandler(filters.AUDIO & ~filters.UpdateType.EDITED,
+                                       cls.partial(cls.translation_section_content_add_audio)),
+                        MessageHandler(filters.VOICE & ~filters.UpdateType.EDITED,
+                                       cls.partial(cls.translation_section_content_add_voice)),
+                        MessageHandler(filters.VIDEO & ~filters.UpdateType.EDITED,
+                                       cls.partial(cls.translation_section_content_add_video)),
+                        MessageHandler(filters.VIDEO_NOTE & ~filters.UpdateType.EDITED,
+                                       cls.partial(cls.translation_section_content_add_video_note)),
+                        MessageHandler(filters.PHOTO & ~filters.UpdateType.EDITED,
+                                       cls.partial(cls.translation_section_content_add_photo)),
+                        MessageHandler(filters.ALL & ~filters.COMMAND & ~filters.UpdateType.EDITED,
+                                       cls.partial(cls.translation_unknown_content)),
                         CommandHandler('done', cls.partial(cls.tour_add_content_done)),
                     ],
                 },
@@ -67,11 +74,16 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                     CommandHandler('cancel', cls.partial(cls.cancel)),
                     CallbackQueryHandler(cls.partial(cls.cancel), 'cancel'),
                     MessageHandler(filters.COMMAND, cls.partial(cls.unknown_command)),
+                    MessageHandler(filters.UpdateType.EDITED, cls.partial(cls.edited_message)),
                 ],
                 name='admin-tour',
                 persistent=True
             )
         ]
+
+    async def edited_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        language = await self.get_language(update, context)
+        await self.reply_text(update, context, t(language).pgettext('admin-tours', "Unfortunately, I can't process modifications of the existing messages."))
 
     async def cleanup_context(self, context: ContextTypes.DEFAULT_TYPE):
         for key in ('tour_language', 'tour_id', 'action'):
