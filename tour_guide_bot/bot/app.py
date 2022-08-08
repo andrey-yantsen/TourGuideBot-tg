@@ -2,6 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from tour_guide_bot import t
+from tour_guide_bot.bot.guide.help import HelpCommandHandler
 from tour_guide_bot.bot.guide.tours import ToursCommandHandler
 from tour_guide_bot.helpers.telegram import get_tour_title
 from tour_guide_bot.helpers.language import LanguageHandler
@@ -29,6 +30,7 @@ class Application(BaseApplication):
         self.add_handlers(StartCommandHandler.get_handlers())
         self.add_handlers(ToursCommandHandler.get_handlers())
         self.add_handlers(LanguageHandler.get_handlers())
+        self.add_handlers(HelpCommandHandler.get_handlers())
 
         self.job_queue.run_repeating(self.check_new_approved_tours, 60, job_kwargs={'misfire_grace_time': 30})
 

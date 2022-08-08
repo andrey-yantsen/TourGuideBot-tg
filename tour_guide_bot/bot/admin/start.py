@@ -7,6 +7,7 @@ from tour_guide_bot.bot.admin.approve import ApproveCommandHandler
 from tour_guide_bot.bot.admin.configure import ConfigureCommandHandler
 from tour_guide_bot.bot.admin.revoke import RevokeCommandHandler
 from tour_guide_bot.bot.admin.tour import TourCommandHandler
+from tour_guide_bot.bot.admin.help import HelpCommandHandler
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback
 from tour_guide_bot.models.admin import Admin, AdminPermissions
 
@@ -22,13 +23,20 @@ class StartCommandHandler(BaseHandlerCallback):
         all_admin_handlers += ConfigureCommandHandler.get_handlers()
         all_admin_handlers += RevokeCommandHandler.get_handlers()
         all_admin_handlers += TourCommandHandler.get_handlers()
+        all_admin_handlers += HelpCommandHandler.get_handlers()
 
         return [
             ConversationHandler(
                 entry_points=[CommandHandler("admin", cls.partial(cls.start))],
                 states={
-                    cls.STATE_CONTACT: [MessageHandler(filters.CONTACT, cls.partial(cls.contact))],
-                    cls.STATE_TOKEN: [MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(cls.token))],
+                    cls.STATE_CONTACT: [
+                        MessageHandler(filters.CONTACT, cls.partial(cls.contact)),
+                        CommandHandler('help', HelpCommandHandler.partial(HelpCommandHandler.waiting_contact_help)),
+                    ],
+                    cls.STATE_TOKEN: [
+                        MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(cls.token)),
+                        CommandHandler('help', HelpCommandHandler.partial(HelpCommandHandler.waiting_token_help)),
+                    ],
                     cls.STATE_ADMIN_MODE_ACTIVE: all_admin_handlers,
                 },
                 fallbacks=[

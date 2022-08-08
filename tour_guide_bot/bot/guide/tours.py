@@ -1,6 +1,5 @@
 from datetime import datetime
 from typing import Optional
-from regex import E
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaAudio, InputMediaPhoto, InputMediaVideo, Update
