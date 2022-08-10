@@ -16,7 +16,7 @@ psycopg2-binary = "^2.9.3"
 dateparser = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
-autopep8 = "^1.6.0"
+autopep8 = "^1.7.0"
 
 [tool.poetry.scripts]
 bot = 'tour_guide_bot.cli:run'
