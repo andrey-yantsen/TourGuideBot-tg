@@ -51,6 +51,7 @@ class TourSection(Base):
     id = Column(Integer, primary_key=True)
     tour_translation_id = Column(Integer, ForeignKey("tour_translation.id"), nullable=False)
     tour_translation = relationship("TourTranslation", back_populates="section")
+    title = Column(String, nullable=False)
     position = Column(SmallInteger, nullable=False)
     content = relationship("TourSectionContent", cascade="all, delete-orphan", order_by="TourSectionContent.position")
     created_ts = Column(DateTime, nullable=False, server_default=func.now())

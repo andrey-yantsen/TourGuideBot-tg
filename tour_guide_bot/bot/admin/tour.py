@@ -21,6 +21,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
     STATE_TOUR_EDIT_SELECT_ACTION = 5
     STATE_TOUR_DELETE_CONFIRM = 6
     STATE_TOUR_DELETE = 7
+    STATE_TOUR_ADD_SECTION = 8
 
     STATE_TOUR_AUDIO_CONVERT_CONFIRMATION = 1
     STATE_TOUR_AUDIO_CONVERT_VOICE_CHECK = 2
@@ -68,6 +69,10 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                     ],
                     cls.STATE_TOUR_SAVE_TITLE: [
                         MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(cls.save_tour_translation)),
+                    ],
+                    cls.STATE_TOUR_ADD_SECTION: [
+                        MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(cls.tour_add_section)),
+                        CommandHandler('done', cls.partial(cls.tour_add_section_done)),
                     ],
                     cls.STATE_TOUR_ADD_CONTENT: [
                         MessageHandler(filters.TEXT & ~filters.COMMAND & ~filters.UpdateType.EDITED, cls.partial(
@@ -130,29 +135,21 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         language = await self.get_language(update, context)
         await self.reply_text(update, context, t(language).pgettext('admin-tours', "Unfortunately, I can't process modifications of the existing messages."))
 
-    async def cleanup_context(self, context: ContextTypes.DEFAULT_TYPE):
+    def cleanup_context(self, context: ContextTypes.DEFAULT_TYPE):
         for key in ('tour_language', 'tour_id', 'action'):
             if key in context.user_data:
                 del context.user_data[key]
 
-        await self.cleanup_context_tour_translation(context)
+        self.cleanup_context_tour_translation(context)
 
-    async def cleanup_context_tour_translation(self, context: ContextTypes.DEFAULT_TYPE):
+    def cleanup_context_tour_translation(self, context: ContextTypes.DEFAULT_TYPE):
         for key in ('tour_translation_id', ):
             if key in context.user_data:
                 del context.user_data[key]
 
-        await self.cleanup_context_tour_translation_section(context)
+        self.cleanup_context_tour_translation_section(context)
 
-    async def cleanup_context_tour_translation_section(self, context: ContextTypes.DEFAULT_TYPE):
-        if 'tour_section_id' in context.user_data:
-            tour_section_id = context.user_data.pop('tour_section_id')
-            tour_section = await self.db_session.scalar(select(TourSection).where(TourSection.id == tour_section_id).options(selectinload(TourSection.content)))
-
-            if len(tour_section.content) == 0:
-                await self.db_session.delete(tour_section)
-                await self.db_session.commit()
-
+    def cleanup_context_tour_translation_section(self, context: ContextTypes.DEFAULT_TYPE):
         for key in ('tour_section_content_position', 'tour_section_position'):
             if key in context.user_data:
                 del context.user_data[key]
@@ -164,30 +161,43 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             if key in context.user_data:
                 del context.user_data[key]
 
-    async def tour_add_content_done(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        user = await self.get_user(update, context)
-        position = context.user_data.get('tour_section_content_position', 0)
-        tour_section_position = context.user_data.get('tour_section_position', 0)
+    async def tour_add_section_done(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        language = await self.get_language(update, context)
+        self.cleanup_context(context)
+        await update.message.reply_text(t(language).pgettext('admin-tours', "Done!"))
+        return ConversationHandler.END
 
-        await self.cleanup_context_tour_translation_section(context)
-
-        if context.user_data.get('action') == 'edit':
-            return ConversationHandler.END
-
-        if position == 0:
-            await self.cleanup_context(context)
-            await update.message.reply_text(t(user.language).pgettext('admin-tours', "Done!"))
-            return ConversationHandler.END
+    async def tour_add_section(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        language = await self.get_language(update, context)
 
         tour_section = TourSection(
-            tour_translation_id=context.user_data['tour_translation_id'], position=tour_section_position + 1)
+            tour_translation_id=context.user_data['tour_translation_id'],
+            position=context.user_data.get('tour_section_position', 0),
+            title=update.message.text
+        )
         self.db_session.add(tour_section)
         await self.db_session.commit()
         context.user_data['tour_section_id'] = tour_section.id
-        context.user_data['tour_section_position'] = tour_section_position + 1
 
-        await update.message.reply_text(t(user.language).pgettext('admin-tours', "Done! Send more content for the next"
+        await update.message.reply_text(t(language).pgettext('admin-tour', "Now send me location, text, photo, audio, video, voice or"
+                                                             " video note messages, and send /done when finished with the section."))
+
+        return self.STATE_TOUR_ADD_CONTENT
+
+    async def tour_add_content_done(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        user = await self.get_user(update, context)
+        tour_section_position = context.user_data.get('tour_section_position', 0)
+
+        self.cleanup_context_tour_translation_section(context)
+
+        if context.user_data.get('action') == 'edit':
+            del context.user_data['action']
+            return ConversationHandler.END
+
+        context.user_data['tour_section_position'] = tour_section_position + 1
+        await update.message.reply_text(t(user.language).pgettext('admin-tours', "Done! Send me the title of the next"
                                                                   " tour section, or send /done if you're finished."))
+        return self.STATE_TOUR_ADD_SECTION
 
     async def cancel_audio_conversion(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
@@ -200,7 +210,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
     async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
-        await self.cleanup_context(context)
+        self.cleanup_context(context)
         if update.callback_query:
             await update.callback_query.delete_message()
 
@@ -627,7 +637,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         if not tour:
             await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
-            await self.cleanup_context(context)
+            self.cleanup_context(context)
             return ConversationHandler.END
 
         tour_title = get_tour_title(tour, user.language, context)
@@ -637,7 +647,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
         await update.callback_query.edit_message_text(t(user.language).pgettext(
             'admin-tours', 'The tour "{0}" was removed.'.format(tour_title)))
-        await self.cleanup_context(context)
+        self.cleanup_context(context)
         return ConversationHandler.END
 
     async def request_delete_tour_confirmation(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -649,7 +659,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         if not tour:
             await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
-            await self.cleanup_context(context)
+            self.cleanup_context(context)
             return ConversationHandler.END
 
         await update.callback_query.edit_message_text(t(user.language).pgettext(
@@ -683,20 +693,15 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         tour_translation.title = update.message.text_markdown_v2_urled
         self.db_session.add(tour_translation)
 
-        tour_section = TourSection(tour_translation=tour_translation, position=0)
-        self.db_session.add(tour_section)
-
         await self.db_session.commit()
 
         context.user_data['tour_id'] = tour.id
         context.user_data['tour_translation_id'] = tour_translation.id
-        context.user_data['tour_section_id'] = tour_section.id
 
         if is_new_translation:
             await update.message.reply_text(t(user.language).pgettext(
-                'admin-tour', "Terrific! Let's add some content now! Send me location, text, photo, audio, video, voice or"
-                " video note messages, and send /done when finished with the section."))
-            return self.STATE_TOUR_ADD_CONTENT
+                'admin-tour', "Terrific! Let's add some content now! Send me the title for the new section."))
+            return self.STATE_TOUR_ADD_SECTION
 
         await update.message.reply_text(t(user.language).pgettext(
             'admin-tour', "Great! The title was updated."))
@@ -754,7 +759,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         if target_language not in context.application.enabled_languages:
             await self.edit_or_reply_text(update, context, t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
-            await self.cleanup_context(context)
+            self.cleanup_context(context)
             return ConversationHandler.END
 
         context.user_data['tour_language'] = target_language
@@ -789,7 +794,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                         'Unexpected callback data received in select_tour(): "{0}"').format(callback_data))
             await update.callback_query.edit_message_text(t(user.language).pgettext(
                 'bot-generic', 'Something went wrong; please try again.'))
-            await self.cleanup_context(context)
+            self.cleanup_context(context)
             return ConversationHandler.END
 
         await update.callback_query.edit_message_text(message, reply_markup=InlineKeyboardMarkup(keyboard))
