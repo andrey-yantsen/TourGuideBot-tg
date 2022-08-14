@@ -29,6 +29,10 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
     CALLBACK_DATA_EDIT_TOUR = 'edit_tour'
     CALLBACK_DATA_DELETE_TOUR = 'delete_tour'
 
+    CALLBACK_DATA_TOUR_RENAME = 'tour_rename'
+    CALLBACK_DATA_TOUR_REMOVE_SECTION = 'tour_remove_section'
+    CALLBACK_DATA_TOUR_EDIT_SECTION = 'edit_section'
+
     CALLBACK_DATA_DELETE_TOUR_CONFIRMED = 'delete_tour_confirmed'
 
     @classmethod
@@ -46,6 +50,14 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                     cls.STATE_TOUR_DELETE_CONFIRM: [
                         CallbackQueryHandler(cls.partial(cls.request_delete_tour_confirmation), '^%s:(\d+)$' %
                                              (cls.CALLBACK_DATA_DELETE_TOUR, )),
+                    ],
+                    cls.STATE_TOUR_EDIT_SELECT_ACTION: [
+                        CallbackQueryHandler(cls.partial(cls.cancel), '^%s:(\d+)$' %
+                                             (cls.CALLBACK_DATA_TOUR_RENAME, )),
+                        CallbackQueryHandler(cls.partial(cls.cancel), '^%s:(\d+)$' %
+                                             (cls.CALLBACK_DATA_TOUR_REMOVE_SECTION, )),
+                        CallbackQueryHandler(cls.partial(cls.cancel), '^%s:(\d+)$' %
+                                             (cls.CALLBACK_DATA_TOUR_EDIT_SECTION, )),
                     ],
                     cls.STATE_TOUR_DELETE: [
                         CallbackQueryHandler(cls.partial(cls.delete_tour), '^%s:(\d+)$' %
@@ -692,6 +704,28 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         return await self.request_edit_action(self, update, context)
 
     async def request_edit_action(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        language = await self.get_language(update, context)
+        await self.edit_or_reply_text(update, context, t(language).pgettext(
+            'admin-tour', 'Please select the action.'),
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton(
+                    t(language).pgettext('admin-tour', 'Rename'),
+                    '%s:%d' % (self.CALLBACK_DATA_TOUR_RENAME, context.user_data['tour_id'])
+                )],
+                [InlineKeyboardButton(
+                    t(language).pgettext('admin-tour', 'Remove a section'),
+                    '%s:%d' % (self.CALLBACK_DATA_TOUR_REMOVE_SECTION, context.user_data['tour_id'])
+                )],
+                [InlineKeyboardButton(
+                    t(language).pgettext('admin-tour', 'Edit a section'),
+                    '%s:%d' % (self.CALLBACK_DATA_TOUR_EDIT_SECTION, context.user_data['tour_id'])
+                )],
+                [InlineKeyboardButton(
+                    t(language).pgettext('bot-generic', 'Abort'),
+                    callback_data='cancel'
+                )]
+            ]))
+
         return self.STATE_TOUR_EDIT_SELECT_ACTION
 
     async def request_tour_language(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
