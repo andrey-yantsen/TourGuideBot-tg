@@ -12,6 +12,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
     STATE_INIT = 1
     STATE_WELCOME_MESSAGE_LANGUAGE = 2
     STATE_WELCOME_MESSAGE = 3
+    STATE_AUDIO_TO_VOICE = 4
 
     @classmethod
     def get_handlers(cls):
@@ -21,9 +22,14 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                 states={
                     cls.STATE_INIT: [
                         CallbackQueryHandler(cls.partial(cls.change_welcome_message_init), '^change_welcome_message$'),
+                        CallbackQueryHandler(cls.partial(cls.change_audio_to_voice_init), '^audio_to_voice$'),
                     ],
                     cls.STATE_WELCOME_MESSAGE_LANGUAGE: [
                         CallbackQueryHandler(cls.partial(cls.change_welcome_message), '^change_welcome_message:(.*)$'),
+                    ],
+                    cls.STATE_AUDIO_TO_VOICE: [
+                        CallbackQueryHandler(cls.partial(cls.change_audio_to_voice),
+                                             '^audio_to_voice:(enable|disable)$'),
                     ],
                     cls.STATE_WELCOME_MESSAGE: [
                         MessageHandler(filters.TEXT & ~filters.COMMAND, cls.partial(cls.change_welcome_message_text)),
@@ -39,6 +45,51 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                 persistent=True
             )
         ]
+
+    async def change_audio_to_voice_init(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        language = await self.get_language(update, context)
+        audio_to_voice_state = await Settings.load(self.db_session, SettingsKey.audio_to_voice)
+
+        if audio_to_voice_state.is_enabled:
+            await update.callback_query.edit_message_text(t(language).pgettext(
+                'admin-configure', 'Audio\-to\-voice conversion suggestions are currently *enabled*\. Would you like to disable them?'),
+                parse_mode=ParseMode.MARKDOWN_V2,
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton(t(language).pgettext('bot-generic', 'Yes'),
+                                          callback_data='audio_to_voice:disable')],
+                    [InlineKeyboardButton(t(language).pgettext('bot-generic', 'Abort'), callback_data='cancel')],
+                ]))
+        else:
+            await update.callback_query.edit_message_text(t(language).pgettext(
+                'admin-configure', 'Audio\-to\-voice conversion suggestions are currently *disabled*\. Would you like to enable them?'),
+                parse_mode=ParseMode.MARKDOWN_V2,
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton(t(language).pgettext('bot-generic', 'Yes'),
+                                          callback_data='audio_to_voice:enable')],
+                    [InlineKeyboardButton(t(language).pgettext('bot-generic', 'Abort'), callback_data='cancel')],
+                ]))
+
+        return self.STATE_AUDIO_TO_VOICE
+
+    async def change_audio_to_voice(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        language = await self.get_language(update, context)
+        audio_to_voice_state = await Settings.load(self.db_session, SettingsKey.audio_to_voice)
+        if context.matches[0].group(1) == 'enable':
+            audio_to_voice_state.enable()
+        else:
+            audio_to_voice_state.disable()
+
+        self.db_session.add(audio_to_voice_state)
+        await self.db_session.commit()
+
+        if context.matches[0].group(1) == 'enable':
+            await update.callback_query.edit_message_text(t(language).pgettext(
+                'admin-configure', 'Audio-to-voice conversion suggestions were enabled.'))
+        else:
+            await update.callback_query.edit_message_text(t(language).pgettext(
+                'admin-configure', 'Audio-to-voice conversion suggestions were disabled.'))
+
+        return ConversationHandler.END
 
     async def change_welcome_message_init(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         if len(context.application.enabled_languages) == 1:
@@ -128,6 +179,10 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                 [
                     InlineKeyboardButton(t(user.language).pgettext('admin-bot-configure',
                                                                    'Guide welcome message'), callback_data='change_welcome_message')
+                ],
+                [
+                    InlineKeyboardButton(t(user.language).pgettext('admin-bot-configure',
+                                                                   'Audio-to-voice suggestions'), callback_data='audio_to_voice')
                 ],
                 [
                     InlineKeyboardButton(t(user.language).pgettext(

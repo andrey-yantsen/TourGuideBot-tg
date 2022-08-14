@@ -1,6 +1,6 @@
 FROM python:3.10-alpine
 
-RUN apk add build-base libpq-dev mariadb-connector-c-dev curl
+RUN apk add build-base libpq-dev mariadb-connector-c-dev curl ffmpeg libogg opus lame
 RUN adduser -h /home/tg -D -u 1000 tg
 USER tg
 WORKDIR /home/tg/app
