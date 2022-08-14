@@ -1,0 +1,44 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "2.0.0",
+    "configurations": [
+        {
+            "name": "TourGuideBot-tg",
+            "type": "python",
+            "request": "launch",
+            "module": "tour_guide_bot.cli",
+            "justMyCode": true,
+            "args": [
+                "-g",
+                "${input:botToken}",
+                "-d",
+                "--db",
+                "sqlite+aiosqlite:///${workspaceFolder}/tour_guide_bot.sqlite3",
+                "--enabled-languages",
+                "ru"
+            ],
+        },
+        {
+            "name": "DB migration",
+            "type": "python",
+            "request": "launch",
+            "module": "alembic",
+            "justMyCode": true,
+            "args": [
+                "-x",
+                "db=sqlite:///${workspaceFolder}/tour_guide_bot.sqlite3",
+                "upgrade",
+                "head"
+            ],
+        }
+    ],
+    "inputs": [
+        {
+            "id": "botToken",
+            "type": "promptString",
+            "description": "Please enter the token for your bot"
+        }
+    ]
+}
