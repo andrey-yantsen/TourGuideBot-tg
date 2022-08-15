@@ -17,7 +17,7 @@
                 "--db",
                 "sqlite+aiosqlite:///${workspaceFolder}/tour_guide_bot.sqlite3",
                 "--enabled-languages",
-                "ru"
+                "en,ru"
             ],
         },
         {
