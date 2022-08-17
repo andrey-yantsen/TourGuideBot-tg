@@ -10,7 +10,7 @@ class SettingsKey(enum.Enum):
 
 
 class Settings(Base):
-    __tablename__ = 'settings'
+    __tablename__ = "settings"
     __mapper_args__ = {"eager_defaults": True}
 
     __bool_settings = [SettingsKey.audio_to_voice]
@@ -23,10 +23,12 @@ class Settings(Base):
     language = Column(String)
     value = Column(String, nullable=False)
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
-    updated_ts = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
+    updated_ts = Column(
+        DateTime, nullable=False, default=func.now(), onupdate=func.now()
+    )
 
     __table_args__ = (
-        Index('ix_settings_key_language', 'key', 'language', unique=True),
+        Index("ix_settings_key_language", "key", "language", unique=True),
     )
 
     @property
@@ -34,13 +36,16 @@ class Settings(Base):
         if self.key not in self.__bool_settings:
             raise RuntimeError("This setting is not boolean")
 
-        return self.value == 'yes' or (self.value is None and self.__bool_settings_defaults.get(self.key, 'yes') == 'yes')
+        return self.value == "yes" or (
+            self.value is None
+            and self.__bool_settings_defaults.get(self.key, "yes") == "yes"
+        )
 
     def enable(self) -> "Settings":
         if self.key not in self.__bool_settings:
             raise RuntimeError("This setting is not boolean")
 
-        self.value = 'yes'
+        self.value = "yes"
 
         return self
 
@@ -48,13 +53,17 @@ class Settings(Base):
         if self.key not in self.__bool_settings:
             raise RuntimeError("This setting is not boolean")
 
-        self.value = 'no'
+        self.value = "no"
 
         return self
 
     @staticmethod
-    async def load(db_session: AsyncSession, key: SettingsKey, language: str | None = None) -> "Settings":
-        stmt = select(Settings).where((Settings.key == key) & (Settings.language == language))
+    async def load(
+        db_session: AsyncSession, key: SettingsKey, language: str | None = None
+    ) -> "Settings":
+        stmt = select(Settings).where(
+            (Settings.key == key) & (Settings.language == language)
+        )
         setting = await db_session.scalar(stmt)
         if not setting:
             setting = Settings(key=key, language=language)

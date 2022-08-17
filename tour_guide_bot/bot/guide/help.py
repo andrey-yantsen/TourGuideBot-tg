@@ -15,8 +15,11 @@ class HelpCommandHandler(BaseHandlerCallback):
         language = await self.get_language(update, context)
 
         await update.message.reply_text(
-            t(language).pgettext('guest-help', "You can use the following commands:\n"
-                                 "* /start — to see the welcome message again\n"
-                                 "* /tours — to list all the available for you tours\n"
-                                 "* /language — to change the interface language")
+            t(language).pgettext(
+                "guest-help",
+                "You can use the following commands:\n"
+                "* /start — to see the welcome message again\n"
+                "* /tours — to list all the available for you tours\n"
+                "* /language — to change the interface language",
+            )
         )

@@ -9,8 +9,10 @@ class LanguageHandler(BaseHandlerCallback):
     @classmethod
     def get_handlers(cls):
         return [
-            CommandHandler('language', cls.partial(cls.start)),
-            CallbackQueryHandler(cls.partial(cls.set_language), '^change_user_language:(.*)$'),
+            CommandHandler("language", cls.partial(cls.start)),
+            CallbackQueryHandler(
+                cls.partial(cls.set_language), "^change_user_language:(.*)$"
+            ),
         ]
 
     async def set_language(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -23,16 +25,36 @@ class LanguageHandler(BaseHandlerCallback):
             self.db_session.add(user)
             await self.db_session.commit()
 
-            await update.callback_query.edit_message_text(t(required_language).pgettext('any-bot', 'The language has been changed to {0}.').format(Locale.parse(required_language).get_language_name(required_language)))
+            await update.callback_query.edit_message_text(
+                t(required_language)
+                .pgettext("any-bot", "The language has been changed to {0}.")
+                .format(
+                    Locale.parse(required_language).get_language_name(required_language)
+                )
+            )
         else:
-            await update.callback_query.answer(t(current_language).pgettext('any-bot', 'Something went wrong, please try again.'))
+            await update.callback_query.answer(
+                t(current_language).pgettext(
+                    "any-bot", "Something went wrong, please try again."
+                )
+            )
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         current_language = await self.get_language(update, context)
 
         if len(context.application.enabled_languages) == 1:
-            await update.message.reply_text(t(current_language).pgettext(
-                'any-bot', 'Unfortunately, you can`t change the language — this bot supports only one.'))
+            await update.message.reply_text(
+                t(current_language).pgettext(
+                    "any-bot",
+                    "Unfortunately, you can`t change the language — this bot supports only one.",
+                )
+            )
         else:
-            await update.message.reply_text(t(current_language).pgettext(
-                'any-bot', 'Please select the language you prefer'), reply_markup=self.get_language_select_inline_keyboard(current_language, context, 'change_user_language:'))
+            await update.message.reply_text(
+                t(current_language).pgettext(
+                    "any-bot", "Please select the language you prefer"
+                ),
+                reply_markup=self.get_language_select_inline_keyboard(
+                    current_language, context, "change_user_language:"
+                ),
+            )

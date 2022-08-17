@@ -17,7 +17,7 @@ dateparser = "^1.1.1"
 ffmpeg-python = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
-autopep8 = "^1.7.0"
+black = "^22.6.0"
 
 [tool.poetry.scripts]
 bot = 'tour_guide_bot.cli:run'
