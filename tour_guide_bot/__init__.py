@@ -1,7 +1,6 @@
-import logging
 import gettext
+import logging
 import os
-from typing import Optional
 
 log = logging.getLogger(__package__)
 
@@ -14,7 +13,7 @@ def set_fallback_locale(locale: str):
     fallback_locale = locale
 
 
-def t(locale: Optional[str] = None) -> gettext.NullTranslations:
+def t(locale: str | None = None) -> gettext.NullTranslations:
     if locale in __translations:
         return __translations[locale]
 

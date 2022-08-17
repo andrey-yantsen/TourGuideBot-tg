@@ -1,15 +1,16 @@
 from functools import partial
+
 from babel import Locale
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from tour_guide_bot import t
-from tour_guide_bot.models.telegram import TelegramUser
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
-from telegram.ext import ConversationHandler, ContextTypes
-from tour_guide_bot.models.guide import Tour
-from tour_guide_bot import t
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import ContextTypes, ConversationHandler
+
+from tour_guide_bot import t
+from tour_guide_bot.models.guide import Tour
+from tour_guide_bot.models.telegram import TelegramUser
+
 from . import log
 
 

@@ -1,22 +1,24 @@
 import datetime
+import re
+
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
+    CallbackQueryHandler,
+    CommandHandler,
     ContextTypes,
     ConversationHandler,
-    CommandHandler,
-    CallbackQueryHandler,
     MessageHandler,
     filters,
 )
+
 from tour_guide_bot import t
 from tour_guide_bot.helpers.telegram import (
-    get_tour_title,
     AdminProtectedBaseHandlerCallback,
+    get_tour_title,
 )
 from tour_guide_bot.models.guide import BoughtTours, Guest, Tour
-import re
 
 
 class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):

@@ -1,22 +1,24 @@
-from asyncio import sleep
 import os
 from re import M
+
+import ffmpeg
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
+    CallbackContext,
+    CallbackQueryHandler,
+    CommandHandler,
     ContextTypes,
     ConversationHandler,
-    CommandHandler,
-    CallbackQueryHandler,
     MessageHandler,
     filters,
-    CallbackContext,
 )
+
 from tour_guide_bot import t
 from tour_guide_bot.helpers.telegram import (
-    get_tour_title,
     AdminProtectedBaseHandlerCallback,
+    get_tour_title,
 )
 from tour_guide_bot.models.guide import (
     MessageType,
@@ -26,7 +28,7 @@ from tour_guide_bot.models.guide import (
     TourTranslation,
 )
 from tour_guide_bot.models.settings import Settings, SettingsKey
-import ffmpeg
+
 from . import log
 
 

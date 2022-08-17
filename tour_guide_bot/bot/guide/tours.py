@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from telegram import (
@@ -12,11 +12,12 @@ from telegram import (
 )
 from telegram.constants import ParseMode
 from telegram.ext import (
+    CallbackQueryHandler,
+    CommandHandler,
     ContextTypes,
     ConversationHandler,
-    CommandHandler,
-    CallbackQueryHandler,
 )
+
 from tour_guide_bot import t
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback, get_tour_title
 from tour_guide_bot.models.guide import (
@@ -26,6 +27,7 @@ from tour_guide_bot.models.guide import (
     TourSection,
     TourTranslation,
 )
+
 from . import log
 
 
@@ -69,7 +71,7 @@ class ToursCommandHandler(BaseHandlerCallback):
 
         return ConversationHandler.END
 
-    async def get_tour(self, guest_id: int, tour_id: int) -> Optional[BoughtTours]:
+    async def get_tour(self, guest_id: int, tour_id: int) -> BoughtTours | None:
         bought_tour = await self.db_session.scalar(
             select(BoughtTours)
             .options(selectinload(BoughtTours.tour).selectinload(Tour.translation))

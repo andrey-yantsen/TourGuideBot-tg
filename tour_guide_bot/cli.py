@@ -1,14 +1,16 @@
 import argparse
+import asyncio
 import logging
+from os import mkdir, sep
+from os.path import dirname
 import sys
 from venv import create
-from tour_guide_bot import log, t, set_fallback_locale
-from tour_guide_bot.bot.app import Application
-import asyncio
-from telegram.ext import PicklePersistence
+
 from sqlalchemy.ext.asyncio import create_async_engine
-from os.path import dirname
-from os import mkdir, sep
+from telegram.ext import PicklePersistence
+
+from tour_guide_bot import log, set_fallback_locale, t
+from tour_guide_bot.bot.app import Application
 
 
 def run():

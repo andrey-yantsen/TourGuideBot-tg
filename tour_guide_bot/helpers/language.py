@@ -1,8 +1,10 @@
 from babel import Locale
-from .telegram import BaseHandlerCallback
 from telegram import Update
-from telegram.ext import ContextTypes, CallbackQueryHandler, CommandHandler
+from telegram.ext import CallbackQueryHandler, CommandHandler, ContextTypes
+
 from tour_guide_bot import t
+
+from .telegram import BaseHandlerCallback
 
 
 class LanguageHandler(BaseHandlerCallback):

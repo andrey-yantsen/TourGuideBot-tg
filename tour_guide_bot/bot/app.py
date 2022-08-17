@@ -1,18 +1,20 @@
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+from telegram import Update
+from telegram.ext import Application as BaseApplication, ContextTypes, TypeHandler
+
 from tour_guide_bot import t
 from tour_guide_bot.bot.guide.help import HelpCommandHandler
 from tour_guide_bot.bot.guide.tours import ToursCommandHandler
-from tour_guide_bot.helpers.telegram import get_tour_title
 from tour_guide_bot.helpers.language import LanguageHandler
-from telegram import Update
-from telegram.ext import ContextTypes, TypeHandler, Application as BaseApplication
+from tour_guide_bot.helpers.telegram import get_tour_title
 from tour_guide_bot.models.guide import BoughtTours, Guest, Tour
 from tour_guide_bot.models.telegram import TelegramUser
-from .guide.start import StartCommandHandler
-from .admin.start import StartCommandHandler as AdminStartCommandHandler
+
 from . import log
+from .admin.start import StartCommandHandler as AdminStartCommandHandler
+from .guide.start import StartCommandHandler
 
 
 class Application(BaseApplication):

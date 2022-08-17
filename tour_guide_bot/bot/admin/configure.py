@@ -1,15 +1,15 @@
-from typing import Optional
 from sqlalchemy import select
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import (
+    CallbackQueryHandler,
+    CommandHandler,
     ContextTypes,
     ConversationHandler,
-    CommandHandler,
-    CallbackQueryHandler,
     MessageHandler,
     filters,
 )
+
 from tour_guide_bot import t
 from tour_guide_bot.helpers.telegram import AdminProtectedBaseHandlerCallback
 from tour_guide_bot.models.settings import Settings, SettingsKey
@@ -186,7 +186,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         self,
         update: Update,
         context: ContextTypes.DEFAULT_TYPE,
-        force_language: Optional[str] = None,
+        force_language: str | None = None,
     ):
         target_language = (
             force_language if force_language else context.matches[0].group(1)

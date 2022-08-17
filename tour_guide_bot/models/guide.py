@@ -1,20 +1,22 @@
-from . import Base
-from sqlalchemy.ext.mutable import MutableDict
+import enum
+
 from sqlalchemy import (
-    Boolean,
     JSON,
+    Boolean,
     Column,
+    DateTime,
     Enum,
     ForeignKey,
     Index,
     Integer,
     SmallInteger,
-    DateTime,
     String,
     func,
 )
-from sqlalchemy.orm import relationship, object_session
-import enum
+from sqlalchemy.ext.mutable import MutableDict
+from sqlalchemy.orm import object_session, relationship
+
+from . import Base
 
 
 class Tour(Base):

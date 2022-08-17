@@ -1,6 +1,8 @@
 import enum
-from sqlalchemy import Column, Index, Integer, String, DateTime, func, Enum, select
+
+from sqlalchemy import Column, DateTime, Enum, Index, Integer, String, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from . import Base
 
 

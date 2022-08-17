@@ -1,5 +1,6 @@
 from telegram import Update
-from telegram.ext import ContextTypes, CommandHandler
+from telegram.ext import CommandHandler, ContextTypes
+
 from tour_guide_bot import t
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback
 
