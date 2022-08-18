@@ -5,15 +5,21 @@ from os import mkdir, sep
 from os.path import dirname
 import sys
 from venv import create
+from warnings import filterwarnings
 
 from sqlalchemy.ext.asyncio import create_async_engine
 from telegram.ext import PicklePersistence
+from telegram.warnings import PTBUserWarning
 
 from tour_guide_bot import log, set_fallback_locale, t
 from tour_guide_bot.bot.app import Application
 
 
 def run():
+    filterwarnings(
+        action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning
+    )
+
     parser = argparse.ArgumentParser(
         description=t().pgettext("cli", "Tour Guide bot [telegram]")
     )
