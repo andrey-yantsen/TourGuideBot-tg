@@ -8,6 +8,7 @@ ENV PATH=/home/tg/.local/bin:$PATH \
     PYTHONUNBUFFERED=1
 COPY --chown=tg:tg poetry.lock pyproject.toml /home/tg/app/
 RUN curl -sSL https://install.python-poetry.org | python -u - \
+  || cat /home/tg/app/poetry-installer-error-* \
   && poetry install --no-dev --no-interaction --no-root
 COPY --chown=tg:tg . /home/tg/app/
 RUN poetry run pybabel compile --domain=tour_guide_bot --directory=tour_guide_bot/locales
