@@ -10,47 +10,52 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2022-08-17 22:17\n"
+"PO-Revision-Date: 2022-08-18 21:57\n"
 
-#: tour_guide_bot/cli.py:18
+#: tour_guide_bot/cli.py:24
 msgctxt "cli"
 msgid "Tour Guide bot [telegram]"
 msgstr "Tour Guide bot [telegram]"
 
-#: tour_guide_bot/cli.py:23
+#: tour_guide_bot/cli.py:29
 msgctxt "cli"
 msgid "Enable debug logging."
 msgstr "Включить отладочное логирование."
 
-#: tour_guide_bot/cli.py:28
+#: tour_guide_bot/cli.py:34
 msgctxt "cli"
 msgid "Comma-separated list of available languages."
 msgstr "Список доступных языков, разделённый запятыми."
 
-#: tour_guide_bot/cli.py:35
+#: tour_guide_bot/cli.py:41
 msgctxt "cli"
 msgid "Default language. If not provided, will be set to the first enabled language."
 msgstr ""
 
-#: tour_guide_bot/cli.py:45
+#: tour_guide_bot/cli.py:51
 msgctxt "cli"
 msgid "Telegram Bot token for the Guide Bot."
 msgstr "Токен Telegram-бота для бота-гида."
 
-#: tour_guide_bot/cli.py:51
+#: tour_guide_bot/cli.py:57
 msgctxt "cli"
 msgid "SQLAlchemy engine URL"
 msgstr "параметры доступа к БД в формате SQLAlchemy engine URL."
 
-#: tour_guide_bot/cli.py:60
+#: tour_guide_bot/cli.py:66
 msgctxt "cli"
 msgid "the list of enabled languages must not be empty"
 msgstr ""
 
-#: tour_guide_bot/cli.py:68
+#: tour_guide_bot/cli.py:74
 msgctxt "cli"
 msgid "the default language must be in the list of enabled languages"
 msgstr "язык по умолчанию должен быть в списке доступных языков"
+
+#: tour_guide_bot/cli.py:119
+msgctxt "cli"
+msgid "Up and runnig!"
+msgstr ""
 
 #: tour_guide_bot/bot/app.py:87
 msgctxt "guide-bot-notification"
