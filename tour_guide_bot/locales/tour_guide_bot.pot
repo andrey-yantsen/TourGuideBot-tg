@@ -40,6 +40,11 @@ msgctxt "cli"
 msgid "the default language must be in the list of enabled languages"
 msgstr ""
 
+#: tour_guide_bot/cli.py:119
+msgctxt "cli"
+msgid "Up and runnig!"
+msgstr ""
+
 #: tour_guide_bot/bot/app.py:87
 msgctxt "guide-bot-notification"
 msgid ""

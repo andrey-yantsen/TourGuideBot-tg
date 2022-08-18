@@ -116,6 +116,7 @@ def run():
     loop.run_until_complete(app.start())
 
     try:
+        log.info(t().pgettext("cli", "Up and runnig!"))
         loop.run_forever()
     finally:
         loop.run_until_complete(app.update_persistence())
