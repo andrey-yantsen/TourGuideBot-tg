@@ -2,11 +2,6 @@
 
 set -eu
 
-if [ -f "$HOME/.poetry/env" ]
-then
-    source $HOME/.poetry/env
-fi
-
 db=""
 
 for v in "$@"
@@ -25,7 +20,7 @@ done
 
 if ! [ "$db" == 'next' ] && ! [ -z "$db" ]
 then
-    poetry run alembic -x db="${db//+*:\/\//://}" upgrade head
+    .venv/bin/alembic -x db="${db//+*:\/\//://}" upgrade head
 fi
 
-poetry run bot "$@"
+.venv/bin/python3 -mtour_guide_bot.cli "$@"
