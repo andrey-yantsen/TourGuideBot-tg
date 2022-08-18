@@ -91,7 +91,7 @@ def run():
 
     engine = create_async_engine(args.db)
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
 
     app = Application.builder().token(args.guide_bot_token).build()
     app.content_add_lock = asyncio.Lock()
