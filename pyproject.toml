@@ -21,7 +21,7 @@ target-version = ["py310"]
 python = "^3.10"
 python-telegram-bot = {version = "*", allow-prereleases = true}
 Babel = "^2.10.3"
-SQLAlchemy = {extras = ["asyncio", "aiomysql", "aiosqlite", "postgresql_asyncpg"], version = "^1.4.40"}
+SQLAlchemy = {extras = ["asyncio", "aiomysql", "aiosqlite", "postgresql_asyncpg"], version = "^1.4.42"}
 alembic = "^1.8.1"
 greenlet = "*"
 psycopg2-binary = "^2.9.3"
