@@ -93,7 +93,6 @@ click = ">=8.0.0"
 mypy-extensions = ">=0.4.3"
 pathspec = ">=0.9.0"
 platformdirs = ">=2"
-tomli = {version = ">=1.1.0", markers = "python_full_version < \"3.11.0a7\""}
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -334,7 +333,7 @@ six = ">=1.5"
 
 [[package]]
 name = "python-telegram-bot"
-version = "20.0a5"
+version = "20.0a6"
 description = "We have made you a wrapper you can't refuse"
 category = "main"
 optional = false
@@ -447,14 +446,6 @@ pymysql = ["pymysql", "pymysql (<1)"]
 sqlcipher = ["sqlcipher3_binary"]
 
 [[package]]
-name = "tomli"
-version = "2.0.1"
-description = "A lil' TOML parser"
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[[package]]
 name = "typing-extensions"
 version = "4.3.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -488,7 +479,7 @@ test = ["pytest (>=4.3)", "pytest-mock (>=3.3)"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.10"
+python-versions = "~3.11"
 content-hash = "b24d34c071e543edbf12a52aa02a8101f8873f68c582252cbbfac6826bd144ef"
 
 [metadata.files]
@@ -808,8 +799,8 @@ python-dateutil = [
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
 ]
 python-telegram-bot = [
-    {file = "python-telegram-bot-20.0a5.tar.gz", hash = "sha256:3ac4d9535ac4fcd2fc125ad2a50983db805b0f2372287c3e501a3702e6fa100f"},
-    {file = "python_telegram_bot-20.0a5-py3-none-any.whl", hash = "sha256:b52e62b479fa4c02624790dccd2072975a90a64cbd7b43e065e01e234bd4d48d"},
+    {file = "python-telegram-bot-20.0a6.tar.gz", hash = "sha256:aac039b54043d5c1778b182d506f2d51ddccef746eeb36e6ca9a236c4cd1c848"},
+    {file = "python_telegram_bot-20.0a6-py3-none-any.whl", hash = "sha256:0279d0d727ab36e4b42a8819656098485bcd0724961c2f5fced3218b15b26c02"},
 ]
 pytz = [
     {file = "pytz-2022.2.1-py2.py3-none-any.whl", hash = "sha256:220f481bdafa09c3955dfbdddb7b57780e9a94f5127e35456a48589b9e0c0197"},
@@ -949,10 +940,6 @@ sqlalchemy = [
     {file = "SQLAlchemy-1.4.44-cp39-cp39-win32.whl", hash = "sha256:7cf7c7adbf4417e3f46fc5a2dbf8395a5a69698217337086888f79700a12e93a"},
     {file = "SQLAlchemy-1.4.44-cp39-cp39-win_amd64.whl", hash = "sha256:d3b6d4588994da73567bb00af9d7224a16c8027865a8aab53ae9be83f9b7cbd1"},
     {file = "SQLAlchemy-1.4.44.tar.gz", hash = "sha256:2dda5f96719ae89b3ec0f1b79698d86eb9aecb1d54e990abb3fdd92c04b46a90"},
-]
-tomli = [
-    {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
-    {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.3.0-py3-none-any.whl", hash = "sha256:25642c956049920a5aa49edcdd6ab1e06d7e5d467fc00e0506c44ac86fbfca02"},
