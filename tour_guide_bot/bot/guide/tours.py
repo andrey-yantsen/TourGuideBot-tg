@@ -308,9 +308,11 @@ class ToursCommandHandler(BaseHandlerCallback):
         user = await self.get_user(update, context)
 
         translation = await self.db_session.scalar(
-            select(TourTranslation).options(
+            select(TourTranslation)
+            .options(
                 selectinload(TourTranslation.section).selectinload(TourSection.content)
             )
+            .where(TourTranslation.id == int(context.matches[0].group(1)))
         )
         if not translation:
             await self.edit_or_reply_text(
