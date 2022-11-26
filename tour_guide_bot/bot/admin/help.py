@@ -42,6 +42,7 @@ class HelpCommandHandler(BaseHandlerCallback):
                 "* /tours — to manage your tours\n"
                 "* /approve — to allow the access to a tour to somebody\n"
                 "* /revoke — to revoke somebody's access to a tour\n"
-                "* /language — to change the interface language",
+                "* /language — to change the interface language\n"
+                "* /guest — return to the guest mode",
             )
         )
