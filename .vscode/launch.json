@@ -17,7 +17,7 @@
                 "--db",
                 "sqlite+aiosqlite:///${workspaceFolder}/tour_guide_bot.sqlite3",
                 "--enabled-languages",
-                "en,ru"
+                "${input:languages}"
             ],
         },
         {
@@ -35,6 +35,12 @@
         }
     ],
     "inputs": [
+        {
+            "id": "languages",
+            "type": "promptString",
+            "description": "Please enter available languages for your bot",
+            "default": "en,ru"
+        },
         {
             "id": "botToken",
             "type": "promptString",
