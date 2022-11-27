@@ -9,6 +9,7 @@ from . import Base
 class SettingsKey(enum.Enum):
     guide_welcome_message = 1
     audio_to_voice = 2
+    delay_between_messages = 3
 
 
 class Settings(Base):
@@ -17,8 +18,8 @@ class Settings(Base):
 
     __bool_settings = [SettingsKey.audio_to_voice]
 
-    # Global default is "empty means true"
-    __bool_settings_defaults = {}
+    # Global default is None
+    __settings_default = {SettingsKey.delay_between_messages: "4"}
 
     id = Column(Integer, primary_key=True)
     key = Column(Enum(SettingsKey), nullable=False)
@@ -38,10 +39,7 @@ class Settings(Base):
         if self.key not in self.__bool_settings:
             raise RuntimeError("This setting is not boolean")
 
-        return self.value == "yes" or (
-            self.value is None
-            and self.__bool_settings_defaults.get(self.key, "yes") == "yes"
-        )
+        return self.value == "yes" or self.value is None
 
     def enable(self) -> "Settings":
         if self.key not in self.__bool_settings:
@@ -68,6 +66,8 @@ class Settings(Base):
         )
         setting = await db_session.scalar(stmt)
         if not setting:
-            setting = Settings(key=key, language=language)
+            setting = Settings(
+                key=key, language=language, value=Settings.__settings_default.get(key)
+            )
 
         return setting

@@ -20,6 +20,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
     STATE_WELCOME_MESSAGE_LANGUAGE = 2
     STATE_WELCOME_MESSAGE = 3
     STATE_AUDIO_TO_VOICE = 4
+    STATE_DELAY_BETWEEN_MESSAGES = 5
 
     @classmethod
     def get_handlers(cls):
@@ -36,6 +37,10 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                             cls.partial(cls.change_audio_to_voice_init),
                             "^audio_to_voice$",
                         ),
+                        CallbackQueryHandler(
+                            cls.partial(cls.change_delay_between_messages_init),
+                            "^delay_between_messages$",
+                        ),
                     ],
                     cls.STATE_WELCOME_MESSAGE_LANGUAGE: [
                         CallbackQueryHandler(
@@ -47,6 +52,12 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                         CallbackQueryHandler(
                             cls.partial(cls.change_audio_to_voice),
                             "^audio_to_voice:(enable|disable)$",
+                        ),
+                    ],
+                    cls.STATE_DELAY_BETWEEN_MESSAGES: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            cls.partial(cls.change_delay_between_messages),
                         ),
                     ],
                     cls.STATE_WELCOME_MESSAGE: [
@@ -68,6 +79,66 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                 persistent=True,
             )
         ]
+
+    async def change_delay_between_messages_init(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        language = await self.get_language(update, context)
+        delay_between_messages_state = await Settings.load(
+            self.db_session, SettingsKey.delay_between_messages
+        )
+
+        await update.callback_query.edit_message_text(
+            t(language).pgettext(
+                "admin-configure",
+                "Current delay between messages is %0.1fs. "
+                "Please enter a desired delay (float value between 0 and 4.5).",
+            )
+            % (float(delay_between_messages_state.value)),
+        )
+
+        return self.STATE_DELAY_BETWEEN_MESSAGES
+
+    async def change_delay_between_messages(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        language = await self.get_language(update, context)
+
+        try:
+            delay = float(update.message.text)
+        except ValueError:
+            await update.message.reply_text(
+                t(language).pgettext(
+                    "admin-configure",
+                    "Please enter a float value between 0 and 4.5.",
+                )
+            )
+            return
+
+        if not 0 <= delay <= 4.5:
+            await update.message.reply_text(
+                t(language).pgettext(
+                    "admin-configure",
+                    "Please enter a float value between 0 and 4.5.",
+                )
+            )
+            return
+
+        delay_between_messages_state = await Settings.load(
+            self.db_session, SettingsKey.delay_between_messages
+        )
+        delay_between_messages_state.value = delay
+        self.db_session.add(delay_between_messages_state)
+        await self.db_session.commit()
+
+        await update.message.reply_text(
+            t(language).pgettext(
+                "admin-configure",
+                "The delay was updated!",
+            )
+        )
+
+        return ConversationHandler.END
 
     async def change_audio_to_voice_init(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
@@ -316,6 +387,14 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                                 "admin-bot-configure", "Audio-to-voice suggestions"
                             ),
                             callback_data="audio_to_voice",
+                        )
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            t(user.language).pgettext(
+                                "admin-bot-configure", "Delay between messages"
+                            ),
+                            callback_data="delay_between_messages",
                         )
                     ],
                     [

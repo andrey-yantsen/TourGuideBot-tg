@@ -1,3 +1,4 @@
+from asyncio import sleep
 from datetime import datetime
 
 from sqlalchemy import select
@@ -10,7 +11,7 @@ from telegram import (
     InputMediaVideo,
     Update,
 )
-from telegram.constants import ParseMode
+from telegram.constants import ChatAction, ParseMode
 from telegram.ext import (
     CallbackQueryHandler,
     CommandHandler,
@@ -27,6 +28,7 @@ from tour_guide_bot.models.guide import (
     TourSection,
     TourTranslation,
 )
+from tour_guide_bot.models.settings import Settings, SettingsKey
 
 from . import log
 
@@ -68,6 +70,9 @@ class ToursCommandHandler(BaseHandlerCallback):
         await self.edit_or_reply_text(
             update, context, t(user.language).pgettext("bot-generic", "Cancelled.")
         )
+
+        if update.callback_query:
+            await update.callback_query.answer()
 
         return ConversationHandler.END
 
@@ -111,7 +116,14 @@ class ToursCommandHandler(BaseHandlerCallback):
         bot = context.bot
         chat_id = update.effective_chat.id
 
-        for content in section.content:
+        section_content_length = len(section.content)
+        is_last_section = position == len(translation.section) - 1
+
+        delay_between_messages_state = await Settings.load(
+            self.db_session, SettingsKey.delay_between_messages
+        )
+
+        for (idx, content) in enumerate(section.content):
             match content.message_type:
                 case MessageType.text:
                     await bot.send_message(
@@ -210,7 +222,35 @@ class ToursCommandHandler(BaseHandlerCallback):
                         chat_id, media_group, disable_notification=True
                     )
 
-        if position < len(translation.section) - 1:
+            chat_action = None if is_last_section else ChatAction.TYPING
+            if section_content_length > idx + 1:
+                match section.content[idx + 1].message_type:
+                    case MessageType.location:
+                        chat_action = (
+                            ChatAction.TYPING
+                        )  # todo change to ChatAction.FIND_LOCATION
+                    case MessageType.voice | MessageType.audio:
+                        chat_action = ChatAction.UPLOAD_VOICE
+                    case MessageType.video_note:
+                        chat_action = ChatAction.UPLOAD_VIDEO_NOTE
+                    case MessageType.video:
+                        chat_action = ChatAction.UPLOAD_VIDEO
+                    case MessageType.photo:
+                        chat_action = ChatAction.UPLOAD_PHOTO
+                    case MessageType.media_group:
+                        match section.content[idx + 1].content["files"]:
+                            case MessageType.audio:
+                                chat_action = ChatAction.UPLOAD_VOICE
+                            case MessageType.video:
+                                chat_action = ChatAction.UPLOAD_VIDEO
+                            case MessageType.photo:
+                                chat_action = ChatAction.UPLOAD_PHOTO
+
+            if chat_action:
+                await bot.send_chat_action(chat_id=chat_id, action=chat_action)
+                await sleep(float(delay_between_messages_state.value))
+
+        if not is_last_section:
             await self.reply_text(
                 update,
                 context,
