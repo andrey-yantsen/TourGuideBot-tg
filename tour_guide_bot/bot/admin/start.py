@@ -45,6 +45,7 @@ class StartCommandHandler(BaseHandlerCallback):
                                 HelpCommandHandler.waiting_contact_help
                             ),
                         ),
+                        CommandHandler("cancel", cls.partial(cls.exit_admin_mode)),
                     ],
                     cls.STATE_TOKEN: [
                         MessageHandler(
@@ -56,6 +57,7 @@ class StartCommandHandler(BaseHandlerCallback):
                                 HelpCommandHandler.waiting_token_help
                             ),
                         ),
+                        CommandHandler("cancel", cls.partial(cls.exit_admin_mode)),
                     ],
                     cls.STATE_ADMIN_MODE_ACTIVE: all_admin_handlers,
                 },
