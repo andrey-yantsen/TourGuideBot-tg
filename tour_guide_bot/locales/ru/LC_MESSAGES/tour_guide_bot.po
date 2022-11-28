@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2022-11-27 13:56\n"
+"PO-Revision-Date: 2022-11-28 16:09\n"
 
 #: tour_guide_bot/cli.py:24
 msgctxt "cli"
@@ -112,7 +112,7 @@ msgstr "К сожалению, у вас нет ни одной экскурси
 #: tour_guide_bot/bot/admin/tour.py:722 tour_guide_bot/bot/admin/tour.py:1072
 #: tour_guide_bot/bot/admin/tour.py:1218 tour_guide_bot/bot/admin/tour.py:1339
 #: tour_guide_bot/bot/admin/tour.py:1421 tour_guide_bot/bot/guide/tours.py:269
-#: tour_guide_bot/bot/guide/tours.py:445 tour_guide_bot/helpers/telegram.py:144
+#: tour_guide_bot/bot/guide/tours.py:453 tour_guide_bot/helpers/telegram.py:144
 msgctxt "bot-generic"
 msgid "Abort"
 msgstr "Отменить"
@@ -404,7 +404,7 @@ msgstr ""
 
 #: tour_guide_bot/bot/admin/tour.py:734
 msgctxt "admin-tours"
-msgid "The audio was converted successfully. Please check the quality And decide what do you want to do with it."
+msgid "The audio was converted successfully. Please check the quality and decide what do you want to do with it."
 msgstr ""
 
 #: tour_guide_bot/bot/admin/tour.py:762
@@ -640,7 +640,13 @@ msgctxt "guide-tour"
 msgid "Unfortunately, you don't have access to the requested tour."
 msgstr "К сожалению, у вас нет доступа к запрошенной экскурсии."
 
-#: tour_guide_bot/bot/guide/tours.py:451
+#: tour_guide_bot/bot/guide/tours.py:441
+#, python-format
+msgctxt "guest-tour"
+msgid "You have only one tour available: %s. Starting it now."
+msgstr ""
+
+#: tour_guide_bot/bot/guide/tours.py:459
 msgctxt "guide-tour"
 msgid "Please select a tour you want to start."
 msgstr "Пожалуйста, выберите тур, который вы хотите начать."
