@@ -552,7 +552,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
         try:
             file = await bot.get_file(context.user_data["audio_file_id"])
-            original_audio_path = await file.download()
+            original_audio_path = await file.download_to_drive()
         except Exception:
             log.exception(
                 "Failed to download file %s", context.user_data["audio_file_id"]
