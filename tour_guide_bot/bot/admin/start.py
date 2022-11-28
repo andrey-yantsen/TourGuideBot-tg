@@ -15,7 +15,7 @@ from tour_guide_bot.bot.admin.approve import ApproveCommandHandler
 from tour_guide_bot.bot.admin.configure import ConfigureCommandHandler
 from tour_guide_bot.bot.admin.help import HelpCommandHandler
 from tour_guide_bot.bot.admin.revoke import RevokeCommandHandler
-from tour_guide_bot.bot.admin.tour import TourCommandHandler
+from tour_guide_bot.bot.admin.tour.main import TourCommandHandler
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback
 from tour_guide_bot.models.admin import Admin, AdminPermissions
 
