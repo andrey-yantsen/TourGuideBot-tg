@@ -45,7 +45,7 @@ class ToursCommandHandler(BaseHandlerCallback):
                 states={
                     cls.STATE_SELECT_TOUR: [
                         CallbackQueryHandler(
-                            cls.partial(cls.start_tour), "^start_tour:(\d+):(\s+)$"
+                            cls.partial(cls.start_tour), "^start_tour:(\d+):(\w+)$"
                         ),
                     ],
                     cls.STATE_TOUR_IN_PROGRESS: [
@@ -79,7 +79,12 @@ class ToursCommandHandler(BaseHandlerCallback):
     async def get_tour(self, guest_id: int, tour_id: int) -> BoughtTours | None:
         bought_tour = await self.db_session.scalar(
             select(BoughtTours)
-            .options(selectinload(BoughtTours.tour).selectinload(Tour.translation))
+            .options(
+                selectinload(BoughtTours.tour)
+                .selectinload(Tour.translation)
+                .selectinload(TourTranslation.section)
+                .selectinload(TourSection.content)
+            )
             .where(
                 (BoughtTours.guest_id == guest_id)
                 & (BoughtTours.tour_id == tour_id)
@@ -326,7 +331,7 @@ class ToursCommandHandler(BaseHandlerCallback):
         user = await self.get_user(update, context)
 
         bought_tour = await self.get_tour(
-            user.guest_id, int(context.matches[0].gorup(1))
+            user.guest_id, int(context.matches[0].group(1))
         )
         if not bought_tour:
             await self.edit_or_reply_text(
@@ -461,4 +466,5 @@ class ToursCommandHandler(BaseHandlerCallback):
             ),
             reply_markup=InlineKeyboardMarkup(keyboard),
         )
+
         return self.STATE_SELECT_TOUR
