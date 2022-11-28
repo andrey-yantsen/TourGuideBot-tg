@@ -437,6 +437,14 @@ class ToursCommandHandler(BaseHandlerCallback):
 
             return ConversationHandler.END
         elif len(keyboard) == 1:
+            await update.message.reply_text(
+                t(language).pgettext(
+                    "guest-tour",
+                    "You have only one tour available: %s. Starting it now.",
+                )
+                % get_tour_title(last_tour, language, context)
+            )
+
             return await self.display_first_section(last_tour, update, context)
 
         keyboard.append(

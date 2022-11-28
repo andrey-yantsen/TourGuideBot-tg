@@ -109,7 +109,7 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour.py:722 tour_guide_bot/bot/admin/tour.py:1072
 #: tour_guide_bot/bot/admin/tour.py:1218 tour_guide_bot/bot/admin/tour.py:1339
 #: tour_guide_bot/bot/admin/tour.py:1421 tour_guide_bot/bot/guide/tours.py:269
-#: tour_guide_bot/bot/guide/tours.py:445 tour_guide_bot/helpers/telegram.py:144
+#: tour_guide_bot/bot/guide/tours.py:453 tour_guide_bot/helpers/telegram.py:144
 msgctxt "bot-generic"
 msgid "Abort"
 msgstr ""
@@ -690,7 +690,13 @@ msgctxt "guide-tour"
 msgid "Unfortunately, you don't have access to the requested tour."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/tours.py:451
+#: tour_guide_bot/bot/guide/tours.py:441
+#, python-format
+msgctxt "guest-tour"
+msgid "You have only one tour available: %s. Starting it now."
+msgstr ""
+
+#: tour_guide_bot/bot/guide/tours.py:459
 msgctxt "guide-tour"
 msgid "Please select a tour you want to start."
 msgstr ""
