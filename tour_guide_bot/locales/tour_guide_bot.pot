@@ -430,7 +430,7 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour.py:734
 msgctxt "admin-tours"
 msgid ""
-"The audio was converted successfully. Please check the quality And decide"
+"The audio was converted successfully. Please check the quality and decide"
 " what do you want to do with it."
 msgstr ""
 

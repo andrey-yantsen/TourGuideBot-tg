@@ -734,7 +734,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             t(language).pgettext(
                 "admin-tours",
                 "The audio was converted successfully. Please check the quality"
-                " And decide what do you want to do with it.",
+                " and decide what do you want to do with it.",
             ),
             chat_id=context.job.data["chat_id"],
             message_id=context.job.data["message_id"],
