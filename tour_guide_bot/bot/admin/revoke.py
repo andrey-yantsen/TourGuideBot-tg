@@ -59,18 +59,10 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
             )
         ]
 
-    async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        user = await self.get_user(update, context)
-
+    def cleanup_context(context: ContextTypes.DEFAULT_TYPE):
         for key in ("phone_number", "tour_id"):
             if key in context.user_data:
                 del context.user_data[key]
-
-        await self.edit_or_reply_text(
-            update, context, t(user.language).pgettext("bot-generic", "Cancelled.")
-        )
-
-        return ConversationHandler.END
 
     async def revoke(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)

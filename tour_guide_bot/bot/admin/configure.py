@@ -355,15 +355,6 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
 
         return ConversationHandler.END
 
-    async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        user = await self.get_user(update, context)
-
-        await self.edit_or_reply_text(
-            update, context, t(user.language).pgettext("bot-generic", "Cancelled.")
-        )
-
-        return ConversationHandler.END
-
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 

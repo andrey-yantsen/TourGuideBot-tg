@@ -234,18 +234,6 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         )
         return self.STATE_TOUR_ADD_SECTION
 
-    async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        user = await self.get_user(update, context)
-        self.cleanup_context(context)
-        if update.callback_query:
-            await update.callback_query.answer()
-            await update.callback_query.delete_message()
-
-        await self.reply_text(
-            update, context, t(user.language).pgettext("bot-generic", "Cancelled.")
-        )
-        return ConversationHandler.END
-
     async def delete_tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
         tour = await self.db_session.scalar(

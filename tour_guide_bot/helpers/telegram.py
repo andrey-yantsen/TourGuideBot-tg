@@ -23,6 +23,21 @@ class BaseHandlerCallback:
     def get_handlers(cls):
         raise NotImplementedError()
 
+    async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        user = await self.get_user(update, context)
+
+        if hasattr(self, "cleanup_context"):
+            self.cleanup_context(context)
+
+        if update.callback_query:
+            await update.callback_query.answer()
+            await update.callback_query.delete_message()
+
+        await self.reply_text(
+            update, context, t(user.language).pgettext("bot-generic", "Cancelled.")
+        )
+        return ConversationHandler.END
+
     @staticmethod
     async def edit_or_reply_text(
         update: Update, context: ContextTypes.DEFAULT_TYPE, text: str, **kwargs

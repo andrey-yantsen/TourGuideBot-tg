@@ -64,18 +64,6 @@ class ToursCommandHandler(BaseHandlerCallback):
             )
         ]
 
-    async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        user = await self.get_user(update, context)
-
-        await self.edit_or_reply_text(
-            update, context, t(user.language).pgettext("bot-generic", "Cancelled.")
-        )
-
-        if update.callback_query:
-            await update.callback_query.answer()
-
-        return ConversationHandler.END
-
     async def get_tour(self, guest_id: int, tour_id: int) -> BoughtTours | None:
         bought_tour = await self.db_session.scalar(
             select(BoughtTours)
