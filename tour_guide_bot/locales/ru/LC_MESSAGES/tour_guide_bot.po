@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2022-12-04 17:05\n"
+"PO-Revision-Date: 2022-12-04 19:28\n"
 
 #: tour_guide_bot/cli.py:24
 msgctxt "cli"
@@ -605,7 +605,7 @@ msgstr "Я вижу, у вас уже есть экскурсии. Что вы �
 #: tour_guide_bot/bot/admin/tour/main.py:635
 msgctxt "admin-tours"
 msgid "Add a new one"
-msgstr "Добавить новый"
+msgstr "Добавить новую"
 
 #: tour_guide_bot/bot/admin/tour/main.py:641
 msgctxt "admin-tours"
