@@ -12,10 +12,14 @@ from telegram.ext import (
 
 from tour_guide_bot import t
 from tour_guide_bot.bot.admin.approve import ApproveCommandHandler
+from tour_guide_bot.bot.admin.bot_commands import BotCommandsFactory
 from tour_guide_bot.bot.admin.configure import ConfigureCommandHandler
 from tour_guide_bot.bot.admin.help import HelpCommandHandler
 from tour_guide_bot.bot.admin.revoke import RevokeCommandHandler
 from tour_guide_bot.bot.admin.tour.main import TourCommandHandler
+from tour_guide_bot.bot.guide.bot_commands import (
+    BotCommandsFactory as GuestBotCommandsFactory,
+)
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback
 from tour_guide_bot.models.admin import Admin, AdminPermissions
 
@@ -114,6 +118,9 @@ class StartCommandHandler(BaseHandlerCallback):
                 reply_markup=ReplyKeyboardRemove(),
             )
 
+            await BotCommandsFactory.start(
+                update.get_bot(), user, await self.get_language(update, context)
+            )
             return self.STATE_ADMIN_MODE_ACTIVE
         else:
             await update.message.reply_text(
@@ -141,6 +148,9 @@ class StartCommandHandler(BaseHandlerCallback):
                 )
             )
 
+            await BotCommandsFactory.start(
+                update.get_bot(), user, await self.get_language(update, context)
+            )
             return self.STATE_ADMIN_MODE_ACTIVE
         else:
             await update.message.reply_text(
@@ -159,6 +169,10 @@ class StartCommandHandler(BaseHandlerCallback):
                 "admin-bot-start", "You're in guest mode now, bye!"
             )
         )
+
+        await GuestBotCommandsFactory.start(
+            update.get_bot(), user, await self.get_language(update, context)
+        )
         return ConversationHandler.END
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -169,6 +183,10 @@ class StartCommandHandler(BaseHandlerCallback):
                 t(user.language).pgettext(
                     "admin-bot-start", "Welcome to the admin mode!"
                 )
+            )
+
+            await BotCommandsFactory.start(
+                update.get_bot(), user, await self.get_language(update, context)
             )
             return self.STATE_ADMIN_MODE_ACTIVE
         elif not user.phone:
@@ -192,6 +210,10 @@ class StartCommandHandler(BaseHandlerCallback):
                     t(user.language).pgettext(
                         "admin-bot-start", "Welcome to the admin mode!"
                     )
+                )
+
+                await BotCommandsFactory.start(
+                    update.get_bot(), user, await self.get_language(update, context)
                 )
                 return self.STATE_ADMIN_MODE_ACTIVE
             else:

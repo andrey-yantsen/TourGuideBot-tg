@@ -12,10 +12,12 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
+from tour_guide_bot.bot.guide.bot_commands import BotCommandsFactory
 from tour_guide_bot.helpers.language import LanguageHandler
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback
 from tour_guide_bot.models.guide import BoughtTours, Guest
 from tour_guide_bot.models.settings import Settings, SettingsKey
+from tour_guide_bot.models.telegram import TelegramUser
 
 
 class StartCommandHandler(BaseHandlerCallback):
@@ -111,15 +113,16 @@ class StartCommandHandler(BaseHandlerCallback):
         self.db_session.add(user)
         await self.db_session.commit()
 
-        await self.process_guest(guest, update, context)
+        await self.process_guest(user, update, context)
         return ConversationHandler.END
 
     async def process_guest(
-        self, guest: Guest, update: Update, context: ContextTypes.DEFAULT_TYPE
+        self, user: TelegramUser, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         active_tours_cnt = await self.db_session.scalar(
             select(func.count(BoughtTours.id)).where(
-                (BoughtTours.guest == guest) & (BoughtTours.expire_ts >= datetime.now())
+                (BoughtTours.guest == user.guest)
+                & (BoughtTours.expire_ts >= datetime.now())
             )
         )
         language = await self.get_language(update, context)
@@ -146,6 +149,8 @@ class StartCommandHandler(BaseHandlerCallback):
                 reply_markup=ReplyKeyboardRemove(),
             )
 
+        await BotCommandsFactory.start(update.get_bot(), user, language)
+
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
@@ -167,7 +172,7 @@ class StartCommandHandler(BaseHandlerCallback):
         await update.message.reply_markdown_v2(welcome_message.value)
 
         if user.guest:
-            await self.process_guest(user.guest, update, context)
+            await self.process_guest(user, update, context)
             return ConversationHandler.END
         elif not user.phone:
             await update.message.reply_text(
@@ -190,6 +195,6 @@ class StartCommandHandler(BaseHandlerCallback):
                 user.guest = guest
                 self.db_session.add_all([guest, user])
 
-            await self.process_guest(guest, update, context)
-            await self.db_session.commit()
+            await self.db_sesson.commit()
+            await self.process_guest(user, update, context)
             return ConversationHandler.END
