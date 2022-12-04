@@ -15,7 +15,7 @@
                 "${input:botToken}",
                 "-d",
                 "--db",
-                "sqlite+aiosqlite:///${workspaceFolder}/tour_guide_bot.sqlite3",
+                "sqlite+aiosqlite:///${workspaceFolder}/persistent/tour_guide_bot.sqlite3",
                 "--enabled-languages",
                 "${input:languages}"
             ],
