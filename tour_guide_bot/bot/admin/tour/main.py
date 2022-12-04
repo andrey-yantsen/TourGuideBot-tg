@@ -14,6 +14,7 @@ from telegram.ext import (
 
 from tour_guide_bot import t
 from tour_guide_bot.bot.admin.tour.add_content import AddContentCommandHandler
+from tour_guide_bot.bot.admin.tour.edit import handlers as edit_handlers
 from tour_guide_bot.helpers.telegram import (
     AdminProtectedBaseHandlerCallback,
     get_tour_title,
@@ -84,16 +85,8 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                     ],
                     cls.STATE_TOUR_EDIT: [
                         CallbackQueryHandler(
-                            cls.partial(cls.cancel),
+                            cls.partial(cls.request_tour_title),
                             "^%s:(\d+)$" % (cls.CALLBACK_DATA_TOUR_RENAME,),
-                        ),
-                        CallbackQueryHandler(
-                            cls.partial(cls.cancel),
-                            "^%s:(\d+)$" % (cls.CALLBACK_DATA_TOUR_REMOVE_SECTION,),
-                        ),
-                        CallbackQueryHandler(
-                            cls.partial(cls.cancel),
-                            "^%s:(\d+)$" % (cls.CALLBACK_DATA_TOUR_EDIT_SECTION,),
                         ),
                     ],
                     cls.STATE_TOUR_DELETE: [
@@ -356,7 +349,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             t(user.language).pgettext("admin-tour", "Great! The title was updated.")
         )
 
-        return await self.request_edit_action(self, update, context)
+        return await self.request_edit_action(update, context)
 
     async def request_edit_action(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
@@ -385,7 +378,9 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             return ConversationHandler.END
 
         context.user_data["tour_language"] = target_language
-        await update.callback_query.answer()
+
+        if update.callback_query:
+            await update.callback_query.answer()
 
         tour_translation = await self.db_session.scalar(
             select(TourTranslation).where(
@@ -510,11 +505,20 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         user = await self.get_user(update, context)
 
         target_language = None
-        if update.callback_query and len(context.matches[0].groups()) == 1:
+        if (
+            update.callback_query
+            and update.callback_query.data.startswith("tour_language:")
+            and len(context.matches[0].groups()) == 1
+        ):
             target_language = context.matches[0].group(1)
         elif "tour_language" in context.user_data:
             target_language = context.user_data["tour_language"]
             del context.user_data["tour_language"]
+
+        if update.callback_query and update.callback_query.data.startswith(
+            self.CALLBACK_DATA_TOUR_RENAME + ":"
+        ):
+            context.user_data["tour_id"] = int(context.matches[0].group(1))
 
         if update.callback_query:
             await update.callback_query.answer()
