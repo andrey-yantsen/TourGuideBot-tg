@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2022-11-28 19:53\n"
+"PO-Revision-Date: 2022-12-04 11:55\n"
 
 #: tour_guide_bot/cli.py:24
 msgctxt "cli"
@@ -129,6 +129,37 @@ msgstr "Отменить"
 msgctxt "admin-generic"
 msgid "Please select the tour."
 msgstr "Пожалуйста, выберите экскурсию."
+
+#: tour_guide_bot/bot/admin/bot_commands.py:15
+msgctxt "admin-bot-command"
+msgid "Return to the guest mode"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/bot_commands.py:22
+msgctxt "guest-bot-command"
+msgid "Change bot's preferences"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/bot_commands.py:29
+msgctxt "guest-bot-command"
+msgid "Manage your tours"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/bot_commands.py:36
+msgctxt "guest-bot-command"
+msgid "Grant access to a tour for somebody"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/bot_commands.py:45
+msgctxt "guest-bot-command"
+msgid "Revoke access to a tour from somebody"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/bot_commands.py:54
+#: tour_guide_bot/bot/guide/bot_commands.py:30
+msgctxt "guest-bot-command"
+msgid "Change the language"
+msgstr ""
 
 #: tour_guide_bot/bot/admin/configure.py:92
 #, python-format
@@ -283,42 +314,42 @@ msgctxt "admin-revoke"
 msgid "Enter the phone number from which you want to revoke access to the tour (with country code) or share the contact. Send /cancel at any time if you wish to cancel."
 msgstr "Введите номер телефона, с которого вы хотите отменить доступ к туру (с кодом страны), или поделитесь контактом. Отправьте /cancel в любое время, если вы хотите прервать операцию."
 
-#: tour_guide_bot/bot/admin/start.py:76
+#: tour_guide_bot/bot/admin/start.py:80
 msgctxt "admin-bot-start"
 msgid "Share phone number"
 msgstr "Поделиться номером телефона"
 
-#: tour_guide_bot/bot/admin/start.py:89
+#: tour_guide_bot/bot/admin/start.py:93
 msgctxt "admin-bot-start"
 msgid "Please send me your contact number and not somebody else's."
 msgstr "Мне нужен ваш номер телефона, а не кого-то из ваших знакомых."
 
-#: tour_guide_bot/bot/admin/start.py:110 tour_guide_bot/bot/admin/start.py:138
+#: tour_guide_bot/bot/admin/start.py:114 tour_guide_bot/bot/admin/start.py:145
 msgctxt "admin-bot-start"
 msgid "Admin permissions confirmed! Use /help command if you need further help."
 msgstr "Права администратора подтверждены! Отправьте /help для дальнейшей помощи."
 
-#: tour_guide_bot/bot/admin/start.py:120 tour_guide_bot/bot/admin/start.py:199
+#: tour_guide_bot/bot/admin/start.py:127 tour_guide_bot/bot/admin/start.py:221
 msgctxt "admin-bot-start"
 msgid "I don't think you're in the right place. Please send me the token to confirm ownership."
 msgstr "Я не уверен, что вы выбрали правильного бота. Пожалуйста, отправьте мне токен, чтобы подтвердить ваши права."
 
-#: tour_guide_bot/bot/admin/start.py:147
+#: tour_guide_bot/bot/admin/start.py:157
 msgctxt "admin-bot-start"
 msgid "I still don't recognize you, sorry. Try saying /admin again when you're ready."
 msgstr "Я до сих пор не знаю Вас, извините. Попробуйте сказать /admin снова, когда будете готовы повторить."
 
-#: tour_guide_bot/bot/admin/start.py:158
+#: tour_guide_bot/bot/admin/start.py:168
 msgctxt "admin-bot-start"
 msgid "You're in guest mode now, bye!"
 msgstr "Теперь вы в гостевом режиме!"
 
-#: tour_guide_bot/bot/admin/start.py:169 tour_guide_bot/bot/admin/start.py:192
+#: tour_guide_bot/bot/admin/start.py:183 tour_guide_bot/bot/admin/start.py:210
 msgctxt "admin-bot-start"
 msgid "Welcome to the admin mode!"
 msgstr "Добро пожаловать в режим администратора!"
 
-#: tour_guide_bot/bot/admin/start.py:176
+#: tour_guide_bot/bot/admin/start.py:194
 msgctxt "admin-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr "Я вас не узнаю! Пожалуйста, отправьте мне ваш номер телефона."
@@ -584,6 +615,21 @@ msgctxt "admin-tours"
 msgid "Delete a tour"
 msgstr "Удалить тур"
 
+#: tour_guide_bot/bot/guide/bot_commands.py:16
+msgctxt "guest-bot-command"
+msgid "Enter admin mode"
+msgstr ""
+
+#: tour_guide_bot/bot/guide/bot_commands.py:23
+msgctxt "guest-bot-command"
+msgid "Show available tours"
+msgstr ""
+
+#: tour_guide_bot/bot/guide/bot_commands.py:37
+msgctxt "guest-bot-command"
+msgid "Display the welcome message again"
+msgstr ""
+
 #: tour_guide_bot/bot/guide/help.py:19
 msgctxt "guest-help"
 msgid "You can use the following commands:\n"
@@ -592,42 +638,42 @@ msgid "You can use the following commands:\n"
 "* /language — to change the interface language"
 msgstr ""
 
-#: tour_guide_bot/bot/guide/start.py:55
+#: tour_guide_bot/bot/guide/start.py:57
 msgctxt "guest-bot-start"
 msgid "Share phone number"
 msgstr "Поделиться номером телефона"
 
-#: tour_guide_bot/bot/guide/start.py:68
+#: tour_guide_bot/bot/guide/start.py:70
 msgctxt "guest-bot-start"
 msgid "Please send me your phone number using the \"Share phone number\" button."
 msgstr "Пожалуйста, пришлите мне свой номер телефона, воспользовавшись кнопкой \"Поделиться номером телефона\"."
 
-#: tour_guide_bot/bot/guide/start.py:80
+#: tour_guide_bot/bot/guide/start.py:82
 msgctxt "guest-bot-start"
 msgid "Unexpected command received. You can only use /language to change the interface language at this stage."
 msgstr "Получена неожиданная команда. Сейчас Вы можете использовать только команду /language, для изменения языка интерфейса."
 
-#: tour_guide_bot/bot/guide/start.py:93
+#: tour_guide_bot/bot/guide/start.py:95
 msgctxt "guest-bot-start"
 msgid "Please send me your contact number and not somebody else's."
 msgstr "Мне нужен ваш номер телефона, а не кого-то из ваших знакомых."
 
-#: tour_guide_bot/bot/guide/start.py:129
+#: tour_guide_bot/bot/guide/start.py:132
 msgctxt "guest-bot-start"
 msgid "I see you have some tours available; thank you for the support! Send /tours to start exploring!"
 msgstr "Я вижу, у вас есть несколько туров; спасибо за поддержку! Отправьте /tours для начала изучения!"
 
-#: tour_guide_bot/bot/guide/start.py:138 tour_guide_bot/bot/guide/tours.py:433
+#: tour_guide_bot/bot/guide/start.py:141 tour_guide_bot/bot/guide/tours.py:433
 msgctxt "guest-tour"
 msgid "Unfortunately, no tours are available for you at the moment. Approving somebody for a tour takes a while, but if you feel like a mistake was made, don't hesitate to contact me! The bot's profile should provide all the required info."
 msgstr "К сожалению, в данный момент у вас нет ни одной экскурсии. Одобрение кого-нибудь для тура занимает некоторое время, но если вы чувствуете, что произошла ошибка, не стесняйтесь связаться со мной! В профиле бота должна быть вся необходимая информация."
 
-#: tour_guide_bot/bot/guide/start.py:160
+#: tour_guide_bot/bot/guide/start.py:165
 msgctxt "guest-bot-start"
 msgid "The bot is not configured yet; please try again later."
 msgstr "Бот еще не настроен; пожалуйста, повторите попытку позже."
 
-#: tour_guide_bot/bot/guide/start.py:174
+#: tour_guide_bot/bot/guide/start.py:179
 msgctxt "guest-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr "Я вас не узнаю! Пожалуйста, отправьте мне ваш номер телефона."
