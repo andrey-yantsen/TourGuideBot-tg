@@ -196,22 +196,21 @@ def get_tour_title(
     if len(tour.translation) == 0:
         title = "Unnamed tour #%d" % tour.id
         log.warning(
-            t().pgettext(
-                "bot-generic",
-                "Tour #{0} doesn't have any translations.".format(tour.id),
-            )
+            t()
+            .pgettext("bot-generic", "Tour #{0} doesn't have any translations.")
+            .format(tour.id)
         )
     elif len(tour.translation) == 1:
         title = tour.translation[0].title
 
         if tour.translation[0].language != default_language:
             log.error(
-                t().pgettext(
+                t()
+                .pgettext(
                     "bot-generic",
-                    "Tour #{0} doesn't have a translation for the default language ({1}).".format(
-                        tour.id, default_language
-                    ),
+                    "Tour #{0} doesn't have a translation for the default language ({1}).",
                 )
+                .format(tour.id, default_language)
             )
     else:
         translations = {
@@ -224,12 +223,12 @@ def get_tour_title(
             title = translations[default_language].title
         else:
             log.warning(
-                t().pgettext(
+                t()
+                .pgettext(
                     "bot-generic",
-                    "Tour #{0} doesn't have a translation for the default language ({1}).".format(
-                        tour.id, default_language
-                    ),
+                    "Tour #{0} doesn't have a translation for the default language ({1}).",
                 )
+                .format(tour.id, default_language)
             )
             title = translations[0].title
 

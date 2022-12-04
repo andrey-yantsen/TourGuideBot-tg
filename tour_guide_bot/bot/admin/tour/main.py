@@ -259,9 +259,9 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         await self.db_session.commit()
 
         await update.callback_query.edit_message_text(
-            t(user.language).pgettext(
-                "admin-tours", 'The tour "{0}" was removed.'.format(tour_title)
-            )
+            t(user.language)
+            .pgettext("admin-tours", 'The tour "{0}" was removed.')
+            .format(tour_title)
         )
         self.cleanup_context(context)
         return ConversationHandler.END
@@ -288,12 +288,9 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             return ConversationHandler.END
 
         await update.callback_query.edit_message_text(
-            t(user.language).pgettext(
-                "admin-tours",
-                'Do you really want to delete the tour "{0}"?'.format(
-                    get_tour_title(tour, user.language, context)
-                ),
-            ),
+            t(user.language)
+            .pgettext("admin-tours", 'Do you really want to delete the tour "{0}"?')
+            .format(get_tour_title(tour, user.language, context)),
             reply_markup=InlineKeyboardMarkup(
                 inline_keyboard=[
                     [
@@ -540,7 +537,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             context,
             t(user.language).pgettext(
                 "admin-tour",
-                "Please send me the" " title for the tour, or send /cancel to abort.",
+                "Please send me the title for the tour, or send /cancel to abort.",
             ),
         )
 

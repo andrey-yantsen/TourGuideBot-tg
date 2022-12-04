@@ -86,8 +86,7 @@ class Application(BaseApplication):
                         t(language)
                         .pgettext(
                             "guide-bot-notification",
-                            'Hey! You have a new tour available — "{0}".'
-                            " Send /tours to start the journey!",
+                            'Hey! You have a new tour available — "{0}". Send /tours to start the journey!',
                         )
                         .format(get_tour_title(purchase.tour, language, context)),
                     )

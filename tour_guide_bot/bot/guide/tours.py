@@ -284,21 +284,20 @@ class ToursCommandHandler(BaseHandlerCallback):
 
         if user.language not in translations:
             log.warning(
-                t().pgettext(
+                t()
+                .pgettext(
                     "cli",
-                    "Tour #{0} doesn't have a language {1} preferred by the user {2}.".format(
-                        tour.id, user.language, user.id
-                    ),
+                    "Tour #{0} doesn't have a language {1} preferred by the user {2}.",
                 )
+                .format(tour.id, user.language, user.id)
             )
             if context.application.default_language not in translations:
                 log.error(
-                    t().pgettext(
-                        "cli",
-                        "Tour #{0} doesn't have a default app language {1}.".format(
-                            tour.id, context.application.default_language
-                        ),
+                    t()
+                    .pgettext(
+                        "cli", "Tour #{0} doesn't have a default app language {1}."
                     )
+                    .format(tour.id, context.application.default_language)
                 )
                 await self.edit_or_reply_text(
                     update,
