@@ -19,14 +19,14 @@ class BotCommandsFactory:
         commands.append(
             BotCommand(
                 "configure",
-                t(language).pgettext("guest-bot-command", "Change bot's preferences"),
+                t(language).pgettext("admin-bot-command", "Change bot's preferences"),
             )
         )
 
         commands.append(
             BotCommand(
                 "tours",
-                t(language).pgettext("guest-bot-command", "Manage your tours"),
+                t(language).pgettext("admin-bot-command", "Manage your tours"),
             )
         )
 
@@ -34,7 +34,7 @@ class BotCommandsFactory:
             BotCommand(
                 "approve",
                 t(language).pgettext(
-                    "guest-bot-command", "Grant access to a tour for somebody"
+                    "admin-bot-command", "Grant access to a tour for somebody"
                 ),
             )
         )
@@ -43,7 +43,7 @@ class BotCommandsFactory:
             BotCommand(
                 "revoke",
                 t(language).pgettext(
-                    "guest-bot-command", "Revoke access to a tour from somebody"
+                    "admin-bot-command", "Revoke access to a tour from somebody"
                 ),
             )
         )
@@ -51,7 +51,7 @@ class BotCommandsFactory:
         commands.append(
             BotCommand(
                 "language",
-                t(language).pgettext("guest-bot-command", "Change the language"),
+                t(language).pgettext("admin-bot-command", "Change the language"),
             )
         )
 

@@ -133,28 +133,27 @@ msgid "Return to the guest mode"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/bot_commands.py:22
-msgctxt "guest-bot-command"
+msgctxt "admin-bot-command"
 msgid "Change bot's preferences"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/bot_commands.py:29
-msgctxt "guest-bot-command"
+msgctxt "admin-bot-command"
 msgid "Manage your tours"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/bot_commands.py:36
-msgctxt "guest-bot-command"
+msgctxt "admin-bot-command"
 msgid "Grant access to a tour for somebody"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/bot_commands.py:45
-msgctxt "guest-bot-command"
+msgctxt "admin-bot-command"
 msgid "Revoke access to a tour from somebody"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/bot_commands.py:54
-#: tour_guide_bot/bot/guide/bot_commands.py:30
-msgctxt "guest-bot-command"
+msgctxt "admin-bot-command"
 msgid "Change the language"
 msgstr ""
 
@@ -664,6 +663,11 @@ msgstr ""
 #: tour_guide_bot/bot/guide/bot_commands.py:23
 msgctxt "guest-bot-command"
 msgid "Show available tours"
+msgstr ""
+
+#: tour_guide_bot/bot/guide/bot_commands.py:30
+msgctxt "guest-bot-command"
+msgid "Change the language"
 msgstr ""
 
 #: tour_guide_bot/bot/guide/bot_commands.py:37
