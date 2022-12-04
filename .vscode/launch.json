@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "module": "tour_guide_bot.cli",
-            "justMyCode": true,
+            "justMyCode": false,
             "args": [
                 "-g",
                 "${input:botToken}",
