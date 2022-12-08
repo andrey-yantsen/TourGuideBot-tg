@@ -169,7 +169,6 @@ class ToursCommandHandler(BaseHandlerCallback):
                         caption=content.content["files"][0].get("caption"),
                         parse_mode=ParseMode.MARKDOWN_V2,
                         disable_notification=True,
-                        supports_streaming=True,
                     )
 
                 case MessageType.photo:
