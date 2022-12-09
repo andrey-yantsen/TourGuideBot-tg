@@ -125,6 +125,7 @@ class ToursCommandHandler(BaseHandlerCallback):
                         ParseMode.MARKDOWN_V2,
                         disable_web_page_preview=True,
                         disable_notification=True,
+                        protect_content=True,
                     )
 
                 case MessageType.location:
@@ -133,6 +134,7 @@ class ToursCommandHandler(BaseHandlerCallback):
                         content.content["latitude"],
                         content.content["longitude"],
                         disable_notification=True,
+                        protect_content=True,
                     )
 
                 case MessageType.voice:
@@ -142,6 +144,7 @@ class ToursCommandHandler(BaseHandlerCallback):
                         caption=content.content["files"][0].get("caption"),
                         parse_mode=ParseMode.MARKDOWN_V2,
                         disable_notification=True,
+                        protect_content=True,
                     )
 
                 case MessageType.video_note:
@@ -151,6 +154,7 @@ class ToursCommandHandler(BaseHandlerCallback):
                         caption=content.content["files"][0].get("caption"),
                         parse_mode=ParseMode.MARKDOWN_V2,
                         disable_notification=True,
+                        protect_content=True,
                     )
 
                 case MessageType.audio:
@@ -169,6 +173,7 @@ class ToursCommandHandler(BaseHandlerCallback):
                         caption=content.content["files"][0].get("caption"),
                         parse_mode=ParseMode.MARKDOWN_V2,
                         disable_notification=True,
+                        protect_content=True,
                     )
 
                 case MessageType.photo:
@@ -176,8 +181,9 @@ class ToursCommandHandler(BaseHandlerCallback):
                         chat_id,
                         content.content["files"][0]["file_id"],
                         caption=content.content["files"][0].get("caption"),
-                        disable_notification=True,
                         parse_mode=ParseMode.MARKDOWN_V2,
+                        disable_notification=True,
+                        protect_content=True,
                     )
 
                 case MessageType.media_group:
@@ -211,7 +217,10 @@ class ToursCommandHandler(BaseHandlerCallback):
                                 )
 
                     await bot.send_media_group(
-                        chat_id, media_group, disable_notification=True
+                        chat_id,
+                        media_group,
+                        disable_notification=True,
+                        protect_content=True,
                     )
 
             chat_action = None if is_last_section else ChatAction.TYPING
