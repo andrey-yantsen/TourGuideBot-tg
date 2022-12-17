@@ -60,7 +60,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             )
         ]
 
-    def cleanup_context(context: ContextTypes.DEFAULT_TYPE):
+    def cleanup_context(self, context: ContextTypes.DEFAULT_TYPE):
         for key in ("phone_number", "tour_id"):
             if key in context.user_data:
                 del context.user_data[key]
