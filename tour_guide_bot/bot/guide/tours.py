@@ -164,6 +164,7 @@ class ToursCommandHandler(BaseHandlerCallback):
                         caption=content.content["files"][0].get("caption"),
                         parse_mode=ParseMode.MARKDOWN_V2,
                         disable_notification=True,
+                        protect_content=True,
                     )
 
                 case MessageType.video:
@@ -178,6 +179,16 @@ class ToursCommandHandler(BaseHandlerCallback):
 
                 case MessageType.photo:
                     await bot.send_photo(
+                        chat_id,
+                        content.content["files"][0]["file_id"],
+                        caption=content.content["files"][0].get("caption"),
+                        parse_mode=ParseMode.MARKDOWN_V2,
+                        disable_notification=True,
+                        protect_content=True,
+                    )
+
+                case MessageType.animation:
+                    await bot.send_animation(
                         chat_id,
                         content.content["files"][0]["file_id"],
                         caption=content.content["files"][0].get("caption"),
