@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: English\n"
 "Language: en_US\n"
-"PO-Revision-Date: 2022-12-17 18:36\n"
+"PO-Revision-Date: 2022-12-17 20:52\n"
 
 #: tour_guide_bot/cli.py:24
 msgctxt "cli"
@@ -100,10 +100,10 @@ msgstr "Unfortunately, you don't have any tours available for the guests."
 #: tour_guide_bot/bot/admin/configure.py:393
 #: tour_guide_bot/bot/admin/revoke.py:212
 #: tour_guide_bot/bot/admin/revoke.py:268
-#: tour_guide_bot/bot/admin/tour/add_content.py:409
-#: tour_guide_bot/bot/admin/tour/add_content.py:466
-#: tour_guide_bot/bot/admin/tour/add_content.py:507
-#: tour_guide_bot/bot/admin/tour/add_content.py:545
+#: tour_guide_bot/bot/admin/tour/add_content.py:410
+#: tour_guide_bot/bot/admin/tour/add_content.py:467
+#: tour_guide_bot/bot/admin/tour/add_content.py:508
+#: tour_guide_bot/bot/admin/tour/add_content.py:546
 #: tour_guide_bot/bot/admin/tour/main.py:296
 #: tour_guide_bot/bot/admin/tour/main.py:444
 #: tour_guide_bot/bot/admin/tour/main.py:574
@@ -175,7 +175,7 @@ msgstr "Audio\\-to\\-voice Conversion suggestions are currently *enabled*\\. Wou
 #: tour_guide_bot/bot/admin/configure.py:162
 #: tour_guide_bot/bot/admin/configure.py:186
 #: tour_guide_bot/bot/admin/revoke.py:208
-#: tour_guide_bot/bot/admin/tour/add_content.py:706
+#: tour_guide_bot/bot/admin/tour/add_content.py:707
 #: tour_guide_bot/bot/admin/tour/main.py:291
 msgctxt "bot-generic"
 msgid "Yes"
@@ -362,143 +362,143 @@ msgid "The text was added to the section!"
 msgstr "The text was added to the section!"
 
 #: tour_guide_bot/bot/admin/tour/add_content.py:270
-#: tour_guide_bot/bot/admin/tour/add_content.py:290
-#: tour_guide_bot/bot/admin/tour/add_content.py:313
-#: tour_guide_bot/bot/admin/tour/add_content.py:340
-#: tour_guide_bot/bot/admin/tour/add_content.py:366
-#: tour_guide_bot/bot/admin/tour/add_content.py:664
-#: tour_guide_bot/bot/admin/tour/add_content.py:759
-#: tour_guide_bot/bot/admin/tour/add_content.py:799
+#: tour_guide_bot/bot/admin/tour/add_content.py:291
+#: tour_guide_bot/bot/admin/tour/add_content.py:314
+#: tour_guide_bot/bot/admin/tour/add_content.py:341
+#: tour_guide_bot/bot/admin/tour/add_content.py:367
+#: tour_guide_bot/bot/admin/tour/add_content.py:665
+#: tour_guide_bot/bot/admin/tour/add_content.py:760
+#: tour_guide_bot/bot/admin/tour/add_content.py:800
 msgctxt "admin-tours"
 msgid "Add more data or send /done if you're finished with the section."
 msgstr "Add more data or send /done if you're finished with the section."
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:286
+#: tour_guide_bot/bot/admin/tour/add_content.py:287
 msgctxt "admin-tours"
 msgid "The animation was added to the section!"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:309
+#: tour_guide_bot/bot/admin/tour/add_content.py:310
 msgctxt "admin-tours"
 msgid "The location was added to the section!"
 msgstr "The location was added to the section!"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:336
+#: tour_guide_bot/bot/admin/tour/add_content.py:337
 msgctxt "admin-tours"
 msgid "The voice was added to the section!"
 msgstr "The voice was added to the section!"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:362
+#: tour_guide_bot/bot/admin/tour/add_content.py:363
 msgctxt "admin-tours"
 msgid "The video note was added to the section!"
 msgstr "The video note was added to the section!"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:384
+#: tour_guide_bot/bot/admin/tour/add_content.py:385
 msgctxt "admin-tours"
 msgid "Something went wrong when I tried to download your audio (see the details in the logs). What should I do now?"
 msgstr "Something went wrong when I tried downloading your audio (see the details in the logs). What should I do now?"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:395
-#: tour_guide_bot/bot/admin/tour/add_content.py:452
-#: tour_guide_bot/bot/admin/tour/add_content.py:531
+#: tour_guide_bot/bot/admin/tour/add_content.py:396
+#: tour_guide_bot/bot/admin/tour/add_content.py:453
+#: tour_guide_bot/bot/admin/tour/add_content.py:532
 msgctxt "bot-generic"
 msgid "Try again"
 msgstr "Try again"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:401
-#: tour_guide_bot/bot/admin/tour/add_content.py:458
-#: tour_guide_bot/bot/admin/tour/add_content.py:499
-#: tour_guide_bot/bot/admin/tour/add_content.py:537
+#: tour_guide_bot/bot/admin/tour/add_content.py:402
+#: tour_guide_bot/bot/admin/tour/add_content.py:459
+#: tour_guide_bot/bot/admin/tour/add_content.py:500
+#: tour_guide_bot/bot/admin/tour/add_content.py:538
 msgctxt "admin-tours"
 msgid "Store the original audio"
 msgstr "Store the original audio"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:419
+#: tour_guide_bot/bot/admin/tour/add_content.py:420
 msgctxt "admin-tours"
 msgid "File downloaded, converting..."
 msgstr "File downloaded, converting..."
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:441
+#: tour_guide_bot/bot/admin/tour/add_content.py:442
 msgctxt "admin-tours"
 msgid "Something went wrong when I tried to convert the file. What should I do now?"
 msgstr "Something went wrong when I tried to convert the file. What should I do now?"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:478
+#: tour_guide_bot/bot/admin/tour/add_content.py:479
 msgctxt "admin-tours"
 msgid "File converted, uploading..."
 msgstr "File converted, uploading..."
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:491
+#: tour_guide_bot/bot/admin/tour/add_content.py:492
 msgctxt "bot-generic"
 msgid "Store the voice message"
 msgstr "Store the voice message"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:520
+#: tour_guide_bot/bot/admin/tour/add_content.py:521
 msgctxt "admin-tours"
 msgid "Something went wrong when I tried to upload the file. What should I do now?"
 msgstr "Something went wrong when I tried to upload the file. What should I do now?"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:557
+#: tour_guide_bot/bot/admin/tour/add_content.py:558
 msgctxt "admin-tours"
 msgid "The audio was converted successfully. Please check the quality and decide what do you want to do with it."
 msgstr "The audio was converted successfully. Please check the quality and decide what you want to do with it."
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:585
+#: tour_guide_bot/bot/admin/tour/add_content.py:586
 msgctxt "admin-tours"
 msgid "Starting the audio conversion process..."
 msgstr "Starting the audio conversion process..."
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:646
+#: tour_guide_bot/bot/admin/tour/add_content.py:647
 msgctxt "admin-tours"
 msgid "Audio-to-voice conversion suggestions have been disabled. You can enabled them again using /configure command in the admin mode."
 msgstr "Audio-to-voice conversion suggestions have been disabled. You can enable them again using /configure command in the admin mode."
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:660
+#: tour_guide_bot/bot/admin/tour/add_content.py:661
 msgctxt "admin-tours"
 msgid "The audio was added to the section!"
 msgstr "The audio was added to the section!"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:671
+#: tour_guide_bot/bot/admin/tour/add_content.py:672
 msgctxt "admin-tours"
 msgid "Please wait until all audios in the group are uploaded before proceeding to the next section."
 msgstr "Please wait until all audios in the group are uploaded before proceeding to the next section."
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:698
+#: tour_guide_bot/bot/admin/tour/add_content.py:699
 msgctxt "admin-tours"
 msgid "Would you like to convert this audio file to a voice message?"
 msgstr "Would you like to convert this audio file to a voice message?"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:710
+#: tour_guide_bot/bot/admin/tour/add_content.py:711
 msgctxt "bot-generic"
 msgid "No"
 msgstr "No"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:716
+#: tour_guide_bot/bot/admin/tour/add_content.py:717
 msgctxt "admin-tours"
 msgid "No, and do not ask again."
 msgstr "No, and do not ask again."
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:755
+#: tour_guide_bot/bot/admin/tour/add_content.py:756
 msgctxt "admin-tours"
 msgid "The video was added to the section!"
 msgstr "The video was added to the section!"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:766
+#: tour_guide_bot/bot/admin/tour/add_content.py:767
 msgctxt "admin-tours"
 msgid "Please wait until all videos in the group are uploaded before proceeding to the next section."
 msgstr "Please wait until all videos in the group are uploaded before proceeding to the next section."
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:795
+#: tour_guide_bot/bot/admin/tour/add_content.py:796
 msgctxt "admin-tours"
 msgid "The photo was added to the section!"
 msgstr "The photo was added to the section!"
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:806
+#: tour_guide_bot/bot/admin/tour/add_content.py:807
 msgctxt "admin-tours"
 msgid "Please wait until all photos in the group are uploaded before proceeding to the next section."
 msgstr "Please wait until all photos in the group are uploaded before proceeding to the next section."
 
-#: tour_guide_bot/bot/admin/tour/add_content.py:818
+#: tour_guide_bot/bot/admin/tour/add_content.py:819
 msgctxt "admin-tours"
 msgid "Unsupported message! Please send me one of the following to add to the tour section: location, text, photo, audio, video, animation, voice or video note."
 msgstr ""
