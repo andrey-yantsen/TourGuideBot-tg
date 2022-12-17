@@ -245,11 +245,11 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
 
                 self.db_session.add(content)
 
-        await self.db_session.commit()
+                context.user_data["tour_section_content_position"] = (
+                    context.user_data.get("tour_section_content_position", 0) + 1
+                )
 
-        context.user_data["tour_section_content_position"] = (
-            context.user_data.get("tour_section_content_position", 0) + 1
-        )
+        await self.db_session.commit()
 
         return is_first
 
