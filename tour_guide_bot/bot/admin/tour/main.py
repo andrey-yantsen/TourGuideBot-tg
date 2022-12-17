@@ -198,7 +198,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         await update.message.reply_text(
             t(language).pgettext(
                 "admin-tour",
-                "Now send me location, text, photo, audio, video, voice or"
+                "Now send me location, text, photo, audio, video, animation, voice or"
                 " video note messages, and send /done when finished with the section.",
             )
         )

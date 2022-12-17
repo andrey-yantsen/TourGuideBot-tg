@@ -37,6 +37,10 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
                 filters.LOCATION & ~filters.UpdateType.EDITED,
                 cls.partial(cls.translation_section_content_add_location),
             ),
+            MessageHandler(
+                filters.ANIMATION & ~filters.UpdateType.EDITED,
+                cls.partial(cls.translation_section_content_add_animation),
+            ),
             ConversationHandler(
                 entry_points=[
                     MessageHandler(
@@ -261,6 +265,26 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
         language = await self.get_language(update, context)
         message = t(language).pgettext(
             "admin-tours", "The text was added to the section!"
+        )
+        message += " "
+        message += t(language).pgettext(
+            "admin-tours",
+            "Add more data or send /done if you're finished with the section.",
+        )
+        await update.message.reply_text(message)
+
+    async def translation_section_content_add_animation(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        await self.translation_section_content_add(
+            update.message.message_id,
+            context,
+            MessageType.animation,
+            text=update.message.text_markdown_v2_urled,
+        )
+        language = await self.get_language(update, context)
+        message = t(language).pgettext(
+            "admin-tours", "The animation was added to the section!"
         )
         message += " "
         message += t(language).pgettext(
@@ -795,6 +819,6 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
                 "admin-tours",
                 "Unsupported message! Please send me one of the"
                 " following to add to the tour section: location, text,"
-                " photo, audio, video, voice or video note.",
+                " photo, audio, video, animation, voice or video note.",
             )
         )

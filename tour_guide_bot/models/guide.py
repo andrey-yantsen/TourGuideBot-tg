@@ -70,6 +70,7 @@ class MessageType(enum.Enum):
     video_note = 6
     photo = 7
     media_group = 8
+    animation = 9
 
 
 class TourSection(Base):
