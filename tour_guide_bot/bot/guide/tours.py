@@ -261,6 +261,9 @@ class ToursCommandHandler(BaseHandlerCallback):
                     )
 
         if not is_last_section:
+            await bot.send_chat_action(chat_id=chat_id, action=ChatAction.TYPING)
+            await sleep(float(delay_between_messages_state.value))
+
             await self.reply_text(
                 update,
                 context,
