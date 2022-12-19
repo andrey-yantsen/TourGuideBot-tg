@@ -109,14 +109,40 @@ class ToursCommandHandler(BaseHandlerCallback):
         bot = context.bot
         chat_id = update.effective_chat.id
 
-        section_content_length = len(section.content)
         is_last_section = position == len(translation.section) - 1
 
         delay_between_messages_state = await Settings.load(
             self.db_session, SettingsKey.delay_between_messages
         )
 
-        for (idx, content) in enumerate(section.content):
+        for content in section.content:
+            chat_action = ChatAction.TYPING
+            match content.message_type:
+                case MessageType.location:
+                    chat_action = (
+                        ChatAction.TYPING
+                    )  # todo change to ChatAction.FIND_LOCATION
+                case MessageType.voice | MessageType.audio:
+                    chat_action = ChatAction.UPLOAD_VOICE
+                case MessageType.video_note:
+                    chat_action = ChatAction.UPLOAD_VIDEO_NOTE
+                case MessageType.video:
+                    chat_action = ChatAction.UPLOAD_VIDEO
+                case MessageType.photo:
+                    chat_action = ChatAction.UPLOAD_PHOTO
+                case MessageType.media_group:
+                    match section.content["files"]:
+                        case MessageType.audio:
+                            chat_action = ChatAction.UPLOAD_VOICE
+                        case MessageType.video:
+                            chat_action = ChatAction.UPLOAD_VIDEO
+                        case MessageType.photo:
+                            chat_action = ChatAction.UPLOAD_PHOTO
+
+            if chat_action and delay_between_messages_state.value > 0:
+                await bot.send_chat_action(chat_id=chat_id, action=chat_action)
+                await sleep(float(delay_between_messages_state.value))
+
             match content.message_type:
                 case MessageType.text:
                     await bot.send_message(
@@ -233,34 +259,6 @@ class ToursCommandHandler(BaseHandlerCallback):
                         disable_notification=True,
                         protect_content=True,
                     )
-
-            chat_action = None if is_last_section else ChatAction.TYPING
-            if section_content_length > idx + 1:
-                match section.content[idx + 1].message_type:
-                    case MessageType.location:
-                        chat_action = (
-                            ChatAction.TYPING
-                        )  # todo change to ChatAction.FIND_LOCATION
-                    case MessageType.voice | MessageType.audio:
-                        chat_action = ChatAction.UPLOAD_VOICE
-                    case MessageType.video_note:
-                        chat_action = ChatAction.UPLOAD_VIDEO_NOTE
-                    case MessageType.video:
-                        chat_action = ChatAction.UPLOAD_VIDEO
-                    case MessageType.photo:
-                        chat_action = ChatAction.UPLOAD_PHOTO
-                    case MessageType.media_group:
-                        match section.content[idx + 1].content["files"]:
-                            case MessageType.audio:
-                                chat_action = ChatAction.UPLOAD_VOICE
-                            case MessageType.video:
-                                chat_action = ChatAction.UPLOAD_VIDEO
-                            case MessageType.photo:
-                                chat_action = ChatAction.UPLOAD_PHOTO
-
-            if chat_action:
-                await bot.send_chat_action(chat_id=chat_id, action=chat_action)
-                await sleep(float(delay_between_messages_state.value))
 
         if not is_last_section:
             await self.reply_text(
