@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: English\n"
 "Language: en_US\n"
-"PO-Revision-Date: 2022-12-19 18:25\n"
+"PO-Revision-Date: 2022-12-19 18:54\n"
 
 #: tour_guide_bot/cli.py:24
 msgctxt "cli"
@@ -108,7 +108,7 @@ msgstr "Unfortunately, you don't have any tours available for the guests."
 #: tour_guide_bot/bot/admin/tour/main.py:444
 #: tour_guide_bot/bot/admin/tour/main.py:574
 #: tour_guide_bot/bot/admin/tour/main.py:656
-#: tour_guide_bot/bot/guide/tours.py:279 tour_guide_bot/bot/guide/tours.py:463
+#: tour_guide_bot/bot/guide/tours.py:282 tour_guide_bot/bot/guide/tours.py:466
 #: tour_guide_bot/helpers/telegram.py:159
 msgctxt "bot-generic"
 msgid "Abort"
@@ -128,27 +128,27 @@ msgstr "Return to the guest mode"
 #: tour_guide_bot/bot/admin/bot_commands.py:22
 msgctxt "admin-bot-command"
 msgid "Change bot's preferences"
-msgstr ""
+msgstr "Change bot's preferences"
 
 #: tour_guide_bot/bot/admin/bot_commands.py:29
 msgctxt "admin-bot-command"
 msgid "Manage your tours"
-msgstr ""
+msgstr "Manage your tours"
 
 #: tour_guide_bot/bot/admin/bot_commands.py:36
 msgctxt "admin-bot-command"
 msgid "Grant access to a tour for somebody"
-msgstr ""
+msgstr "Grant access to a tour to somebody"
 
 #: tour_guide_bot/bot/admin/bot_commands.py:45
 msgctxt "admin-bot-command"
 msgid "Revoke access to a tour from somebody"
-msgstr ""
+msgstr "Revoke access to a tour from somebody"
 
 #: tour_guide_bot/bot/admin/bot_commands.py:54
 msgctxt "admin-bot-command"
 msgid "Change the language"
-msgstr ""
+msgstr "Change the language"
 
 #: tour_guide_bot/bot/admin/configure.py:92
 #, python-format
@@ -210,8 +210,8 @@ msgstr "Please select the language for the welcome message you want to edit."
 #: tour_guide_bot/bot/admin/tour/main.py:373
 #: tour_guide_bot/bot/admin/tour/main.py:530
 #: tour_guide_bot/bot/admin/tour/main.py:597
-#: tour_guide_bot/bot/guide/tours.py:101 tour_guide_bot/bot/guide/tours.py:322
-#: tour_guide_bot/bot/guide/tours.py:370
+#: tour_guide_bot/bot/guide/tours.py:101 tour_guide_bot/bot/guide/tours.py:325
+#: tour_guide_bot/bot/guide/tours.py:373
 msgctxt "bot-generic"
 msgid "Something went wrong; please try again."
 msgstr "Something went wrong; please try again."
@@ -376,7 +376,7 @@ msgstr "Add more data or send /done if you're finished with the section."
 #: tour_guide_bot/bot/admin/tour/add_content.py:287
 msgctxt "admin-tours"
 msgid "The animation was added to the section!"
-msgstr ""
+msgstr "The animation was added to the section!"
 
 #: tour_guide_bot/bot/admin/tour/add_content.py:310
 msgctxt "admin-tours"
@@ -501,7 +501,7 @@ msgstr "Please wait until all photos in the group are uploaded before proceeding
 #: tour_guide_bot/bot/admin/tour/add_content.py:819
 msgctxt "admin-tours"
 msgid "Unsupported message! Please send me one of the following to add to the tour section: location, text, photo, audio, video, animation, voice or video note."
-msgstr ""
+msgstr "Unsupported message! Please send me one of the following to add to the tour section: location, text, photo, audio, video, animation, voice or video note."
 
 #: tour_guide_bot/bot/admin/tour/main.py:137
 msgctxt "admin-tours"
@@ -516,7 +516,7 @@ msgstr "Done!"
 #: tour_guide_bot/bot/admin/tour/main.py:199
 msgctxt "admin-tour"
 msgid "Now send me location, text, photo, audio, video, animation, voice or video note messages, and send /done when finished with the section."
-msgstr ""
+msgstr "Now send me a location, text, photo, audio, video, animation, voice or video note messages, and send /done when finished with the section."
 
 #: tour_guide_bot/bot/admin/tour/main.py:222
 msgctxt "admin-tours"
@@ -679,7 +679,7 @@ msgctxt "guest-bot-start"
 msgid "I see you have some tours available; thank you for the support! Send /tours to start exploring!"
 msgstr "I see you have some tours available; thank you for the support! Send /tours to start exploring!"
 
-#: tour_guide_bot/bot/guide/start.py:141 tour_guide_bot/bot/guide/tours.py:437
+#: tour_guide_bot/bot/guide/start.py:141 tour_guide_bot/bot/guide/tours.py:440
 msgctxt "guest-tour"
 msgid "Unfortunately, no tours are available for you at the moment. Approving somebody for a tour takes a while, but if you feel like a mistake was made, don't hesitate to contact me! The bot's profile should provide all the required info."
 msgstr "Unfortunately, no tours are available for you at the moment. Approving somebody for a tour takes a while, but if you feel like a mistake was made, don't hesitate to contact me! The bot's profile should provide all the required info."
@@ -694,39 +694,40 @@ msgctxt "guest-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr "I don't recognise you! Please send me your phone number."
 
-#: tour_guide_bot/bot/guide/tours.py:267
+#: tour_guide_bot/bot/guide/tours.py:270
 msgctxt "guide-tour"
 msgid "Are you ready to continue?"
 msgstr "Are you ready to continue?"
 
-#: tour_guide_bot/bot/guide/tours.py:272
+#: tour_guide_bot/bot/guide/tours.py:275
 msgctxt "guide-tour"
 msgid "Next section"
 msgstr "Next section"
 
-#: tour_guide_bot/bot/guide/tours.py:305
+#: tour_guide_bot/bot/guide/tours.py:308
 msgctxt "cli"
 msgid "Tour #{0} doesn't have a language {1} preferred by the user {2}."
 msgstr "Tour #{0} doesn't have a language {1} preferred by the user {2}."
 
-#: tour_guide_bot/bot/guide/tours.py:314
+#: tour_guide_bot/bot/guide/tours.py:317
 msgctxt "cli"
 msgid "Tour #{0} doesn't have a default app language {1}."
 msgstr "Tour #{0} doesn't have a default app language {1}."
 
-#: tour_guide_bot/bot/guide/tours.py:344 tour_guide_bot/bot/guide/tours.py:381
+#: tour_guide_bot/bot/guide/tours.py:347 tour_guide_bot/bot/guide/tours.py:384
 msgctxt "guide-tour"
 msgid "Unfortunately, you don't have access to the requested tour."
 msgstr "Unfortunately, you don't have access to the requested tour."
 
-#: tour_guide_bot/bot/guide/tours.py:450
+#: tour_guide_bot/bot/guide/tours.py:453
 #, python-format
 msgctxt "guest-tour"
 msgid "The tour available for you is: %s.\n"
 "Now the bot will send you several messages, please start the tour with the following one 👇"
-msgstr ""
+msgstr "One tour available for you: %s\n"
+"Now the bot will send you several messages, please start the tour with the following one 👇"
 
-#: tour_guide_bot/bot/guide/tours.py:469
+#: tour_guide_bot/bot/guide/tours.py:472
 msgctxt "guide-tour"
 msgid "Please select a tour you want to start."
 msgstr "Please select a tour you want to start."
