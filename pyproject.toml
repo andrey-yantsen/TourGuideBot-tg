@@ -22,7 +22,7 @@ python = "^3.10"
 python-telegram-bot = {version = "*", allow-prereleases = true, extras = ["job-queue"]}
 Babel = "^2.11.0"
 SQLAlchemy = {extras = ["asyncio", "aiomysql", "aiosqlite", "postgresql_asyncpg"], version = "^1.4.45"}
-alembic = "^1.8.1"
+alembic = "^1.9.0"
 greenlet = "*"
 psycopg2-binary = "^2.9.5"
 dateparser = "^1.1.4"
