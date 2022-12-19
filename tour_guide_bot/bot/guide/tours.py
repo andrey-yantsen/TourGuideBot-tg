@@ -449,7 +449,8 @@ class ToursCommandHandler(BaseHandlerCallback):
             await update.message.reply_text(
                 t(language).pgettext(
                     "guest-tour",
-                    "You have only one tour available: %s. Starting it now.",
+                    "The tour available for you is: %s.\nNow the bot will send you several messages, please start the"
+                    " tour with the following one 👇",
                 )
                 % get_tour_title(last_tour, language, context)
             )
