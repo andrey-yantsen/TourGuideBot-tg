@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2022-12-17 20:52\n"
+"PO-Revision-Date: 2022-12-19 18:25\n"
 
 #: tour_guide_bot/cli.py:24
 msgctxt "cli"
@@ -108,7 +108,7 @@ msgstr "К сожалению, у вас нет ни одной экскурси
 #: tour_guide_bot/bot/admin/tour/main.py:444
 #: tour_guide_bot/bot/admin/tour/main.py:574
 #: tour_guide_bot/bot/admin/tour/main.py:656
-#: tour_guide_bot/bot/guide/tours.py:281 tour_guide_bot/bot/guide/tours.py:464
+#: tour_guide_bot/bot/guide/tours.py:279 tour_guide_bot/bot/guide/tours.py:463
 #: tour_guide_bot/helpers/telegram.py:159
 msgctxt "bot-generic"
 msgid "Abort"
@@ -210,8 +210,8 @@ msgstr "Пожалуйста, выберите язык приветственн
 #: tour_guide_bot/bot/admin/tour/main.py:373
 #: tour_guide_bot/bot/admin/tour/main.py:530
 #: tour_guide_bot/bot/admin/tour/main.py:597
-#: tour_guide_bot/bot/guide/tours.py:101 tour_guide_bot/bot/guide/tours.py:324
-#: tour_guide_bot/bot/guide/tours.py:372
+#: tour_guide_bot/bot/guide/tours.py:101 tour_guide_bot/bot/guide/tours.py:322
+#: tour_guide_bot/bot/guide/tours.py:370
 msgctxt "bot-generic"
 msgid "Something went wrong; please try again."
 msgstr "Что-то пошло не так. Пожалуйста, попытайтесь еще раз."
@@ -679,7 +679,7 @@ msgctxt "guest-bot-start"
 msgid "I see you have some tours available; thank you for the support! Send /tours to start exploring!"
 msgstr "Я вижу, у вас есть несколько экскурсий; спасибо за поддержку! Отправьте /tours для начала изучения!"
 
-#: tour_guide_bot/bot/guide/start.py:141 tour_guide_bot/bot/guide/tours.py:439
+#: tour_guide_bot/bot/guide/start.py:141 tour_guide_bot/bot/guide/tours.py:437
 msgctxt "guest-tour"
 msgid "Unfortunately, no tours are available for you at the moment. Approving somebody for a tour takes a while, but if you feel like a mistake was made, don't hesitate to contact me! The bot's profile should provide all the required info."
 msgstr "К сожалению, в данный момент у вас нет ни одной экскурсии. Одобрение кого-нибудь для экскурсии занимает некоторое время, но если вы чувствуете, что произошла ошибка, не стесняйтесь связаться со мной! В профиле бота должна быть вся необходимая информация."
@@ -694,38 +694,39 @@ msgctxt "guest-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr "Я вас не узнаю! Пожалуйста, отправьте мне ваш номер телефона."
 
-#: tour_guide_bot/bot/guide/tours.py:269
+#: tour_guide_bot/bot/guide/tours.py:267
 msgctxt "guide-tour"
 msgid "Are you ready to continue?"
 msgstr "Вы готовы продолжить?"
 
-#: tour_guide_bot/bot/guide/tours.py:274
+#: tour_guide_bot/bot/guide/tours.py:272
 msgctxt "guide-tour"
 msgid "Next section"
 msgstr "Следующий раздел"
 
-#: tour_guide_bot/bot/guide/tours.py:307
+#: tour_guide_bot/bot/guide/tours.py:305
 msgctxt "cli"
 msgid "Tour #{0} doesn't have a language {1} preferred by the user {2}."
 msgstr "Экскурсия #{0} не имеет языка {1} предпочитаемого пользователем {2}."
 
-#: tour_guide_bot/bot/guide/tours.py:316
+#: tour_guide_bot/bot/guide/tours.py:314
 msgctxt "cli"
 msgid "Tour #{0} doesn't have a default app language {1}."
 msgstr "Экскурсия #{0} не имеет языка приложения по умолчанию {1}."
 
-#: tour_guide_bot/bot/guide/tours.py:346 tour_guide_bot/bot/guide/tours.py:383
+#: tour_guide_bot/bot/guide/tours.py:344 tour_guide_bot/bot/guide/tours.py:381
 msgctxt "guide-tour"
 msgid "Unfortunately, you don't have access to the requested tour."
 msgstr "К сожалению, у вас нет доступа к запрошенной экскурсии."
 
-#: tour_guide_bot/bot/guide/tours.py:452
+#: tour_guide_bot/bot/guide/tours.py:450
 #, python-format
 msgctxt "guest-tour"
-msgid "You have only one tour available: %s. Starting it now."
-msgstr "У вас есть только одна экскурсия: %s. Начинаем."
+msgid "The tour available for you is: %s.\n"
+"Now the bot will send you several messages, please start the tour with the following one 👇"
+msgstr ""
 
-#: tour_guide_bot/bot/guide/tours.py:470
+#: tour_guide_bot/bot/guide/tours.py:469
 msgctxt "guide-tour"
 msgid "Please select a tour you want to start."
 msgstr "Пожалуйста, выберите экскурсию, которую вы хотите начать."
