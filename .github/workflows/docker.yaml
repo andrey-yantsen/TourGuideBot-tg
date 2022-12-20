@@ -2,9 +2,9 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches:
-      - '**'
-      - '!l10n_main'
+    branches-ignore:
+      - 'l10n_main'
+      - 'dependabot/*'
     tags:
       - 'v*'
   pull_request:
