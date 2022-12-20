@@ -131,7 +131,7 @@ class ToursCommandHandler(BaseHandlerCallback):
                 case MessageType.photo:
                     chat_action = ChatAction.UPLOAD_PHOTO
                 case MessageType.media_group:
-                    match section.content["files"]:
+                    match content["files"]:
                         case MessageType.audio:
                             chat_action = ChatAction.UPLOAD_VOICE
                         case MessageType.video:
