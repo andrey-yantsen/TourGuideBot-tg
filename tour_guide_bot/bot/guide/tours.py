@@ -139,7 +139,7 @@ class ToursCommandHandler(BaseHandlerCallback):
                         case MessageType.photo:
                             chat_action = ChatAction.UPLOAD_PHOTO
 
-            if chat_action and delay_between_messages_state.value > 0:
+            if chat_action and int(delay_between_messages_state.value) > 0:
                 await bot.send_chat_action(chat_id=chat_id, action=chat_action)
                 await sleep(float(delay_between_messages_state.value))
 
@@ -261,8 +261,9 @@ class ToursCommandHandler(BaseHandlerCallback):
                     )
 
         if not is_last_section:
-            await bot.send_chat_action(chat_id=chat_id, action=ChatAction.TYPING)
-            await sleep(float(delay_between_messages_state.value))
+            if int(delay_between_messages_state.value) > 0:
+                await bot.send_chat_action(chat_id=chat_id, action=ChatAction.TYPING)
+                await sleep(float(delay_between_messages_state.value))
 
             await self.reply_text(
                 update,
