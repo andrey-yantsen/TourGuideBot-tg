@@ -4,7 +4,7 @@ on:
   push:
     branches-ignore:
       - 'l10n_main'
-      - 'dependabot/*'
+      - 'dependabot/**'
     tags:
       - 'v*'
   pull_request:
