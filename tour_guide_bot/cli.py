@@ -93,7 +93,12 @@ def run():
 
     loop = asyncio.new_event_loop()
 
-    app = Application.builder().token(args.guide_bot_token).build()
+    app = (
+        Application.builder()
+        .token(args.guide_bot_token)
+        .concurrent_updates(True)
+        .build()
+    )
     app.content_add_lock = asyncio.Lock()
     app.db_engine = engine
     app.enabled_languages = args.enabled_languages
@@ -112,6 +117,8 @@ def run():
     )
 
     loop.run_until_complete(app.initialize())
+    if app.post_init:
+        loop.run_until_complete(app.post_init(app))
     loop.run_until_complete(app.updater.start_polling())
     loop.run_until_complete(app.start())
 
