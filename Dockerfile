@@ -11,7 +11,7 @@ RUN sh <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) -y \
   && curl -sSL https://install.python-poetry.org | python -u - \
   || cat /home/tg/app/poetry-installer-error-* \
   && poetry config virtualenvs.in-project true \
-  && poetry install --no-dev --no-interaction --no-root --no-ansi
+  && poetry install --only main --no-interaction --no-root --no-ansi
 
 FROM python:3.10-alpine
 RUN apk add libpq mariadb-connector-c ffmpeg libogg opus lame \
