@@ -90,6 +90,7 @@ class ToursCommandHandler(BaseHandlerCallback):
         context: ContextTypes.DEFAULT_TYPE,
     ):
         if update.callback_query:
+            await update.callback_query.answer()
             await update.callback_query.delete_message()
 
         user = await self.get_user(update, context)
@@ -288,9 +289,6 @@ class ToursCommandHandler(BaseHandlerCallback):
                 ),
             )
             return self.STATE_TOUR_IN_PROGRESS
-
-        if update.callback_query:
-            await update.callback_query.answer()
 
         return ConversationHandler.END
 
