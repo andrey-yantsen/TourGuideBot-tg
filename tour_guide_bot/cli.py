@@ -4,7 +4,6 @@ import logging
 from os import mkdir, sep
 from os.path import dirname
 import sys
-from venv import create
 from warnings import filterwarnings
 
 from sqlalchemy.ext.asyncio import create_async_engine
