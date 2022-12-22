@@ -5,16 +5,17 @@ from telegram import Update
 from telegram.ext import Application as BaseApplication, ContextTypes, TypeHandler
 
 from tour_guide_bot import t
+from tour_guide_bot.bot import log
+from tour_guide_bot.bot.admin.start import (
+    StartCommandHandler as AdminStartCommandHandler,
+)
 from tour_guide_bot.bot.guide.help import HelpCommandHandler
+from tour_guide_bot.bot.guide.start import StartCommandHandler
 from tour_guide_bot.bot.guide.tours import ToursCommandHandler
 from tour_guide_bot.helpers.language import LanguageHandler
 from tour_guide_bot.helpers.telegram import get_tour_title
 from tour_guide_bot.models.guide import BoughtTours, Guest, Tour
 from tour_guide_bot.models.telegram import TelegramUser
-
-from . import log
-from .admin.start import StartCommandHandler as AdminStartCommandHandler
-from .guide.start import StartCommandHandler
 
 
 class Application(BaseApplication):

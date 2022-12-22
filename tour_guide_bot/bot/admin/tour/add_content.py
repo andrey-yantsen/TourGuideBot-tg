@@ -15,11 +15,10 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
+from tour_guide_bot.bot.admin import log
 from tour_guide_bot.helpers.telegram import AdminProtectedBaseHandlerCallback
 from tour_guide_bot.models.guide import MessageType, TourSectionContent
 from tour_guide_bot.models.settings import Settings, SettingsKey
-
-from .. import log
 
 
 class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):

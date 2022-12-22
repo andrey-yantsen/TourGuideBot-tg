@@ -20,6 +20,7 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
+from tour_guide_bot.bot.guide import log
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback, get_tour_title
 from tour_guide_bot.models.guide import (
     BoughtTours,
@@ -29,8 +30,6 @@ from tour_guide_bot.models.guide import (
     TourTranslation,
 )
 from tour_guide_bot.models.settings import Settings, SettingsKey
-
-from . import log
 
 
 class ToursCommandHandler(BaseHandlerCallback):
