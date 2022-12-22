@@ -28,9 +28,11 @@ psycopg2-binary = "^2.9.5"
 dateparser = "^1.1.4"
 ffmpeg-python = "^0.2.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
 black = "^22.12.0"
 isort = "^5.11.4"
+pytest-asyncio = "^0.20.3"
 
 [tool.poetry.scripts]
 bot = 'tour_guide_bot.cli:run'
