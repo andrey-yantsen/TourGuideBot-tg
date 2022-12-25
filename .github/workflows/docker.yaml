@@ -18,6 +18,7 @@ env:
 jobs:
   tests:
     uses: ./.github/workflows/test.yaml
+    secrets: inherit
 
   build-and-push-image:
     runs-on: ubuntu-latest
