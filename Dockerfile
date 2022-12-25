@@ -1,4 +1,4 @@
-FROM python:3.10-alpine AS builder
+FROM python:3.11-alpine AS builder
 
 RUN apk add build-base libffi-dev libpq-dev mariadb-connector-c-dev curl \
   && adduser -h /home/tg -D -u 1000 tg
