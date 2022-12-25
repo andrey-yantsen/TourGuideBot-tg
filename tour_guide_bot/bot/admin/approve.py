@@ -35,7 +35,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
                 states={
                     cls.STATE_TOUR: [
                         CallbackQueryHandler(
-                            cls.partial(cls.tour), "^approve_tour:(\d+)$"
+                            cls.partial(cls.tour), r"^approve_tour:(\d+)$"
                         ),
                     ],
                     cls.STATE_PHONE_NUMBER: [
@@ -143,7 +143,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
         else:
             phone_number = update.message.text
 
-        context.user_data["phone_number"] = re.sub("\D+", "", phone_number)
+        context.user_data["phone_number"] = re.sub(r"\D+", "", phone_number)
 
         await update.message.reply_text(
             t(user.language).pgettext(

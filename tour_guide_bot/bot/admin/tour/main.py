@@ -54,49 +54,50 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                     cls.STATE_SELECT_ACTION: [
                         CallbackQueryHandler(
                             cls.partial(cls.request_tour_language),
-                            "^%s$" % (cls.CALLBACK_DATA_ADD_TOUR,),
+                            r"^%s$" % (cls.CALLBACK_DATA_ADD_TOUR,),
                         ),
                         CallbackQueryHandler(
                             cls.partial(cls.select_tour),
-                            "^%s$" % (cls.CALLBACK_DATA_EDIT_TOUR,),
+                            r"^%s$" % (cls.CALLBACK_DATA_EDIT_TOUR,),
                         ),
                         CallbackQueryHandler(
                             cls.partial(cls.select_tour),
-                            "^%s$" % (cls.CALLBACK_DATA_DELETE_TOUR,),
+                            r"^%s$" % (cls.CALLBACK_DATA_DELETE_TOUR,),
                         ),
                     ],
                     cls.STATE_TOUR_DELETE_CONFIRM: [
                         CallbackQueryHandler(
                             cls.partial(cls.request_delete_tour_confirmation),
-                            "^%s:(\d+)$" % (cls.CALLBACK_DATA_DELETE_TOUR,),
+                            r"^%s:(\d+)$" % (cls.CALLBACK_DATA_DELETE_TOUR,),
                         ),
                     ],
                     cls.STATE_TOUR_EDIT_SELECT_LANGUAGE: [
                         CallbackQueryHandler(
                             cls.partial(cls.request_tour_language),
-                            "^%s:(\d+)$" % (cls.CALLBACK_DATA_EDIT_TOUR,),
+                            r"^%s:(\d+)$" % (cls.CALLBACK_DATA_EDIT_TOUR,),
                         ),
                     ],
                     cls.STATE_TOUR_EDIT_SELECT_ACTION: [
                         CallbackQueryHandler(
-                            cls.partial(cls.request_edit_action), "^tour_language:(.+)$"
+                            cls.partial(cls.request_edit_action),
+                            r"^tour_language:(.+)$",
                         ),
                     ],
                     cls.STATE_TOUR_EDIT: [
                         CallbackQueryHandler(
                             cls.partial(cls.request_tour_title),
-                            "^%s:(\d+)$" % (cls.CALLBACK_DATA_TOUR_RENAME,),
+                            r"^%s:(\d+)$" % (cls.CALLBACK_DATA_TOUR_RENAME,),
                         ),
                     ],
                     cls.STATE_TOUR_DELETE: [
                         CallbackQueryHandler(
                             cls.partial(cls.delete_tour),
-                            "^%s:(\d+)$" % (cls.CALLBACK_DATA_DELETE_TOUR_CONFIRMED,),
+                            r"^%s:(\d+)$" % (cls.CALLBACK_DATA_DELETE_TOUR_CONFIRMED,),
                         ),
                     ],
                     cls.STATE_TOUR_ADD_LANGUAGE: [
                         CallbackQueryHandler(
-                            cls.partial(cls.request_tour_title), "^tour_language:(.*)$"
+                            cls.partial(cls.request_tour_title), r"^tour_language:(.*)$"
                         ),
                     ],
                     cls.STATE_TOUR_SAVE_TITLE: [

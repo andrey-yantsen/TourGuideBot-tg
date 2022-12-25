@@ -34,7 +34,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
                 states={
                     cls.STATE_TOUR: [
                         CallbackQueryHandler(
-                            cls.partial(cls.tour), "^revoke_tour:(\d+)$"
+                            cls.partial(cls.tour), r"^revoke_tour:(\d+)$"
                         ),
                     ],
                     cls.STATE_PHONE_NUMBER: [
@@ -46,7 +46,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
                     ],
                     cls.STATE_REVOKE: [
                         CallbackQueryHandler(
-                            cls.partial(cls.revoke), "^revoke_confirm:(\d+)$"
+                            cls.partial(cls.revoke), r"^revoke_confirm:(\d+)$"
                         ),
                     ],
                 },
@@ -149,7 +149,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         else:
             phone_number = update.message.text
 
-        phone_number = re.sub("\D+", "", phone_number)
+        phone_number = re.sub(r"\D+", "", phone_number)
 
         guest = await self.db_session.scalar(
             select(Guest).where(Guest.phone == phone_number)

@@ -100,7 +100,7 @@ class StartCommandHandler(BaseHandlerCallback):
             )
             return self.STATE_CONTACT
 
-        user.phone = re.sub("\D+", "", update.message.contact.phone_number)
+        user.phone = re.sub(r"\D+", "", update.message.contact.phone_number)
 
         stmt = select(Guest).where(Guest.phone == user.phone)
         guest = await self.db_session.scalar(stmt)

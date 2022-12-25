@@ -44,13 +44,13 @@ class ToursCommandHandler(BaseHandlerCallback):
                 states={
                     cls.STATE_SELECT_TOUR: [
                         CallbackQueryHandler(
-                            cls.partial(cls.start_tour), "^start_tour:(\d+):(\w+)$"
+                            cls.partial(cls.start_tour), r"^start_tour:(\d+):(\w+)$"
                         ),
                     ],
                     cls.STATE_TOUR_IN_PROGRESS: [
                         CallbackQueryHandler(
                             cls.partial(cls.tour_change_section),
-                            "^tour_change_section:(\d+):(\d+)$",
+                            r"^tour_change_section:(\d+):(\d+)$",
                         ),
                     ],
                 },
