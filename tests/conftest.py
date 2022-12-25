@@ -10,10 +10,12 @@ from tour_guide_bot.bot.app import Application
 from tour_guide_bot.cli import prepare_app
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def bot_token() -> str:
     bot_token = environ.get("TOUR_GUIDE_TELEGRAM_BOT_TOKEN")
-    assert bot_token
+    assert (
+        bot_token
+    ), "Please set the telegram bot token via TOUR_GUIDE_TELEGRAM_BOT_TOKEN env variable"
     return bot_token
 
 
@@ -58,12 +60,12 @@ async def db_engine(persistence_path):
         Base.metadata.drop_all()
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def enabled_languages() -> list[str]:
     return ["en"]
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def default_language() -> str:
     return "en"
 
