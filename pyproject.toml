@@ -18,7 +18,7 @@ combine_as_imports = true
 target-version = ["py310"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.10 <3.12"
 python-telegram-bot = {version = "*", allow-prereleases = true, extras = ["job-queue"]}
 Babel = "^2.11.0"
 SQLAlchemy = {extras = ["asyncio", "aiomysql", "aiosqlite", "postgresql_asyncpg"], version = "^1.4.45"}
@@ -41,3 +41,11 @@ bot = 'tour_guide_bot.cli:run'
 [build-system]
 requires = ["setuptools >= 40.6.0", "wheel", "poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+# pyproject.toml
+[tool.pytest.ini_options]
+filterwarnings = [
+    # Warning from past/builtins/misc, which out of our control
+    'ignore:the imp module is deprecated in favour of importlib:DeprecationWarning',
+]
+asyncio_mode = "auto"
