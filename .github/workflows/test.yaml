@@ -31,5 +31,7 @@ jobs:
           poetry install --no-interaction --no-root --no-ansi
 
       - name: Run test suite
+        env:
+          TOUR_GUIDE_TELEGRAM_BOT_TOKEN: ${{ secrets.TOUR_GUIDE_TELEGRAM_BOT_TOKEN }}
         run: |
           poetry run pytest
