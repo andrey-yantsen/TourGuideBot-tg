@@ -152,7 +152,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
             await update.callback_query.edit_message_text(
                 t(language).pgettext(
                     "admin-configure",
-                    "Audio\-to\-voice conversion suggestions are currently *enabled*\. Would you like to disable them?",
+                    r"Audio\-to\-voice conversion suggestions are currently *enabled*\. Would you like to disable them?",
                 ),
                 parse_mode=ParseMode.MARKDOWN_V2,
                 reply_markup=InlineKeyboardMarkup(
@@ -176,7 +176,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
             await update.callback_query.edit_message_text(
                 t(language).pgettext(
                     "admin-configure",
-                    "Audio\-to\-voice conversion suggestions are currently *disabled*\. Would you like to enable them?",
+                    r"Audio\-to\-voice conversion suggestions are currently *disabled*\. Would you like to enable them?",
                 ),
                 parse_mode=ParseMode.MARKDOWN_V2,
                 reply_markup=InlineKeyboardMarkup(
