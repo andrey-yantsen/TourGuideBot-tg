@@ -1,0 +1,35 @@
+name: Test
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.11"
+
+      - name: Install poetry
+        run: |
+          sh <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) -y \
+          && curl -sSL https://install.python-poetry.org | python -u -
+
+      - id: cache-poetry
+        uses: actions/cache@v1
+        with:
+          path: ~/.config/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/Pipfile.lock') }}
+
+      - name: Install dependencies
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        run: |
+          poetry install --no-interaction --no-root --no-ansi
+
+      - name: Run test suite
+        run: |
+          poetry run pytest
