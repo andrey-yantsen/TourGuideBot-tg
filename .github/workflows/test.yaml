@@ -24,5 +24,6 @@ jobs:
       - name: Run test suite
         env:
           TOUR_GUIDE_TELEGRAM_BOT_TOKEN: ${{ secrets.TOUR_GUIDE_TELEGRAM_BOT_TOKEN }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          poetry run pytest
+          poetry run pytest --cov=tour_guide_bot --codecov --codecov-slug=${{ github.repository }} --codecov-commit=${{ github.sha }}
