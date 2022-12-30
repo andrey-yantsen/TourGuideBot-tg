@@ -11,19 +11,22 @@ jobs:
 
       - name: Install poetry
         run: pipx install poetry
+
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
           cache: 'poetry'
 
       - name: Install dependencies
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
-        run: |
-          poetry install --no-interaction --no-root --no-ansi
+        run: poetry install --no-interaction --no-root --no-ansi
 
       - name: Run test suite
         env:
           TOUR_GUIDE_TELEGRAM_BOT_TOKEN: ${{ secrets.TOUR_GUIDE_TELEGRAM_BOT_TOKEN }}
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          poetry run pytest --cov=tour_guide_bot --codecov --codecov-slug=${{ github.repository }} --codecov-commit=${{ github.sha }}
+          poetry run pytest --cov=tour_guide_bot --cov-report=xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
