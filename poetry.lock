@@ -330,14 +330,14 @@ toml = ["tomli"]
 
 [[package]]
 name = "dateparser"
-version = "1.1.5"
+version = "1.1.6"
 description = "Date parsing library designed to parse dates from HTML pages"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "dateparser-1.1.5-py2.py3-none-any.whl", hash = "sha256:ceb159f1b4a9df54ed6209e91298097deafde476037f8611b4cb2b1cb8b31c58"},
-    {file = "dateparser-1.1.5.tar.gz", hash = "sha256:107f3cc87a60770e10d111349adc1504224a6b60753a47a64b0ec842ab85b5a9"},
+    {file = "dateparser-1.1.6-py2.py3-none-any.whl", hash = "sha256:c47b6e4b8c4b2b2a21690111b6571b6991295ba327ec6503753abeebf5e80696"},
+    {file = "dateparser-1.1.6.tar.gz", hash = "sha256:e703db1815270c020552f4b3e3a981937b48b2cbcfcef5347071b74788dd9214"},
 ]
 
 [package.dependencies]
@@ -1230,4 +1230,4 @@ test = ["pytest (>=4.3)", "pytest-mock (>=3.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10 <3.12"
-content-hash = "34ee6f9dda26732bbe60dc59281afd67123655357fd3713fddda3bf0920490c1"
+content-hash = "a6a6217082f4c8f7de4e98a62ec3509e425a10f7452db869707a03bb563443f2"
