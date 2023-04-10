@@ -52,12 +52,11 @@ async def db_engine(persistence_path):
             "test.db",
         )
     ).connect() as connection:
-        Base.metadata.bind = connection
-        Base.metadata.create_all()
+        Base.metadata.create_all(connection)
 
         yield engine
 
-        Base.metadata.drop_all()
+        Base.metadata.drop_all(connection)
 
 
 @pytest.fixture(scope="session")
