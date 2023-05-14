@@ -8,9 +8,9 @@ viewable over Telegram.
 At this moment you need to manually approve users for your tours using the
 admin-mode in the bot.
 
-# Bot commands
+## Bot commands
 
-## Guide mode (default)
+### Guide mode (default)
 
 * `/start` — initialize the bot. It will greet you, ask for the phone number
              and check if you have any tours approved.
@@ -18,7 +18,7 @@ admin-mode in the bot.
 * `/language` - change the interface language.
 * `/admin` — switch to the admin mode.
 
-## Admin mode
+### Admin mode
 
 * `/guest` — exit the admin mode.
 * `/language` - change the interface language.
@@ -27,15 +27,15 @@ admin-mode in the bot.
 * `/approve` — allow somebody to access a tour.
 * `/revoke` — revoke access to a tour.
 
-# Running
+## Running
 
-## Preparation
+### Preparation
 
 First of all you need to register a bot with [BotFather](https://t.me/BotFather).
 
 Have the received token ready and don't share it anywhere.
 
-## Database
+### Database
 
 The easiest way to run the bot is by using a sqlite3 database, but it's not
 recommended if you expect multiple users at the same time. The example of
@@ -45,10 +45,10 @@ Keep in mind, that the database connection URL must be in the SQLAlchemy format
 see the [documentation](https://docs.sqlalchemy.org/en/14/core/engines.html#database-urls) for further details. Also note that you need to provide
 an async dialect for the connection, e.g. aiosqlite or asyncpg.
 
-## Simplest way to run (recommended only for development or testing purposes)
+### Simplest way to run (recommended only for development or testing purposes)
 
-```
-$ docker run --restart=unless-stopped -d \
+```shell
+docker run --restart=unless-stopped -d \
     -v $(pwd)/persistent:/home/tg/app/persistent \
     ghcr.io/andrey-yantsen/tourguidebot-tg:latest \
         -g <telegram_bot_token> \
@@ -60,7 +60,7 @@ Do not forget to replace `<telegram_bot_token>` with the correct token value.
 This command will start a single process for both admin_bot and guide_bot.
 This may cause delays in processing requests on high load.
 
-## Recommended way
+### Recommended way
 
 Copy included `docker-compose.yml.example` into `docker-compose.yml`, and
 replace `<telegram_bot_token>` with the correct token value.
@@ -68,6 +68,29 @@ replace `<telegram_bot_token>` with the correct token value.
 After that, you should be able to start everything required with the following
 command:
 
-```
+```shell
 docker-compose up
 ```
+
+## Contributing
+
+In order to run the tests you'll need to have:
+
+* A telegram bot token
+* A telegram app api_id and api_hash (from https://my.telegram.org/apps)
+* A session string for the app; you can get one by executing the code below:
+
+```python
+from telethon import TelegramClient
+from telethon.sessions import StringSession
+
+
+api_id = "YOUR API ID"
+api_hash = "YOUR API HASH"
+
+
+with TelegramClient(StringSession(), api_id, api_hash) as client:
+    print("Session string:", client.session.save())
+```
+
+Thanks to [ShallowDepth](https://shallowdepth.online/posts/2021/12/end-to-end-tests-for-telegram-bots/) for the instructions.

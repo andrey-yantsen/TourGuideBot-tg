@@ -51,6 +51,9 @@ jobs:
       - name: Run test suite
         env:
           TOUR_GUIDE_TELEGRAM_BOT_TOKEN: ${{ secrets.TOUR_GUIDE_TELEGRAM_BOT_TOKEN }}
+          TOUR_GUIDE_TELEGRAM_APP_SESSION_STRING: ${{ secrets.TOUR_GUIDE_TELEGRAM_APP_SESSION_STRING }}
+          TOUR_GUIDE_TELEGRAM_APP_API_ID: ${{ secrets.TOUR_GUIDE_TELEGRAM_APP_API_ID }}
+          TOUR_GUIDE_TELEGRAM_APP_API_HASH: ${{ secrets.TOUR_GUIDE_TELEGRAM_APP_API_HASH }}
         run: |
           poetry run pytest --cov=tour_guide_bot --cov-report=xml
 
