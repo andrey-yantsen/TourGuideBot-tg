@@ -1,9 +1,7 @@
-import asyncio
 from os import environ
+from pathlib import Path
 
 import pytest
-import pytest_asyncio
-from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import create_async_engine
 from telegram.ext import ContextTypes
 
@@ -20,44 +18,33 @@ def bot_token() -> str:
     return token
 
 
-@pytest.fixture(scope="session")
-def persistence_path(tmp_path_factory: pytest.TempPathFactory) -> str:
-    return str(tmp_path_factory.mktemp("persistence"))
+@pytest.fixture(scope="function")
+def persistence_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    return tmp_path_factory.mktemp("persistence")
 
 
-@pytest.fixture(scope="session")
-def event_loop():
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
+@pytest.fixture
+def test_db_file(persistence_path: Path) -> Path:
+    return persistence_path.joinpath("test.db")
 
 
-@pytest.fixture(scope="session")
-async def db_engine(persistence_path):
+@pytest.fixture
+async def db_engine(test_db_file: Path):
     from tour_guide_bot.models import Base
     import tour_guide_bot.models.admin as _  # noqa: F811, F401
     import tour_guide_bot.models.guide as _  # noqa: F811, F401
     import tour_guide_bot.models.settings as _  # noqa: F811, F401
     import tour_guide_bot.models.telegram as _  # noqa: F811, F401
 
-    engine = create_async_engine(
-        "sqlite+aiosqlite:///{}/{}".format(
-            persistence_path,
-            "test.db",
-        )
-    )
+    engine = create_async_engine("sqlite+aiosqlite:///{}".format(test_db_file))
 
-    with create_engine(
-        "sqlite:///{}/{}".format(
-            persistence_path,
-            "test.db",
-        )
-    ).connect() as connection:
-        Base.metadata.create_all(connection)
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
 
-        yield engine
+    yield engine
 
-        Base.metadata.drop_all(connection)
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.drop_all)
 
 
 @pytest.fixture(scope="session")
@@ -75,11 +62,11 @@ def unintialized_app(
     bot_token, db_engine, enabled_languages, default_language, persistence_path
 ) -> Application:
     return prepare_app(
-        bot_token, db_engine, enabled_languages, default_language, persistence_path
+        bot_token, db_engine, enabled_languages, default_language, str(persistence_path)
     )
 
 
-@pytest_asyncio.fixture
+@pytest.fixture
 async def app(unintialized_app: Application) -> Application:
     await unintialized_app.initialize()
     return unintialized_app
@@ -101,12 +88,12 @@ def unitialized_test_app(
         db_engine,
         enabled_languages,
         default_language,
-        persistence_path,
+        str(persistence_path),
         TestApplication,
     )
 
 
-@pytest_asyncio.fixture
+@pytest.fixture
 async def test_app(test_unitialized_app: TestApplication) -> TestApplication:
     await test_unitialized_app.initialize()
     return test_unitialized_app
