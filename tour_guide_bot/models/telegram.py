@@ -2,8 +2,8 @@ from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func
 from sqlalchemy.orm import relationship
 
 from . import Base
-from .admin import Admin as _
-from .guide import Guest as _
+from .admin import Admin as _  # noqa: F401, F811
+from .guide import Guest as _  # noqa: F401, F811
 
 
 class TelegramUser(Base):

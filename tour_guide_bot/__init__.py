@@ -5,12 +5,12 @@ import os
 log = logging.getLogger(__package__)
 
 __translations = {}
-fallback_locale = "en"
+__fallback_locale = "en"
 
 
 def set_fallback_locale(locale: str):
-    global fallback_locale
-    fallback_locale = locale
+    global __fallback_locale
+    __fallback_locale = locale
 
 
 def t(locale: str | None = None) -> gettext.NullTranslations:
@@ -20,7 +20,7 @@ def t(locale: str | None = None) -> gettext.NullTranslations:
     if locale is None:
         languages = None
     else:
-        languages = [locale, fallback_locale, "en"]
+        languages = [locale, __fallback_locale, "en"]
 
     __translations[locale] = gettext.translation(
         __package__,

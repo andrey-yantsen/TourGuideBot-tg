@@ -1,5 +1,3 @@
-from re import M
-
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
@@ -15,7 +13,6 @@ from telegram.ext import (
 from tour_guide_bot import t
 from tour_guide_bot.bot.admin import log
 from tour_guide_bot.bot.admin.tour.add_content import AddContentCommandHandler
-from tour_guide_bot.bot.admin.tour.edit import handlers as edit_handlers
 from tour_guide_bot.helpers.telegram import (
     AdminProtectedBaseHandlerCallback,
     get_tour_title,

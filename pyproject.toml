@@ -34,6 +34,7 @@ black = "^23.3.0"
 isort = "^5.12.0"
 pytest-asyncio = "^0.21.0"
 pytest-cov = "^4.0.0"
+ruff = "^0.0.267"
 
 [tool.poetry.scripts]
 bot = 'tour_guide_bot.cli:run'
@@ -49,3 +50,6 @@ filterwarnings = [
     'ignore:the imp module is deprecated in favour of importlib:DeprecationWarning',
 ]
 asyncio_mode = "auto"
+
+[tool.ruff]
+ignore = ["E"]

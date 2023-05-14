@@ -109,9 +109,9 @@ def run():
     else:
         log_format = "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s"
 
-    lh = logging.StreamHandler(sys.stdout)
-    lh.setFormatter(logging.Formatter(log_format, datefmt="%Y-%m-%d %H:%M:%S"))
-    log.addHandler(lh)
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(logging.Formatter(log_format, datefmt="%Y-%m-%d %H:%M:%S"))
+    log.addHandler(handler)
 
     engine = create_async_engine(args.db)
 
