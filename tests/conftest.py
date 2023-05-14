@@ -3,7 +3,6 @@ from pathlib import Path
 
 import pytest
 from sqlalchemy.ext.asyncio import create_async_engine
-from telegram.ext import ContextTypes
 
 from tour_guide_bot.bot.app import Application
 from tour_guide_bot.cli import prepare_app
@@ -58,42 +57,16 @@ def default_language() -> str:
 
 
 @pytest.fixture
-def unintialized_app(
+def unitialized_app(
     bot_token, db_engine, enabled_languages, default_language, persistence_path
 ) -> Application:
-    return prepare_app(
+    app = prepare_app(
         bot_token, db_engine, enabled_languages, default_language, str(persistence_path)
     )
+    return app
 
 
 @pytest.fixture
-async def app(unintialized_app: Application) -> Application:
-    await unintialized_app.initialize()
-    return unintialized_app
-
-
-class TestApplication(Application):
-    async def check_new_approved_tours(
-        self, context: ContextTypes.DEFAULT_TYPE
-    ) -> None:
-        pass
-
-
-@pytest.fixture
-def unitialized_test_app(
-    bot_token, db_engine, enabled_languages, default_language, persistence_path
-) -> TestApplication:
-    return prepare_app(
-        bot_token,
-        db_engine,
-        enabled_languages,
-        default_language,
-        str(persistence_path),
-        TestApplication,
-    )
-
-
-@pytest.fixture
-async def test_app(test_unitialized_app: TestApplication) -> TestApplication:
-    await test_unitialized_app.initialize()
-    return test_unitialized_app
+async def app(unitialized_app: Application) -> Application:
+    await unitialized_app.initialize()
+    return unitialized_app
