@@ -2,6 +2,7 @@ import asyncio
 from os import environ
 
 import pytest
+import pytest_asyncio
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import create_async_engine
 from telegram.ext import ContextTypes
@@ -12,11 +13,11 @@ from tour_guide_bot.cli import prepare_app
 
 @pytest.fixture(scope="session")
 def bot_token() -> str:
-    bot_token = environ.get("TOUR_GUIDE_TELEGRAM_BOT_TOKEN")
+    token = environ.get("TOUR_GUIDE_TELEGRAM_BOT_TOKEN")
     assert (
-        bot_token
+        token
     ), "Please set the telegram bot token via TOUR_GUIDE_TELEGRAM_BOT_TOKEN env variable"
-    return bot_token
+    return token
 
 
 @pytest.fixture(scope="session")
@@ -34,10 +35,10 @@ def event_loop():
 @pytest.fixture(scope="session")
 async def db_engine(persistence_path):
     from tour_guide_bot.models import Base
-    import tour_guide_bot.models.admin as _
-    import tour_guide_bot.models.guide as _
-    import tour_guide_bot.models.settings as _
-    import tour_guide_bot.models.telegram as _
+    import tour_guide_bot.models.admin as _  # noqa: F811, F401
+    import tour_guide_bot.models.guide as _  # noqa: F811, F401
+    import tour_guide_bot.models.settings as _  # noqa: F811, F401
+    import tour_guide_bot.models.telegram as _  # noqa: F811, F401
 
     engine = create_async_engine(
         "sqlite+aiosqlite:///{}/{}".format(
@@ -70,10 +71,18 @@ def default_language() -> str:
 
 
 @pytest.fixture
-def app(bot_token, db_engine, enabled_languages, default_language, persistence_path):
+def unintialized_app(
+    bot_token, db_engine, enabled_languages, default_language, persistence_path
+) -> Application:
     return prepare_app(
         bot_token, db_engine, enabled_languages, default_language, persistence_path
     )
+
+
+@pytest_asyncio.fixture
+async def app(unintialized_app: Application) -> Application:
+    await unintialized_app.initialize()
+    return unintialized_app
 
 
 class TestApplication(Application):
@@ -84,9 +93,9 @@ class TestApplication(Application):
 
 
 @pytest.fixture
-def test_app(
+def unitialized_test_app(
     bot_token, db_engine, enabled_languages, default_language, persistence_path
-):
+) -> TestApplication:
     return prepare_app(
         bot_token,
         db_engine,
@@ -95,3 +104,9 @@ def test_app(
         persistence_path,
         TestApplication,
     )
+
+
+@pytest_asyncio.fixture
+async def test_app(test_unitialized_app: TestApplication) -> TestApplication:
+    await test_unitialized_app.initialize()
+    return test_unitialized_app
