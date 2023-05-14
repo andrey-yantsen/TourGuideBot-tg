@@ -91,7 +91,7 @@ async def db_engine(test_db_file: Path):
 
 @pytest.fixture(scope="session")
 def enabled_languages() -> list[str]:
-    return ["en"]
+    return ["en", "ru"]
 
 
 @pytest.fixture(scope="session")
@@ -171,8 +171,6 @@ async def conversation(telegram_client: TelegramClient, bot_id: int):
     async with telegram_client.conversation(
         bot_id, timeout=10, max_messages=10000
     ) as conv:
-        conv: Conversation
-
         yield conv
 
 
@@ -206,7 +204,7 @@ async def guest(
         session.add(telegram_user)
         await session.commit()
 
-        yield guest
+        return guest
 
 
 @pytest.fixture
@@ -225,7 +223,21 @@ async def admin(
         session.add(telegram_user)
         await session.commit()
 
-        yield admin
+        return admin
+
+
+@pytest.fixture
+async def admin_conversation(conversation: Conversation, app, admin):
+    await conversation.send_message("/admin")
+    response = await conversation.get_response()
+
+    assert (
+        "Welcome to the admin mode" in response.message
+    ), "Unexpected message in response to the admin mode switch"
+
+    await asyncio.sleep(0.5)
+
+    yield conversation
 
 
 async def get_phone_number_request(conversation: Conversation):

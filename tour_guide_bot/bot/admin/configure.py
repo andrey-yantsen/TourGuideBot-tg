@@ -241,6 +241,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
 
         user = await self.get_user(update, context)
 
+        await update.callback_query.answer("")
         await update.callback_query.edit_message_text(
             t(user.language).pgettext(
                 "admin-configure",
@@ -282,6 +283,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         welcome_message = await self.db_session.scalar(stmt)
 
         if welcome_message:
+            await update.callback_query.answer("")
             await update.callback_query.edit_message_text(
                 t(user.language).pgettext(
                     "admin-configure",
@@ -296,6 +298,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                 parse_mode=ParseMode.MARKDOWN_V2,
             )
         else:
+            await update.callback_query.answer("")
             await update.callback_query.edit_message_text(
                 t(user.language).pgettext(
                     "admin-configure",
