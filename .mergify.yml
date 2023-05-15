@@ -1,0 +1,22 @@
+pull_request_rules:
+  - name: Mark for the tests on approval
+    conditions:
+      - "#approved-reviews-by>=1"
+    actions:
+      label:
+        add: ["S-Run-Protected-Tests"]
+  - name: Mark for the tests PRs from dependabot
+    conditions:
+      - "author=dependabot[bot]"
+    actions:
+      label:
+        add: ["S-Run-Protected-Tests"]
+  - name: Merge approved and tested
+    conditions:
+      - or:
+        - "#approved-reviews-by>=1"
+        - "author=dependabot[bot]"
+      - check-success=Run tests (3.10, ubuntu-latest)
+    actions:
+      queue:
+        name: default
