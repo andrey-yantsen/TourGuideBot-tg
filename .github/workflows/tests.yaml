@@ -1,0 +1,63 @@
+name: Run the tests
+
+on:
+  push:
+    branches-ignore:
+      - 'l10n_main'
+      - 'dependabot/**'
+    tags:
+      - 'v*'
+  pull_request_target:
+    branches:
+      - 'main'
+    types:
+      - 'labeled'
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Run tests
+
+    if: "!github.event.pull_request_target || github.event.pull_request_target.label.name == 'S-Run-Protected-Tests'"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.10"
+        os:
+          - ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'poetry'
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root --no-ansi
+
+      - name: Run test suite
+        env:
+          TOUR_GUIDE_TELEGRAM_BOT_TOKEN: ${{ secrets.TOUR_GUIDE_TELEGRAM_BOT_TOKEN }}
+          TOUR_GUIDE_TELEGRAM_APP_SESSION_STRING: ${{ secrets.TOUR_GUIDE_TELEGRAM_APP_SESSION_STRING }}
+          TOUR_GUIDE_TELEGRAM_APP_API_ID: ${{ secrets.TOUR_GUIDE_TELEGRAM_APP_API_ID }}
+          TOUR_GUIDE_TELEGRAM_APP_API_HASH: ${{ secrets.TOUR_GUIDE_TELEGRAM_APP_API_HASH }}
+        run: |
+          poetry run pytest --cov=tour_guide_bot --cov-report=xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
