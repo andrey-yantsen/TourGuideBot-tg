@@ -1,4 +1,5 @@
 import pytest
+from telethon.events import MessageEdited
 from telethon.tl.custom import Message
 from telethon.tl.custom.conversation import Conversation
 from telethon.tl.types.messages import BotCallbackAnswer
@@ -27,6 +28,7 @@ async def test_multiple_languages(conversation: Conversation):
     assert isinstance(
         response, BotCallbackAnswer
     ), "BotCallbackAnswer didn't arrive after the inline button click"
+    await conversation.wait_event(MessageEdited())
 
     await conversation.send_message("/language")
     response: Message = await conversation.get_response()
