@@ -30,7 +30,7 @@ async def test_multiple_languages(conversation: Conversation):
         response, BotCallbackAnswer
     ), "BotCallbackAnswer didn't arrive after the inline button click"
 
-    await sleep(0.5)
+    await sleep(2)
 
     await conversation.send_message("/language")
     response: Message = await conversation.get_response()
