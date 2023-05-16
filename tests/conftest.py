@@ -160,8 +160,6 @@ async def telegram_client(
     await client.get_me()
     await client.get_dialogs()
 
-    client.add_event_handler(print)
-
     yield client
 
     await client.disconnect()
