@@ -112,6 +112,7 @@ class TourSectionContent(Base):
 
     id = Column(Integer, primary_key=True)
     tour_section_id = Column(Integer, ForeignKey("tour_section.id"), nullable=False)
+    tour_section = relationship("TourSection", back_populates="content")
     position = Column(SmallInteger, nullable=False)
     message_type = Column(Enum(MessageType), nullable=False)
     media_group_id = Column(String)
