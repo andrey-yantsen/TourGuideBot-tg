@@ -1,10 +1,12 @@
+import pytest
 from telethon.tl.custom import Message
 from telethon.tl.custom.conversation import Conversation
 
 from .conftest import get_phone_number_request
 
 
-async def test_success_auth_flow(conversation: Conversation, app):
+@pytest.mark.usefixtures("app")
+async def test_success_auth_flow(conversation: Conversation):
     await conversation.send_message("/start")
     response: Message = await conversation.get_response()
     assert (

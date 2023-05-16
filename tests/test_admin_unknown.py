@@ -1,12 +1,12 @@
+import pytest
 from telethon.tl.custom import Message
 from telethon.tl.custom.conversation import Conversation
 
 from .conftest import get_phone_number_request
 
 
-async def test_success_auth_flow_configured_app(
-    conversation: Conversation, app, bot_token
-):
+@pytest.mark.usefixtures("app")
+async def test_success_auth_flow_configured_app(conversation: Conversation, bot_token):
     await conversation.send_message("/admin")
     response: Message = await get_phone_number_request(conversation)
     await response.click(0, share_phone=True)
@@ -25,8 +25,9 @@ async def test_success_auth_flow_configured_app(
     ), "Unexpected message in response to the secret phrase"
 
 
+@pytest.mark.usefixtures("unconfigured_app")
 async def test_success_auth_flow_unconfigured_app(
-    conversation: Conversation, unconfigured_app, bot_token
+    conversation: Conversation, bot_token
 ):
     await conversation.send_message("/admin")
     response: Message = await get_phone_number_request(conversation)

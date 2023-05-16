@@ -9,9 +9,10 @@ from telethon.tl.types.messages import BotCallbackAnswer
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 
+@pytest.mark.usefixtures("app", "guest")
 @pytest.mark.enabled_languages(["en"])
 async def test_change_welcome_message_single_language(
-    admin_conversation: Conversation, db_engine: AsyncEngine, app, guest
+    admin_conversation: Conversation, db_engine: AsyncEngine
 ):
     conversation = admin_conversation
     await conversation.send_message("/configure")
@@ -66,9 +67,10 @@ async def test_change_welcome_message_single_language(
         assert welcome_ru is None
 
 
+@pytest.mark.usefixtures("app", "guest")
 @pytest.mark.enabled_languages(["en", "ru"])
 async def test_change_welcome_message_multiple_language(
-    admin_conversation: Conversation, db_engine: AsyncEngine, app, guest
+    admin_conversation: Conversation, db_engine: AsyncEngine
 ):
     conversation = admin_conversation
     await conversation.send_message("/configure")

@@ -4,8 +4,9 @@ from telethon.tl.custom.conversation import Conversation
 from telethon.tl.types.messages import BotCallbackAnswer
 
 
+@pytest.mark.usefixtures("app", "guest")
 @pytest.mark.enabled_languages(["en"])
-async def test_single_language(conversation: Conversation, app, guest):
+async def test_single_language(conversation: Conversation):
     await conversation.send_message("/language")
     response: Message = await conversation.get_response()
     assert (
@@ -13,8 +14,9 @@ async def test_single_language(conversation: Conversation, app, guest):
     ), "Unexpected response to the language switch from a bot that support only one language"
 
 
+@pytest.mark.usefixtures("app", "guest")
 @pytest.mark.enabled_languages(["en", "ru"])
-async def test_multiple_languages(conversation: Conversation, app, guest):
+async def test_multiple_languages(conversation: Conversation):
     await conversation.send_message("/language")
     response: Message = await conversation.get_response()
     assert (

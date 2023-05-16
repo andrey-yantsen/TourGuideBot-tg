@@ -164,7 +164,6 @@ async def telegram_client(
 
     await client.disconnect()
     await client.disconnected
-    await asyncio.sleep(0.5)  # force delay between tests
 
 
 @pytest.fixture(scope="session")
