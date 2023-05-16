@@ -48,6 +48,10 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction --no-root --no-ansi
 
+      - name: Compile translations
+        run: |
+          poetry run pybabel compile --domain=tour_guide_bot --directory=tour_guide_bot/locales
+
       - name: Run test suite
         env:
           TOUR_GUIDE_TELEGRAM_BOT_TOKEN: ${{ secrets.TOUR_GUIDE_TELEGRAM_BOT_TOKEN }}
