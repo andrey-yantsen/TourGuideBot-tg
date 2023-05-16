@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2023-05-14 22:36\n"
+"PO-Revision-Date: 2023-05-16 22:15\n"
 
 #: tour_guide_bot/cli.py:48
 msgctxt "cli"
@@ -732,22 +732,22 @@ msgctxt "guide-tour"
 msgid "Please select a tour you want to start."
 msgstr "Пожалуйста, выберите экскурсию, которую вы хотите начать."
 
-#: tour_guide_bot/helpers/language.py:32
+#: tour_guide_bot/helpers/language.py:33
 msgctxt "any-bot"
 msgid "The language has been changed to {0}."
 msgstr "Язык был изменён на {0}."
 
-#: tour_guide_bot/helpers/language.py:39
+#: tour_guide_bot/helpers/language.py:40
 msgctxt "any-bot"
 msgid "Something went wrong, please try again."
 msgstr "Что-то пошло не так. Пожалуйста, попытайтесь еще раз."
 
-#: tour_guide_bot/helpers/language.py:49
+#: tour_guide_bot/helpers/language.py:50
 msgctxt "any-bot"
 msgid "Unfortunately, you can`t change the language — this bot supports only one."
 msgstr "К сожалению, вы не можете изменить язык — этот бот поддерживает только один."
 
-#: tour_guide_bot/helpers/language.py:56
+#: tour_guide_bot/helpers/language.py:57
 msgctxt "any-bot"
 msgid "Please select the language you prefer"
 msgstr "Пожалуйста, выберите предпочитаемый язык"
