@@ -133,6 +133,8 @@ async def unconfigured_app(unitialized_app: Application):
     await unitialized_app.updater.stop()
     await unitialized_app.stop()
 
+    await asyncio.sleep(0.5)
+
 
 @pytest.fixture
 async def app(unconfigured_app: Application, db_engine: AsyncEngine):
