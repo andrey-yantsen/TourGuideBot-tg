@@ -89,12 +89,18 @@ async def db_engine(test_db_file: Path):
     yield engine
 
 
-@pytest.fixture(scope="session")
-def enabled_languages() -> list[str]:
-    return ["en", "ru"]
+@pytest.fixture
+def enabled_languages(request: pytest.FixtureRequest) -> list[str]:
+    marker = request.node.get_closest_marker("enabled_languages")
+    if marker is None:
+        data = ["en", "ru"]
+    else:
+        data = marker.args[0]
+
+    return data
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def default_language() -> str:
     return "en"
 

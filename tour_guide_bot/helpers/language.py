@@ -27,6 +27,7 @@ class LanguageHandler(BaseHandlerCallback):
             self.db_session.add(user)
             await self.db_session.commit()
 
+            await update.callback_query.answer()
             await update.callback_query.edit_message_text(
                 t(required_language)
                 .pgettext("any-bot", "The language has been changed to {0}.")
