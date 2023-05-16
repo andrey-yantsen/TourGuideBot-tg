@@ -60,4 +60,4 @@ async def test_accepts_only_current_contact(conversation: Conversation):
     response: Message = await conversation.get_response()
     assert (
         "Please send me your contact number and not somebody else's" in response.message
-    ), "Unexpected response to sanding a random contact"
+    ), "Unexpected response to sending a random contact"
