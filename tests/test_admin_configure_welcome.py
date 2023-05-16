@@ -33,7 +33,7 @@ async def test_change_welcome_message(admin_conversation: Conversation, app):
         "The bot currently has the following welcome message" in msg.message
     ), "Unexpected message after selecting the language"
 
-    current_welcome_message = await conversation.get_response()
+    current_welcome_message: Message = await conversation.get_response()
 
     assert (
         current_welcome_message.message == "welcome"
