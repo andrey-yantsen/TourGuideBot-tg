@@ -9,7 +9,7 @@ from tour_guide_bot.models.guide import MessageType
 
 @pytest.mark.approved_tour_ids(1)
 @pytest.mark.usefixtures("app", "guest", "approved_tours")
-async def test_single_tour(conversation: Conversation, default_tour: dict):
+async def test_single_tour(conversation: Conversation, tours_as_dicts: list[dict]):
     await conversation.send_message("/start")
     response: Message = await conversation.get_response()
     assert (
@@ -24,10 +24,10 @@ async def test_single_tour(conversation: Conversation, default_tour: dict):
     await conversation.send_message("/tours")
     response: Message = await conversation.get_response()
     assert (
-        "One tour available for you: %s" % (default_tour["en"]["title"])
+        "One tour available for you: %s" % (tours_as_dicts[0]["en"]["title"])
     ) in response.message, "Unexpected response to /tours"
 
-    for content in default_tour["en"]["sections"][0]["content"]:
+    for content in tours_as_dicts[0]["en"]["sections"][0]["content"]:
         response: Message = await conversation.get_response()
 
         match content["type"]:
@@ -110,7 +110,7 @@ async def test_single_tour(conversation: Conversation, default_tour: dict):
     },
 )
 @pytest.mark.usefixtures("app", "guest", "approved_tours")
-async def test_multiple_tours(conversation: Conversation):
+async def test_multiple_tours(conversation: Conversation, tours_as_dicts: list[dict]):
     await conversation.send_message("/start")
     response: Message = await conversation.get_response()
     assert (
@@ -126,12 +126,15 @@ async def test_multiple_tours(conversation: Conversation):
     response: Message = await conversation.get_response()
     assert "Please select a tour you want to start." == response.message
 
-    response = await response.click(text="Test tour 2")
+    response = await response.click(text=tours_as_dicts[1]["en"]["title"])
     assert isinstance(response, BotCallbackAnswer)
 
     response: Message = await conversation.get_response()
     assert (
-        "Test text 2.1.1" == response.message
+        tours_as_dicts[1]["en"]["sections"][0]["content"][0]["content"]["text"].replace(
+            r"\.", "."
+        )
+        == response.message
     ), "Unexpected first section of the tour 2"
 
     response: Message = await conversation.get_response()
@@ -194,7 +197,9 @@ async def test_multiple_tours(conversation: Conversation):
     },
 )
 @pytest.mark.usefixtures("app", "guest", "approved_tours")
-async def test_multiple_tours_one_approved(conversation: Conversation):
+async def test_multiple_tours_one_approved(
+    conversation: Conversation, tours_as_dicts: list[dict]
+):
     await conversation.send_message("/start")
     response: Message = await conversation.get_response()
     assert (
@@ -209,12 +214,15 @@ async def test_multiple_tours_one_approved(conversation: Conversation):
     await conversation.send_message("/tours")
     response: Message = await conversation.get_response()
     assert (
-        "One tour available for you: Test tour 2"
+        "One tour available for you: %s" % tours_as_dicts[1]["en"]["title"]
     ) in response.message, "Unexpected response to /tours"
 
     response: Message = await conversation.get_response()
     assert (
-        "Test text 2.1.1" == response.message
+        tours_as_dicts[1]["en"]["sections"][0]["content"][0]["content"]["text"].replace(
+            r"\.", "."
+        )
+        == response.message
     ), "Unexpected first section of the tour 2"
 
     response: Message = await conversation.get_response()

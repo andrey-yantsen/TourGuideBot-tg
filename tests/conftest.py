@@ -142,25 +142,29 @@ def default_tour() -> dict:
 
 
 @pytest.fixture
-async def tours(
-    request: pytest.FixtureRequest,
-    db_engine: AsyncEngine,
-    default_tour: dict,
-    conversation: Conversation,
-    guest,
-) -> list[Tour]:
+async def tours_as_dicts(request: pytest.FixtureRequest, default_tour: dict) -> dict:
     marker = request.node.get_closest_marker("tours")
     if marker is None:
         tours = [default_tour]
     else:
         tours = marker.args
 
+    return tours
+
+
+@pytest.fixture
+async def tours(
+    db_engine: AsyncEngine,
+    tours_as_dicts: dict,
+    conversation: Conversation,
+    guest,
+) -> list[Tour]:
     cached_files = {}
 
     ret = []
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
-        for tour in tours:
+        for tour in tours_as_dicts:
             tour_model = Tour()
             session.add(tour_model)
 
