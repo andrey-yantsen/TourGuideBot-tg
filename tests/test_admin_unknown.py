@@ -1,3 +1,5 @@
+from asyncio import sleep
+
 import pytest
 from telethon.tl.custom import Message
 from telethon.tl.custom.conversation import Conversation
@@ -11,6 +13,7 @@ async def test_success_auth_flow_configured_app(conversation: Conversation, bot_
     await conversation.send_message("/admin")
     response: Message = await get_phone_number_request(conversation)
     await response.click(0, share_phone=True)
+    await sleep(0.2)
 
     response: Message = await conversation.get_response()
     assert (
@@ -33,6 +36,7 @@ async def test_success_auth_flow_unconfigured_app(
     await conversation.send_message("/admin")
     response: Message = await get_phone_number_request(conversation)
     await response.click(0, share_phone=True)
+    await sleep(0.2)
 
     response: Message = await conversation.get_response()
     assert (

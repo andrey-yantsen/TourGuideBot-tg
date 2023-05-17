@@ -1,3 +1,5 @@
+from asyncio import sleep
+
 import pytest
 from telethon.events import MessageEdited
 from telethon.tl.custom import Message
@@ -29,6 +31,7 @@ async def test_multiple_languages(conversation: Conversation):
         response, BotCallbackAnswer
     ), "BotCallbackAnswer didn't arrive after the inline button click"
     await conversation.wait_event(MessageEdited())
+    await sleep(0.2)
 
     await conversation.send_message("/language")
     response: Message = await conversation.get_response()

@@ -151,7 +151,7 @@ async def app(unconfigured_app: Application, db_engine: AsyncEngine):
 @pytest.fixture(scope="session")
 async def telegram_client(
     mtproto_api_id: str, mtproto_api_hash: str, mtproto_session_string: StringSession
-) -> TelegramClient:
+):
     client = TelegramClient(
         mtproto_session_string,
         mtproto_api_id,
@@ -173,12 +173,28 @@ def bot_id(bot_token: str) -> int:
     return int(bot_token.split(":")[0])
 
 
+class ConversationWrapper:
+    def __init__(self, wrappee: Conversation):
+        self.wrappee = wrappee
+
+    def __getattr__(self, attr):
+        return getattr(self.wrappee, attr)
+
+    async def send_message(self, *args, **kwargs):
+        await self.wrappee.send_message(*args, **kwargs)
+        await asyncio.sleep(0.2)
+
+    async def send_file(self, *args, **kwargs):
+        await self.wrappee.send_file(*args, **kwargs)
+        await asyncio.sleep(0.2)
+
+
 @pytest.fixture(scope="session")
 async def conversation(telegram_client: TelegramClient, bot_id: int):
     async with telegram_client.conversation(
         bot_id, timeout=10, max_messages=10000
     ) as conv:
-        yield conv
+        yield ConversationWrapper(conv)
 
 
 async def get_telegram_user(
