@@ -133,7 +133,7 @@ async def unconfigured_app(unitialized_app: Application):
     await unitialized_app.updater.stop()
     await unitialized_app.stop()
 
-    await asyncio.sleep(0.5)
+    await asyncio.sleep(2)
 
 
 @pytest.fixture
@@ -157,6 +157,7 @@ async def telegram_client(
         mtproto_api_id,
         mtproto_api_hash,
         sequential_updates=True,
+        flood_sleep_threshold=60,
     )
     await client.connect()
     await client.get_me()
@@ -181,12 +182,19 @@ class ConversationWrapper:
         return getattr(self.wrappee, attr)
 
     async def send_message(self, *args, **kwargs):
-        await self.wrappee.send_message(*args, **kwargs)
-        await asyncio.sleep(0.2)
+        ret = await self.wrappee.send_message(*args, **kwargs)
+        await asyncio.sleep(1)
+        return ret
 
     async def send_file(self, *args, **kwargs):
-        await self.wrappee.send_file(*args, **kwargs)
-        await asyncio.sleep(0.2)
+        ret = await self.wrappee.send_file(*args, **kwargs)
+        await asyncio.sleep(1)
+        return ret
+
+    async def wait_event(self, event, *, timeout=None):
+        ret = await self.wrappee.wait_event(event, timeout=timeout)
+        await asyncio.sleep(1)
+        return ret
 
 
 @pytest.fixture(scope="session")

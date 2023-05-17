@@ -1,5 +1,3 @@
-from asyncio import sleep
-
 import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
@@ -30,7 +28,6 @@ async def test_change_welcome_message_single_language(
     ), "BotCallbackAnswer didn't arrive after the inline button click"
 
     event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    await sleep(0.2)
     msg: Message = event.message
 
     assert (
@@ -89,7 +86,6 @@ async def test_change_welcome_message_multiple_language(
     ), "BotCallbackAnswer didn't arrive after the inline button click"
 
     event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    await sleep(0.2)
     msg: Message = event.message
 
     response = await msg.click(text="English")
@@ -98,7 +94,6 @@ async def test_change_welcome_message_multiple_language(
     ), "BotCallbackAnswer didn't arrive after the inline button click"
 
     event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    await sleep(0.2)
     msg: Message = event.message
 
     assert (
@@ -131,7 +126,6 @@ async def test_change_welcome_message_multiple_language(
     ), "BotCallbackAnswer didn't arrive after the inline button click"
 
     event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    await sleep(0.2)
     msg: Message = event.message
 
     response = await msg.click(text="Russian (Русский)")
@@ -140,7 +134,6 @@ async def test_change_welcome_message_multiple_language(
     ), "BotCallbackAnswer didn't arrive after the inline button click"
 
     event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    await sleep(0.2)
     msg: Message = event.message
 
     assert (
