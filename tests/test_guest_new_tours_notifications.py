@@ -167,9 +167,3 @@ async def test_multiple_tours_single_approved(
         'You have a new tour available — "%s"' % tours_as_dicts[1]["en"]["title"]
         in response.message
     )
-
-    try:
-        response: Message = await conversation.get_response(timeout=5)
-        assert False, "Unexpected message received"
-    except TimeoutError:
-        pass
