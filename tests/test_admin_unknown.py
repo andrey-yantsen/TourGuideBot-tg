@@ -3,7 +3,6 @@ from asyncio import sleep
 import pytest
 from telethon.tl.custom import Message
 from telethon.tl.custom.conversation import Conversation
-from telethon.tl.types import InputMediaContact
 
 from .conftest import get_phone_number_request
 
@@ -57,9 +56,7 @@ async def test_accepts_only_current_contact(conversation: Conversation):
     await conversation.send_message("/admin")
     response: Message = await get_phone_number_request(conversation)
 
-    await response.click(
-        0, share_phone=InputMediaContact("+79999999999", "Random", "Name", "")
-    )
+    await response.click(0, share_phone="+99999999999")
 
     response: Message = await conversation.get_response()
     assert (
