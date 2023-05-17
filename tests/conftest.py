@@ -155,9 +155,8 @@ async def tours_as_dicts(request: pytest.FixtureRequest, default_tour: dict) -> 
 @pytest.fixture
 async def tours(
     db_engine: AsyncEngine,
-    tours_as_dicts: dict,
+    tours_as_dicts: list[dict],
     conversation: Conversation,
-    guest,
 ) -> list[Tour]:
     cached_files = {}
 
