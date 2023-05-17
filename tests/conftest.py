@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime, timedelta
 from os import environ
 from pathlib import Path
 
@@ -14,7 +15,15 @@ from telethon.tl.types import KeyboardButtonRequestPhone
 from tour_guide_bot.bot.app import Application
 from tour_guide_bot.cli import prepare_app
 from tour_guide_bot.models.admin import Admin, AdminPermissions
-from tour_guide_bot.models.guide import Guest
+from tour_guide_bot.models.guide import (
+    BoughtTours,
+    Guest,
+    MessageType,
+    Tour,
+    TourSection,
+    TourSectionContent,
+    TourTranslation,
+)
 from tour_guide_bot.models.settings import Settings, SettingsKey
 from tour_guide_bot.models.telegram import TelegramUser
 
@@ -98,6 +107,127 @@ def enabled_languages(request: pytest.FixtureRequest) -> list[str]:
         data = marker.args[0]
 
     return data
+
+
+@pytest.fixture
+def default_tour() -> dict:
+    return {
+        "en": {
+            "title": "Test tour",
+            "sections": [
+                {
+                    "title": "Test section 1",
+                    "content": [
+                        {"type": MessageType.text, "content": {"text": "Test text 1"}},
+                        {
+                            "type": MessageType.location,
+                            "content": {
+                                "latitude": 51.5072046,
+                                "longitude": -0.1758395,
+                            },
+                        },
+                        {"type": MessageType.text, "content": {"text": "Test text 2"}},
+                    ],
+                },
+                {
+                    "title": "Test section 2",
+                    "content": [
+                        {"type": MessageType.text, "content": {"text": "Test text 3"}},
+                        {"type": MessageType.text, "content": {"text": "Test text 4"}},
+                    ],
+                },
+            ],
+        }
+    }
+
+
+@pytest.fixture
+async def tours(
+    request: pytest.FixtureRequest,
+    db_engine: AsyncEngine,
+    default_tour: dict,
+    conversation: Conversation,
+    guest,
+) -> list[Tour]:
+    marker = request.node.get_closest_marker("tours")
+    if marker is None:
+        tours = [default_tour]
+    else:
+        tours = marker.args
+
+    cached_files = {}
+
+    ret = []
+
+    async with AsyncSession(db_engine, expire_on_commit=False) as session:
+        for tour in tours:
+            tour_model = Tour()
+            session.add(tour_model)
+
+            for lang, data in tour.items():
+                tour_translation = TourTranslation(
+                    language=lang, tour=tour_model, title=data["title"]
+                )
+                session.add(tour_translation)
+
+                for idx, section in enumerate(data["sections"]):
+                    tour_section = TourSection(
+                        tour_translation=tour_translation,
+                        title=section["title"],
+                        position=idx,
+                    )
+                    session.add(tour_section)
+
+                    for content_idx, content in enumerate(section["content"]):
+                        for file in content["content"].get("files", []):
+                            file_to_upload = file.pop("file", None)
+                            if file_to_upload:
+                                if file_to_upload in cached_files:
+                                    uploaded = await conversation.send_file(
+                                        file_to_upload
+                                    )
+                                    cached_files[file_to_upload] = uploaded["file_id"]
+                                file["file_id"] = cached_files[file_to_upload]
+
+                        content = TourSectionContent(
+                            message_type=content["type"],
+                            tour_section=tour_section,
+                            position=content_idx,
+                            media_group_id=content.get("media_group_id"),
+                            content=content["content"],
+                        )
+                        session.add(content)
+
+            ret.append(tour_model)
+
+        await session.commit()
+
+    return ret
+
+
+@pytest.fixture
+async def approved_tours(
+    request: pytest.FixtureRequest,
+    db_engine: AsyncEngine,
+    guest: Guest,
+    tours: list[Tour],
+):
+    marker = request.node.get_closest_marker("approved_tour_ids")
+    approved_tour_ids = None
+    if marker is not None:
+        approved_tour_ids = marker.args
+
+    async with AsyncSession(db_engine, expire_on_commit=False) as session:
+        for tour in tours:
+            if approved_tour_ids is None or tour.id in approved_tour_ids:
+                purchase = BoughtTours(
+                    guest=guest,
+                    tour=tour,
+                    expire_ts=datetime.now() + timedelta(minutes=10),
+                )
+                session.add(purchase)
+
+        await session.commit()
 
 
 @pytest.fixture

@@ -52,6 +52,8 @@ filterwarnings = [
 ]
 markers = [
     "enabled_languages",
+    "approved_tour_ids",
+    "tours",
 ]
 asyncio_mode = "auto"
 
