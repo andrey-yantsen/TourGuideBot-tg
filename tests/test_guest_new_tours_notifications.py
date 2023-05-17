@@ -169,7 +169,7 @@ async def test_multiple_tours_single_approved(
     )
 
     try:
-        response: Message = await conversation.get_response(timeout=1)
+        response: Message = await conversation.get_response(timeout=5)
         assert False, "Unexpected message received"
     except TimeoutError:
         pass
