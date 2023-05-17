@@ -65,7 +65,7 @@ msgid "Phone number +{0} was approved for the tour '{1}' until {2}."
 msgstr ""
 
 #: tour_guide_bot/bot/admin/approve.py:136
-#: tour_guide_bot/bot/admin/revoke.py:142
+#: tour_guide_bot/bot/admin/revoke.py:146
 msgctxt "admin-generic"
 msgid "The contact you sent me doesn't have a phone number; please try again."
 msgstr ""
@@ -77,7 +77,7 @@ msgid ""
 " 1 week\" and so on."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:160
+#: tour_guide_bot/bot/admin/approve.py:161
 msgctxt "admin-approve"
 msgid ""
 "Enter the phone number that should be able to access the tour (with "
@@ -85,18 +85,18 @@ msgid ""
 " to abort."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:193
-#: tour_guide_bot/bot/admin/revoke.py:258
+#: tour_guide_bot/bot/admin/approve.py:194
+#: tour_guide_bot/bot/admin/revoke.py:263
 msgctxt "admin-generic"
 msgid "Unfortunately, you don't have any tours available for the guests."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:203
+#: tour_guide_bot/bot/admin/approve.py:204
 #: tour_guide_bot/bot/admin/configure.py:168
 #: tour_guide_bot/bot/admin/configure.py:192
 #: tour_guide_bot/bot/admin/configure.py:396
-#: tour_guide_bot/bot/admin/revoke.py:212
-#: tour_guide_bot/bot/admin/revoke.py:268
+#: tour_guide_bot/bot/admin/revoke.py:216
+#: tour_guide_bot/bot/admin/revoke.py:273
 #: tour_guide_bot/bot/admin/tour/add_content.py:408
 #: tour_guide_bot/bot/admin/tour/add_content.py:465
 #: tour_guide_bot/bot/admin/tour/add_content.py:506
@@ -111,8 +111,8 @@ msgctxt "bot-generic"
 msgid "Abort"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:210
-#: tour_guide_bot/bot/admin/revoke.py:275
+#: tour_guide_bot/bot/admin/approve.py:211
+#: tour_guide_bot/bot/admin/revoke.py:280
 msgctxt "admin-generic"
 msgid "Please select the tour."
 msgstr ""
@@ -175,7 +175,7 @@ msgstr ""
 
 #: tour_guide_bot/bot/admin/configure.py:162
 #: tour_guide_bot/bot/admin/configure.py:186
-#: tour_guide_bot/bot/admin/revoke.py:208
+#: tour_guide_bot/bot/admin/revoke.py:212
 #: tour_guide_bot/bot/admin/tour/add_content.py:705
 #: tour_guide_bot/bot/admin/tour/main.py:288
 msgctxt "bot-generic"
@@ -206,8 +206,8 @@ msgstr ""
 
 #: tour_guide_bot/bot/admin/configure.py:273
 #: tour_guide_bot/bot/admin/configure.py:330
-#: tour_guide_bot/bot/admin/revoke.py:77 tour_guide_bot/bot/admin/revoke.py:89
-#: tour_guide_bot/bot/admin/revoke.py:113
+#: tour_guide_bot/bot/admin/revoke.py:78 tour_guide_bot/bot/admin/revoke.py:91
+#: tour_guide_bot/bot/admin/revoke.py:116
 #: tour_guide_bot/bot/admin/tour/main.py:239
 #: tour_guide_bot/bot/admin/tour/main.py:273
 #: tour_guide_bot/bot/admin/tour/main.py:370
@@ -284,29 +284,29 @@ msgid ""
 "* /guest — return to the guest mode"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/revoke.py:128
+#: tour_guide_bot/bot/admin/revoke.py:132
 msgctxt "admin-revoke"
 msgid "Access to \"{0}\" was revoked from +{1}."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/revoke.py:160
+#: tour_guide_bot/bot/admin/revoke.py:164
 msgctxt "admin-revoke"
 msgid ""
 "I don't see anybody with that phone number in the database; please send "
 "another one."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/revoke.py:183
+#: tour_guide_bot/bot/admin/revoke.py:187
 msgctxt "admin-revoke"
 msgid "This phone number doesn't have access to that tour; aborting."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/revoke.py:199
+#: tour_guide_bot/bot/admin/revoke.py:203
 msgctxt "admin-revoke"
 msgid "Are you sure you want to revoke the access to \"{0}\" from +{1}?"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/revoke.py:225
+#: tour_guide_bot/bot/admin/revoke.py:230
 msgctxt "admin-revoke"
 msgid ""
 "Enter the phone number from which you want to revoke access to the tour "

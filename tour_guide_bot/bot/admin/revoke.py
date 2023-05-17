@@ -71,6 +71,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         tour_id = context.user_data.pop("tour_id")
 
         if tour_id != context.matches[0].group(1):
+            await update.callback_query.answer()
             await self.edit_or_reply_text(
                 update,
                 context,
@@ -83,6 +84,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         guest = await self.db_session.scalar(select(Guest).where(Guest.id == guest_id))
 
         if not guest:
+            await update.callback_query.answer()
             await self.edit_or_reply_text(
                 update,
                 context,
@@ -107,6 +109,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         )
 
         if not purchase:
+            await update.callback_query.answer()
             await self.edit_or_reply_text(
                 update,
                 context,
@@ -121,6 +124,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         self.db_session.add(purchase)
         await self.db_session.commit()
 
+        await update.callback_query.answer()
         await self.edit_or_reply_text(
             update,
             context,
@@ -221,6 +225,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
 
     async def tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
+        await update.callback_query.answer()
         await update.callback_query.edit_message_text(
             t(user.language).pgettext(
                 "admin-revoke",

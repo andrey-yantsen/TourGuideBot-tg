@@ -156,6 +156,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
 
     async def tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
+        await update.callback_query.answer()
         await update.callback_query.edit_message_text(
             t(user.language).pgettext(
                 "admin-approve",
