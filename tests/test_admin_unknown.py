@@ -62,3 +62,24 @@ async def test_accepts_only_current_contact(conversation: Conversation):
     assert (
         "Please send me your contact number and not somebody else's" in response.message
     ), "Unexpected response to sending a random contact"
+
+
+@pytest.mark.usefixtures("app")
+async def test_incorrect_token(conversation: Conversation):
+    await conversation.send_message("/admin")
+    response: Message = await get_phone_number_request(conversation)
+    await response.click(0, share_phone=True)
+    await sleep(1)
+
+    response: Message = await conversation.get_response()
+    assert (
+        "Please send me the token to confirm ownership" in response.message
+    ), "Unexpected response to an unknown phone number"
+
+    await conversation.send_message("foo")
+
+    response: Message = await conversation.get_response()
+
+    assert (
+        "I still don't recognise you, sorry." in response.message
+    ), "Unexpected message in response to the secret phrase"
