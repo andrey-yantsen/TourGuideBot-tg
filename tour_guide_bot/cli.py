@@ -1,9 +1,9 @@
 import argparse
 import asyncio
 import logging
+import sys
 from os import mkdir, sep
 from os.path import dirname
-import sys
 from warnings import filterwarnings
 
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
@@ -18,7 +18,7 @@ def prepare_app(
     guide_bot_token: str,
     engine: AsyncEngine,
     enabled_languages: list[str],
-    default_language: list[str],
+    default_language: str,
     persistence_path: str,
     application_class=Application,
 ) -> Application:
