@@ -17,8 +17,8 @@ from tour_guide_bot.models.settings import Settings, SettingsKey
 
 class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
     STATE_INIT = 1
-    STATE_WELCOME_MESSAGE_LANGUAGE = 2
-    STATE_WELCOME_MESSAGE = 3
+    STATE_MESSAGE_LANGUAGE = 2
+    STATE_CHANGE_MESSAGE = 3
     STATE_AUDIO_TO_VOICE = 4
     STATE_DELAY_BETWEEN_MESSAGES = 5
 
@@ -30,8 +30,8 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                 states={
                     cls.STATE_INIT: [
                         CallbackQueryHandler(
-                            cls.partial(cls.change_welcome_message_init),
-                            "^change_welcome_message$",
+                            cls.partial(cls.change_message_init),
+                            "^(\w+)_message$",
                         ),
                         CallbackQueryHandler(
                             cls.partial(cls.change_audio_to_voice_init),
@@ -42,10 +42,10 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                             "^delay_between_messages$",
                         ),
                     ],
-                    cls.STATE_WELCOME_MESSAGE_LANGUAGE: [
+                    cls.STATE_MESSAGE_LANGUAGE: [
                         CallbackQueryHandler(
-                            cls.partial(cls.change_welcome_message),
-                            "^change_welcome_message:(.*)$",
+                            cls.partial(cls.change_message),
+                            "^(\w+)_message:(.*)$",
                         ),
                     ],
                     cls.STATE_AUDIO_TO_VOICE: [
@@ -60,14 +60,14 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                             cls.partial(cls.change_delay_between_messages),
                         ),
                     ],
-                    cls.STATE_WELCOME_MESSAGE: [
+                    cls.STATE_CHANGE_MESSAGE: [
                         MessageHandler(
                             filters.TEXT & ~filters.COMMAND,
-                            cls.partial(cls.change_welcome_message_text),
+                            cls.partial(cls.change_message_text),
                         ),
                         MessageHandler(
                             filters.ALL & ~filters.COMMAND & ~filters.TEXT,
-                            cls.partial(cls.incorrect_welcome_message),
+                            cls.partial(cls.incorrect_message),
                         ),
                     ],
                 },
@@ -231,11 +231,11 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
 
         return ConversationHandler.END
 
-    async def change_welcome_message_init(
+    async def change_message_init(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         if len(context.application.enabled_languages) == 1:
-            return await self.change_welcome_message(
+            return await self.change_message(
                 update, context, context.application.default_language
             )
 
@@ -245,30 +245,47 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         await update.callback_query.edit_message_text(
             t(user.language).pgettext(
                 "admin-configure",
-                "Please select the language for the welcome message you want to edit.",
+                "Please select the language for the {} you want to edit.".format(
+                    self.get_message_name(user.language, context.matches[0].group(1))
+                ),
             ),
             reply_markup=self.get_language_select_inline_keyboard(
-                user.language, context, "change_welcome_message:", True
+                user.language, context, "%s:" % update.callback_query.data, True
             ),
         )
 
-        return self.STATE_WELCOME_MESSAGE_LANGUAGE
+        return self.STATE_MESSAGE_LANGUAGE
 
-    async def change_welcome_message(
+    def get_message_name(self, language: str, type_: str) -> str:
+        match type_:
+            case "welcome":
+                return t(language).pgettext("admin-configure", "welcome message")
+            case _:
+                raise ValueError("Invalid message type")
+
+    def get_message_settings_key(self, type_: str) -> SettingsKey:
+        match type_:
+            case "welcome":
+                return SettingsKey.guide_welcome_message
+            case _:
+                raise ValueError("Invalid message type")
+
+    async def change_message(
         self,
         update: Update,
         context: ContextTypes.DEFAULT_TYPE,
         force_language: str | None = None,
     ):
         target_language = (
-            force_language if force_language else context.matches[0].group(1)
+            force_language if force_language else context.matches[0].group(2)
         )
-        context.user_data["welcome_message_target_language"] = target_language
+        context.user_data["message_target_language"] = target_language
 
         user = await self.get_user(update, context)
 
         if target_language not in context.application.enabled_languages:
-            del context.user_data["welcome_message_target_language"]
+            del context.user_data["message_target_language"]
+            await update.callback_query.answer()
             await update.callback_query.edit_message_text(
                 t(user.language).pgettext(
                     "bot-generic", "Something went wrong; please try again."
@@ -276,53 +293,62 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
             )
             return ConversationHandler.END
 
+        context.user_data["message_type"] = context.matches[0].group(1)
+
         stmt = select(Settings).where(
-            (Settings.key == SettingsKey.guide_welcome_message)
+            (Settings.key == self.get_message_settings_key(context.matches[0].group(1)))
             & (Settings.language == target_language)
         )
-        welcome_message = await self.db_session.scalar(stmt)
+        message = await self.db_session.scalar(stmt)
 
-        if welcome_message:
-            await update.callback_query.answer()
+        await update.callback_query.answer()
+        if message:
             await update.callback_query.edit_message_text(
                 t(user.language).pgettext(
                     "admin-configure",
-                    "The bot currently has the following welcome message. Please send me a new one if you want to change it, or send /cancel to abort the modification.",
+                    "The bot currently has the following {}. Please send me a new one if you want to change it, or send /cancel to abort the modification.".format(
+                        self.get_message_name(
+                            user.language, context.matches[0].group(1)
+                        )
+                    ),
                 )
             )
 
             await context.application.bot.send_message(
                 update.effective_chat.id,
-                welcome_message.value,
+                message.value,
                 disable_web_page_preview=True,
                 parse_mode=ParseMode.MARKDOWN_V2,
             )
         else:
-            await update.callback_query.answer()
             await update.callback_query.edit_message_text(
                 t(user.language).pgettext(
                     "admin-configure",
-                    "The bot currently doesn't have a welcome message. Please send me one.",
+                    "The bot currently doesn't have a {}. Please send me one.".format(
+                        self.get_message_name(
+                            user.language, context.matches[0].group(1)
+                        )
+                    ),
                 )
             )
 
-        return self.STATE_WELCOME_MESSAGE
+        return self.STATE_CHANGE_MESSAGE
 
-    async def incorrect_welcome_message(
+    async def incorrect_message(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         user = await self.get_user(update, context)
         await update.callback_query.edit_message_text(
             t(user.language).pgettext(
-                "admin-configure", "You can use only text as the bot's welcome message."
+                "admin-configure", "Please send me a regular text message."
             )
         )
-        return self.STATE_WELCOME_MESSAGE
+        return self.STATE_CHANGE_MESSAGE
 
-    async def change_welcome_message_text(
+    async def change_message_text(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
-        target_language = context.user_data.get("welcome_message_target_language")
+        target_language = context.user_data.get("message_target_language")
         user = await self.get_user(update, context)
 
         if not target_language:
@@ -333,28 +359,29 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
             )
             return ConversationHandler.END
 
-        stmt = select(Settings).where(
-            (Settings.key == SettingsKey.guide_welcome_message)
-            & (Settings.language == target_language)
+        message = await Settings.load(
+            self.db_session,
+            self.get_message_settings_key(context.user_data["message_type"]),
+            target_language,
         )
-        welcome_message = await self.db_session.scalar(stmt)
+        message.value = update.message.text_markdown_v2_urled
 
-        if not welcome_message:
-            welcome_message = Settings(
-                key=SettingsKey.guide_welcome_message, language=target_language
-            )
-
-        welcome_message.value = update.message.text_markdown_v2_urled
-
-        self.db_session.add(welcome_message)
+        self.db_session.add(message)
         await self.db_session.commit()
-        del context.user_data["welcome_message_target_language"]
 
         await update.message.reply_text(
             t(user.language).pgettext(
-                "admin-configure", "Bot's welcome message has been changed."
+                "admin-configure",
+                "Bot's {} has been changed.".format(
+                    self.get_message_name(
+                        user.language, context.user_data["message_type"]
+                    )
+                ),
             )
         )
+
+        del context.user_data["message_type"]
+        del context.user_data["message_target_language"]
 
         return ConversationHandler.END
 
@@ -372,7 +399,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                             t(user.language).pgettext(
                                 "admin-bot-configure", "Guide welcome message"
                             ),
-                            callback_data="change_welcome_message",
+                            callback_data="welcome_message",
                         )
                     ],
                     [

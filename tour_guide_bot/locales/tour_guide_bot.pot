@@ -94,7 +94,7 @@ msgstr ""
 #: tour_guide_bot/bot/admin/approve.py:204
 #: tour_guide_bot/bot/admin/configure.py:168
 #: tour_guide_bot/bot/admin/configure.py:192
-#: tour_guide_bot/bot/admin/configure.py:396
+#: tour_guide_bot/bot/admin/configure.py:439
 #: tour_guide_bot/bot/admin/revoke.py:216
 #: tour_guide_bot/bot/admin/revoke.py:273
 #: tour_guide_bot/bot/admin/tour/add_content.py:408
@@ -199,13 +199,18 @@ msgctxt "admin-configure"
 msgid "Audio-to-voice conversion suggestions were disabled."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:246
+#: tour_guide_bot/bot/admin/configure.py:249
 msgctxt "admin-configure"
-msgid "Please select the language for the welcome message you want to edit."
+msgid "Please select the language for the {} you want to edit."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:273
-#: tour_guide_bot/bot/admin/configure.py:330
+#: tour_guide_bot/bot/admin/configure.py:262
+msgctxt "admin-configure"
+msgid "welcome message"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure.py:290
+#: tour_guide_bot/bot/admin/configure.py:356
 #: tour_guide_bot/bot/admin/revoke.py:78 tour_guide_bot/bot/admin/revoke.py:91
 #: tour_guide_bot/bot/admin/revoke.py:116
 #: tour_guide_bot/bot/admin/tour/main.py:239
@@ -219,44 +224,44 @@ msgctxt "bot-generic"
 msgid "Something went wrong; please try again."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:288
+#: tour_guide_bot/bot/admin/configure.py:311
 msgctxt "admin-configure"
 msgid ""
-"The bot currently has the following welcome message. Please send me a new"
-" one if you want to change it, or send /cancel to abort the modification."
+"The bot currently has the following {}. Please send me a new one if you "
+"want to change it, or send /cancel to abort the modification."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:303
+#: tour_guide_bot/bot/admin/configure.py:329
 msgctxt "admin-configure"
-msgid "The bot currently doesn't have a welcome message. Please send me one."
+msgid "The bot currently doesn't have a {}. Please send me one."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:316
+#: tour_guide_bot/bot/admin/configure.py:342
 msgctxt "admin-configure"
-msgid "You can use only text as the bot's welcome message."
+msgid "Please send me a regular text message."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:354
+#: tour_guide_bot/bot/admin/configure.py:376
 msgctxt "admin-configure"
-msgid "Bot's welcome message has been changed."
+msgid "Bot's {} has been changed."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:365
+#: tour_guide_bot/bot/admin/configure.py:392
 msgctxt "admin-configure"
 msgid "Please select the parameter you want to change."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:372
+#: tour_guide_bot/bot/admin/configure.py:399
 msgctxt "admin-bot-configure"
 msgid "Guide welcome message"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:380
+#: tour_guide_bot/bot/admin/configure.py:407
 msgctxt "admin-bot-configure"
 msgid "Audio-to-voice suggestions"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:388
+#: tour_guide_bot/bot/admin/configure.py:415
 msgctxt "admin-bot-configure"
 msgid "Delay between messages"
 msgstr ""
