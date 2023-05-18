@@ -16,9 +16,9 @@ from tour_guide_bot.bot.app import Application
 from tour_guide_bot.cli import prepare_app
 from tour_guide_bot.models.admin import Admin, AdminPermissions
 from tour_guide_bot.models.guide import (
-    BoughtTours,
     Guest,
     MessageType,
+    Subscription,
     Tour,
     TourSection,
     TourSectionContent,
@@ -223,7 +223,7 @@ async def approved_tours(
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         for tour in tours:
             if approved_tour_ids is None or tour.id in approved_tour_ids:
-                purchase = BoughtTours(
+                purchase = Subscription(
                     guest=guest,
                     tour=tour,
                     expire_ts=datetime.now() + timedelta(minutes=10),

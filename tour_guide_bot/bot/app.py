@@ -2,7 +2,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from telegram import Update
-from telegram.ext import Application as BaseApplication, ContextTypes, TypeHandler
+from telegram.ext import Application as BaseApplication
+from telegram.ext import ContextTypes, TypeHandler
 
 from tour_guide_bot import t
 from tour_guide_bot.bot import log
@@ -14,7 +15,7 @@ from tour_guide_bot.bot.guide.start import StartCommandHandler
 from tour_guide_bot.bot.guide.tours import ToursCommandHandler
 from tour_guide_bot.helpers.language import LanguageHandler
 from tour_guide_bot.helpers.telegram import get_tour_title
-from tour_guide_bot.models.guide import BoughtTours, Guest, Tour
+from tour_guide_bot.models.guide import Guest, Subscription, Tour
 from tour_guide_bot.models.telegram import TelegramUser
 
 
@@ -59,8 +60,8 @@ class Application(BaseApplication):
         stmt = (
             select(TelegramUser)
             .join(Guest)
-            .join(BoughtTours, Guest.id == BoughtTours.guest_id)
-            .where(BoughtTours.is_user_notified == False)
+            .join(Subscription, Guest.id == Subscription.guest_id)
+            .where(Subscription.is_user_notified == False)
         )
 
         async with AsyncSession(
@@ -68,14 +69,14 @@ class Application(BaseApplication):
         ) as session:
             for telegram_user in await session.scalars(stmt):
                 stmt = (
-                    select(BoughtTours)
+                    select(Subscription)
                     .options(
-                        selectinload(BoughtTours.tour).selectinload(Tour.translation),
-                        selectinload(BoughtTours.guest),
+                        selectinload(Subscription.tour).selectinload(Tour.translation),
+                        selectinload(Subscription.guest),
                     )
                     .where(
-                        (BoughtTours.guest_id == telegram_user.guest_id)
-                        & (BoughtTours.is_user_notified == False)
+                        (Subscription.guest_id == telegram_user.guest_id)
+                        & (Subscription.is_user_notified == False)
                     )
                 )
                 bought_tours = await session.scalars(stmt)

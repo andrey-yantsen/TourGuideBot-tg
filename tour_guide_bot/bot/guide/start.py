@@ -1,5 +1,5 @@
-from datetime import datetime
 import re
+from datetime import datetime
 
 from sqlalchemy import func, select
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
@@ -15,7 +15,7 @@ from tour_guide_bot import t
 from tour_guide_bot.bot.guide.bot_commands import BotCommandsFactory
 from tour_guide_bot.helpers.language import LanguageHandler
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback
-from tour_guide_bot.models.guide import BoughtTours, Guest
+from tour_guide_bot.models.guide import Guest, Subscription
 from tour_guide_bot.models.settings import Settings, SettingsKey
 from tour_guide_bot.models.telegram import TelegramUser
 
@@ -120,9 +120,9 @@ class StartCommandHandler(BaseHandlerCallback):
         self, user: TelegramUser, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         active_tours_cnt = await self.db_session.scalar(
-            select(func.count(BoughtTours.id)).where(
-                (BoughtTours.guest == user.guest)
-                & (BoughtTours.expire_ts >= datetime.now())
+            select(func.count(Subscription.id)).where(
+                (Subscription.guest == user.guest)
+                & (Subscription.expire_ts >= datetime.now())
             )
         )
         language = await self.get_language(update, context)

@@ -18,7 +18,7 @@ from tour_guide_bot.helpers.telegram import (
     AdminProtectedBaseHandlerCallback,
     get_tour_title,
 )
-from tour_guide_bot.models.guide import BoughtTours, Guest, Tour
+from tour_guide_bot.models.guide import Guest, Subscription, Tour
 
 
 class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
@@ -101,10 +101,10 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         )
 
         purchase = await self.db_session.scalar(
-            select(BoughtTours).where(
-                (BoughtTours.guest == guest)
-                & (BoughtTours.tour == tour)
-                & (BoughtTours.expire_ts >= datetime.datetime.now())
+            select(Subscription).where(
+                (Subscription.guest == guest)
+                & (Subscription.tour == tour)
+                & (Subscription.expire_ts >= datetime.datetime.now())
             )
         )
 
@@ -175,10 +175,10 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         )
 
         purchase = await self.db_session.scalar(
-            select(BoughtTours).where(
-                (BoughtTours.guest == guest)
-                & (BoughtTours.tour == tour)
-                & (BoughtTours.expire_ts >= datetime.datetime.now())
+            select(Subscription).where(
+                (Subscription.guest == guest)
+                & (Subscription.tour == tour)
+                & (Subscription.expire_ts >= datetime.datetime.now())
             )
         )
 

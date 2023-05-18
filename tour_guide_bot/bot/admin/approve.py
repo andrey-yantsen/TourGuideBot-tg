@@ -19,7 +19,7 @@ from tour_guide_bot.helpers.telegram import (
     AdminProtectedBaseHandlerCallback,
     get_tour_title,
 )
-from tour_guide_bot.models.guide import BoughtTours, Guest, Tour
+from tour_guide_bot.models.guide import Guest, Subscription, Tour
 
 
 class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
@@ -95,13 +95,13 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             guest = Guest(phone=context.user_data["phone_number"])
             self.db_session.add(guest)
 
-        purchase = BoughtTours(guest=guest, tour=tour, expire_ts=d)
+        purchase = Subscription(guest=guest, tour=tour, expire_ts=d)
         if guest.id:
             existing_purchase = await self.db_session.scalar(
-                select(BoughtTours).where(
-                    (BoughtTours.guest == guest)
-                    & (BoughtTours.tour == tour)
-                    & (BoughtTours.expire_ts >= now)
+                select(Subscription).where(
+                    (Subscription.guest == guest)
+                    & (Subscription.tour == tour)
+                    & (Subscription.expire_ts >= now)
                 )
             )
             if existing_purchase:

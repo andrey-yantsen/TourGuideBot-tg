@@ -23,8 +23,8 @@ from tour_guide_bot import t
 from tour_guide_bot.bot.guide import log
 from tour_guide_bot.helpers.telegram import BaseHandlerCallback, get_tour_title
 from tour_guide_bot.models.guide import (
-    BoughtTours,
     MessageType,
+    Subscription,
     Tour,
     TourSection,
     TourTranslation,
@@ -63,19 +63,19 @@ class ToursCommandHandler(BaseHandlerCallback):
             )
         ]
 
-    async def get_tour(self, guest_id: int, tour_id: int) -> BoughtTours | None:
+    async def get_tour(self, guest_id: int, tour_id: int) -> Subscription | None:
         bought_tour = await self.db_session.scalar(
-            select(BoughtTours)
+            select(Subscription)
             .options(
-                selectinload(BoughtTours.tour)
+                selectinload(Subscription.tour)
                 .selectinload(Tour.translation)
                 .selectinload(TourTranslation.section)
                 .selectinload(TourSection.content)
             )
             .where(
-                (BoughtTours.guest_id == guest_id)
-                & (BoughtTours.tour_id == tour_id)
-                & (BoughtTours.expire_ts >= datetime.now())
+                (Subscription.guest_id == guest_id)
+                & (Subscription.tour_id == tour_id)
+                & (Subscription.expire_ts >= datetime.now())
             )
         )
 
@@ -398,16 +398,16 @@ class ToursCommandHandler(BaseHandlerCallback):
         # TODO: rewrite this
         # Currently done in the stupidiest way possible for self.display_first_section()
         bought_tours = await self.db_session.scalars(
-            select(BoughtTours)
+            select(Subscription)
             .options(
-                selectinload(BoughtTours.tour)
+                selectinload(Subscription.tour)
                 .selectinload(Tour.translation)
                 .selectinload(TourTranslation.section)
                 .selectinload(TourSection.content)
             )
             .where(
-                (BoughtTours.guest == user.guest)
-                & (BoughtTours.expire_ts >= datetime.now())
+                (Subscription.guest == user.guest)
+                & (Subscription.expire_ts >= datetime.now())
             )
         )
 

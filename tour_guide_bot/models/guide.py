@@ -28,7 +28,7 @@ class Tour(Base):
         "TourTranslation", back_populates="tour", cascade="all, delete-orphan"
     )
     purchases = relationship(
-        "BoughtTours", cascade="all, delete-orphan", back_populates="tour"
+        "Subscription", cascade="all, delete-orphan", back_populates="tour"
     )
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
@@ -136,8 +136,8 @@ class TourSectionContent(Base):
     )
 
 
-class BoughtTours(Base):
-    __tablename__ = "bought_tours"
+class Subscription(Base):
+    __tablename__ = "subscription"
     __mapper_args__ = {"eager_defaults": True}
 
     id = Column(Integer, primary_key=True)
