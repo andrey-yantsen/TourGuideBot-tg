@@ -106,7 +106,7 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour/main.py:571
 #: tour_guide_bot/bot/admin/tour/main.py:653
 #: tour_guide_bot/bot/guide/tours.py:283 tour_guide_bot/bot/guide/tours.py:464
-#: tour_guide_bot/helpers/telegram.py:159
+#: tour_guide_bot/helpers/telegram.py:155
 msgctxt "bot-generic"
 msgid "Abort"
 msgstr ""
@@ -846,18 +846,18 @@ msgctxt "bot-generic"
 msgid "Unknown command."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:184
+#: tour_guide_bot/helpers/telegram.py:180
 msgctxt "admin-bot"
 msgid "Access denied."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:200
+#: tour_guide_bot/helpers/telegram.py:196
 msgctxt "bot-generic"
 msgid "Tour #{0} doesn't have any translations."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:209
-#: tour_guide_bot/helpers/telegram.py:227
+#: tour_guide_bot/helpers/telegram.py:205
+#: tour_guide_bot/helpers/telegram.py:223
 msgctxt "bot-generic"
 msgid "Tour #{0} doesn't have a translation for the default language ({1})."
 msgstr ""

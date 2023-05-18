@@ -83,10 +83,6 @@ class BaseHandlerCallback:
     def partial(cls, callback):
         return partial(cls.build_and_run, callback)
 
-    @staticmethod
-    def is_admin_app(context: ContextTypes.DEFAULT_TYPE) -> bool:
-        return context.application.__class__.__name__ == "AdminBot"
-
     async def get_language(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> str:
