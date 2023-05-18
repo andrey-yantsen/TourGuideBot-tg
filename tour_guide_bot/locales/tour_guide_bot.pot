@@ -52,32 +52,32 @@ msgid ""
 "journey!"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:77
+#: tour_guide_bot/bot/admin/approve.py:80
 msgctxt "admin-approve"
 msgid ""
 "I've failed to parse your input; please try again. Enter something like "
 "\"in 6 months\", \"in 1 week\" and so on."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:116
+#: tour_guide_bot/bot/admin/approve.py:119
 msgctxt "admin-approve"
 msgid "Phone number +{0} was approved for the tour '{1}' until {2}."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:136
+#: tour_guide_bot/bot/admin/approve.py:139
 #: tour_guide_bot/bot/admin/revoke.py:146
 msgctxt "admin-generic"
 msgid "The contact you sent me doesn't have a phone number; please try again."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:149
+#: tour_guide_bot/bot/admin/approve.py:152
 msgctxt "admin-approve"
 msgid ""
 "When the access should expire? Enter something like \"in 6 months\", \"in"
 " 1 week\" and so on."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:161
+#: tour_guide_bot/bot/admin/approve.py:164
 msgctxt "admin-approve"
 msgid ""
 "Enter the phone number that should be able to access the tour (with "
@@ -85,13 +85,13 @@ msgid ""
 " to abort."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:194
+#: tour_guide_bot/bot/admin/approve.py:197
 #: tour_guide_bot/bot/admin/revoke.py:263
 msgctxt "admin-generic"
 msgid "Unfortunately, you don't have any tours available for the guests."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:204
+#: tour_guide_bot/bot/admin/approve.py:207
 #: tour_guide_bot/bot/admin/configure.py:168
 #: tour_guide_bot/bot/admin/configure.py:192
 #: tour_guide_bot/bot/admin/configure.py:448
@@ -111,7 +111,7 @@ msgctxt "bot-generic"
 msgid "Abort"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:211
+#: tour_guide_bot/bot/admin/approve.py:214
 #: tour_guide_bot/bot/admin/revoke.py:280
 msgctxt "admin-generic"
 msgid "Please select the tour."

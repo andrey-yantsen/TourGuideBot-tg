@@ -68,7 +68,10 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
     async def duration(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
-        d = dateparser.parse(update.message.text)
+        d = dateparser.parse(
+            update.message.text,
+            languages=context.application.enabled_languages,
+        )
 
         now = datetime.datetime.now()
 
