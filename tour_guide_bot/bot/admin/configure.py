@@ -31,7 +31,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                     cls.STATE_INIT: [
                         CallbackQueryHandler(
                             cls.partial(cls.change_message_init),
-                            "^(\w+)_message$",
+                            r"^(\w+)_message$",
                         ),
                         CallbackQueryHandler(
                             cls.partial(cls.change_audio_to_voice_init),
@@ -45,7 +45,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                     cls.STATE_MESSAGE_LANGUAGE: [
                         CallbackQueryHandler(
                             cls.partial(cls.change_message),
-                            "^(\w+)_message:(.*)$",
+                            r"^(\w+)_message:(.*)$",
                         ),
                     ],
                     cls.STATE_AUDIO_TO_VOICE: [
