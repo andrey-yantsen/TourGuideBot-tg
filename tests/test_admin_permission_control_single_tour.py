@@ -1,4 +1,8 @@
+from datetime import datetime
+
 import pytest
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 from telethon.events import MessageEdited
 from telethon.tl.custom import Message
 from telethon.tl.custom.conversation import Conversation
@@ -6,13 +10,16 @@ from telethon.tl.types.messages import BotCallbackAnswer
 
 from tests.conftest import get_phone_number_request
 from tour_guide_bot.models.admin import Admin
+from tour_guide_bot.models.guide import Guest, Subscription
 
 
-@pytest.mark.usefixtures("app", "guest", "tours")
+@pytest.mark.usefixtures("app", "tours")
 async def test_approve_known_user(
     admin_conversation: Conversation,
     tours_as_dicts: list[dict],
     admin: Admin,
+    guest: Guest,
+    db_engine: AsyncEngine,
 ):
     await admin_conversation.send_message("/approve")
     response: Message = await admin_conversation.get_response()
@@ -33,7 +40,8 @@ async def test_approve_known_user(
         "When should the access expire?" in response.message
     ), "Unexpected grant duration request message"
 
-    await admin_conversation.send_message("in 1 hour")
+    now = datetime.now()
+    await admin_conversation.send_message("in 1 week")
     response: Message = await admin_conversation.get_response()
     assert (
         "was approved for the tour" in response.message
@@ -44,6 +52,12 @@ async def test_approve_known_user(
 
     response: Message = await admin_conversation.get_response()
     assert "One tour available for you: Test tour" in response.message
+
+    async with AsyncSession(db_engine, expire_on_commit=False) as session:
+        stmt = select(Subscription).where(Subscription.guest == guest)
+        s = await session.scalar(stmt)
+
+        assert (s.expire_ts - now).days == 7, "Unexpected subscription duration"
 
 
 @pytest.mark.usefixtures("app", "tours")
