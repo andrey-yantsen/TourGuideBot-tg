@@ -37,7 +37,7 @@ async def test_change_welcome_message_single_language(
     current_welcome_message: Message = await conversation.get_response()
 
     assert (
-        current_welcome_message.message == "welcome"
+        current_welcome_message.message == "welcome (en)"
     ), "Unexpected old welcome message"
 
     await conversation.send_message("new welcome message")
@@ -103,7 +103,7 @@ async def test_change_welcome_message_multiple_language(
     current_welcome_message: Message = await conversation.get_response()
 
     assert (
-        current_welcome_message.message == "welcome"
+        current_welcome_message.message == "welcome (en)"
     ), "Unexpected old welcome message"
 
     await conversation.send_message("new welcome message")
@@ -137,8 +137,14 @@ async def test_change_welcome_message_multiple_language(
     msg: Message = event.message
 
     assert (
-        "doesn't have a welcome message" in msg.message
+        "The bot currently has the following welcome message" in msg.message
     ), "Unexpected message after selecting the language"
+
+    current_welcome_message: Message = await conversation.get_response()
+
+    assert (
+        current_welcome_message.message == "welcome (ru)"
+    ), "Unexpected old welcome message"
 
     await conversation.send_message("new welcome message (ru)")
     response: Message = await conversation.get_response()

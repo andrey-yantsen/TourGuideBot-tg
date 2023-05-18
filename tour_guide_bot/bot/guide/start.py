@@ -149,7 +149,9 @@ class StartCommandHandler(BaseHandlerCallback):
                 reply_markup=ReplyKeyboardRemove(),
             )
 
-        await BotCommandsFactory.start(update.get_bot(), user, language)
+        await BotCommandsFactory.start(
+            update.get_bot(), user, language, self.db_session
+        )
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)

@@ -1,4 +1,5 @@
 import enum
+from typing import Optional
 
 from sqlalchemy import Column, DateTime, Enum, Index, Integer, String, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,6 +11,8 @@ class SettingsKey(enum.Enum):
     guide_welcome_message = 1
     audio_to_voice = 2
     delay_between_messages = 3
+    support_message = 4
+    terms_message = 5
 
 
 class Settings(Base):
@@ -59,15 +62,35 @@ class Settings(Base):
 
     @staticmethod
     async def load(
-        db_session: AsyncSession, key: SettingsKey, language: str | None = None
-    ) -> "Settings":
+        db_session: AsyncSession,
+        key: SettingsKey,
+        language: str | None = None,
+        create: bool = False,
+    ) -> Optional["Settings"]:
         stmt = select(Settings).where(
             (Settings.key == key) & (Settings.language == language)
         )
         setting = await db_session.scalar(stmt)
-        if not setting:
+        if not setting and create:
             setting = Settings(
                 key=key, language=language, value=Settings.__settings_default.get(key)
             )
 
         return setting
+
+    @staticmethod
+    async def exists(
+        db_session: AsyncSession, keys: list[SettingsKey], language: str | None = None
+    ) -> bool:
+        if language:
+            stmt = select(Settings).where(
+                Settings.key.in_(keys) & (Settings.language == language)
+            )
+        else:
+            stmt = select(Settings).where(Settings.key.in_(keys))
+
+        stmt = stmt.with_only_columns(Settings.key)
+
+        existing_keys = (await db_session.scalars(stmt)).all()
+
+        return len(set(existing_keys)) == len(set(keys))

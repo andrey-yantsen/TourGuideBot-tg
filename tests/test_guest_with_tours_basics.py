@@ -13,7 +13,7 @@ async def test_single_tour(conversation: Conversation, tours_as_dicts: list[dict
     await conversation.send_message("/start")
     response: Message = await conversation.get_response()
     assert (
-        response.message == "welcome"
+        response.message == "welcome (en)"
     ), "Unexpected first message from a configured bot"
 
     response: Message = await conversation.get_response()
@@ -114,7 +114,7 @@ async def test_multiple_tours(conversation: Conversation, tours_as_dicts: list[d
     await conversation.send_message("/start")
     response: Message = await conversation.get_response()
     assert (
-        response.message == "welcome"
+        response.message == "welcome (en)"
     ), "Unexpected first message from a configured bot"
 
     response: Message = await conversation.get_response()
@@ -203,7 +203,7 @@ async def test_multiple_tours_one_approved(
     await conversation.send_message("/start")
     response: Message = await conversation.get_response()
     assert (
-        response.message == "welcome"
+        response.message == "welcome (en)"
     ), "Unexpected first message from a configured bot"
 
     response: Message = await conversation.get_response()

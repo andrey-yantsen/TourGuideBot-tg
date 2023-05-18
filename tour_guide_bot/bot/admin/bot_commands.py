@@ -1,3 +1,4 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 from telegram import Bot, BotCommand, BotCommandScopeChat
 
 from tour_guide_bot import t
@@ -6,7 +7,9 @@ from tour_guide_bot.models.telegram import TelegramUser
 
 class BotCommandsFactory:
     @staticmethod
-    async def start(bot: Bot, user: TelegramUser, language: str):
+    async def start(
+        bot: Bot, user: TelegramUser, language: str, db_session: AsyncSession
+    ):
         commands = []
 
         commands.append(

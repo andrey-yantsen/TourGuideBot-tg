@@ -119,7 +119,10 @@ class StartCommandHandler(BaseHandlerCallback):
             )
 
             await BotCommandsFactory.start(
-                update.get_bot(), user, await self.get_language(update, context)
+                update.get_bot(),
+                user,
+                await self.get_language(update, context),
+                self.db_session,
             )
             return self.STATE_ADMIN_MODE_ACTIVE
         else:
@@ -149,7 +152,10 @@ class StartCommandHandler(BaseHandlerCallback):
             )
 
             await BotCommandsFactory.start(
-                update.get_bot(), user, await self.get_language(update, context)
+                update.get_bot(),
+                user,
+                await self.get_language(update, context),
+                self.db_session,
             )
             return self.STATE_ADMIN_MODE_ACTIVE
         else:
@@ -171,7 +177,10 @@ class StartCommandHandler(BaseHandlerCallback):
         )
 
         await GuestBotCommandsFactory.start(
-            update.get_bot(), user, await self.get_language(update, context)
+            update.get_bot(),
+            user,
+            await self.get_language(update, context),
+            self.db_session,
         )
         return ConversationHandler.END
 
@@ -186,7 +195,10 @@ class StartCommandHandler(BaseHandlerCallback):
             )
 
             await BotCommandsFactory.start(
-                update.get_bot(), user, await self.get_language(update, context)
+                update.get_bot(),
+                user,
+                await self.get_language(update, context),
+                self.db_session,
             )
             return self.STATE_ADMIN_MODE_ACTIVE
         elif not user.phone:
@@ -213,7 +225,10 @@ class StartCommandHandler(BaseHandlerCallback):
                 )
 
                 await BotCommandsFactory.start(
-                    update.get_bot(), user, await self.get_language(update, context)
+                    update.get_bot(),
+                    user,
+                    await self.get_language(update, context),
+                    self.db_session,
                 )
                 return self.STATE_ADMIN_MODE_ACTIVE
             else:

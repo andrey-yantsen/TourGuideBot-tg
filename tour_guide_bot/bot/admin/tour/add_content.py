@@ -621,7 +621,7 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         audio_to_voice_state = await Settings.load(
-            self.db_session, SettingsKey.audio_to_voice
+            self.db_session, SettingsKey.audio_to_voice, create=True
         )
         audio_to_voice_state.disable()
 
@@ -682,7 +682,7 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
     ):
         if not update.message.media_group_id:
             audio_to_voice_state = await Settings.load(
-                self.db_session, SettingsKey.audio_to_voice
+                self.db_session, SettingsKey.audio_to_voice, create=True
             )
 
             if audio_to_voice_state.is_enabled:

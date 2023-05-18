@@ -85,7 +85,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
     ):
         language = await self.get_language(update, context)
         delay_between_messages_state = await Settings.load(
-            self.db_session, SettingsKey.delay_between_messages
+            self.db_session, SettingsKey.delay_between_messages, create=True
         )
 
         await update.callback_query.edit_message_text(
@@ -125,7 +125,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
             return
 
         delay_between_messages_state = await Settings.load(
-            self.db_session, SettingsKey.delay_between_messages
+            self.db_session, SettingsKey.delay_between_messages, create=True
         )
         delay_between_messages_state.value = delay
         self.db_session.add(delay_between_messages_state)
@@ -145,7 +145,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
     ):
         language = await self.get_language(update, context)
         audio_to_voice_state = await Settings.load(
-            self.db_session, SettingsKey.audio_to_voice
+            self.db_session, SettingsKey.audio_to_voice, create=True
         )
 
         if audio_to_voice_state.is_enabled:
@@ -204,7 +204,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
     ):
         language = await self.get_language(update, context)
         audio_to_voice_state = await Settings.load(
-            self.db_session, SettingsKey.audio_to_voice
+            self.db_session, SettingsKey.audio_to_voice, create=True
         )
         if context.matches[0].group(1) == "enable":
             audio_to_voice_state.enable()
@@ -260,6 +260,10 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         match type_:
             case "welcome":
                 return t(language).pgettext("admin-configure", "welcome message")
+            case "terms":
+                return t(language).pgettext("admin-configure", "terms & conditions")
+            case "support":
+                return t(language).pgettext("admin-configure", "support message")
             case _:
                 raise ValueError("Invalid message type")
 
@@ -267,6 +271,10 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         match type_:
             case "welcome":
                 return SettingsKey.guide_welcome_message
+            case "terms":
+                return SettingsKey.terms_message
+            case "support":
+                return SettingsKey.support_message
             case _:
                 raise ValueError("Invalid message type")
 
@@ -363,6 +371,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
             self.db_session,
             self.get_message_settings_key(context.user_data["message_type"]),
             target_language,
+            create=True,
         )
         message.value = update.message.text_markdown_v2_urled
 
@@ -416,6 +425,22 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                                 "admin-bot-configure", "Delay between messages"
                             ),
                             callback_data="delay_between_messages",
+                        )
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            t(user.language).pgettext(
+                                "admin-bot-configure", "Support message"
+                            ),
+                            callback_data="support_message",
+                        )
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            t(user.language).pgettext(
+                                "admin-bot-configure", "Terms & Conditions"
+                            ),
+                            callback_data="terms_message",
                         )
                     ],
                     [

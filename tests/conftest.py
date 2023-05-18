@@ -270,12 +270,32 @@ async def unconfigured_app(unitialized_app: Application):
 
 
 @pytest.fixture
-async def app(unconfigured_app: Application, db_engine: AsyncEngine):
+async def app(
+    unconfigured_app: Application, db_engine: AsyncEngine, enabled_languages: list[str]
+):
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
-        welcome_message = Settings(
-            key=SettingsKey.guide_welcome_message, language="en", value="welcome"
-        )
-        session.add(welcome_message)
+        for lang in enabled_languages:
+            welcome_message = Settings(
+                key=SettingsKey.guide_welcome_message,
+                language=lang,
+                value=r"welcome \(%s\)" % lang,
+            )
+            session.add(welcome_message)
+
+            terms = Settings(
+                key=SettingsKey.terms_message,
+                language=lang,
+                value=r"terms \(%s\)" % lang,
+            )
+            session.add(terms)
+
+            support = Settings(
+                key=SettingsKey.support_message,
+                language=lang,
+                value=r"support \(%s\)" % lang,
+            )
+            session.add(support)
+
         await session.commit()
 
     yield unconfigured_app
@@ -391,7 +411,7 @@ async def admin(
 
 
 @pytest.fixture
-async def admin_conversation(conversation: Conversation, app, admin):
+async def admin_conversation(conversation: Conversation, unconfigured_app, admin):
     await conversation.send_message("/admin")
     response = await conversation.get_response()
 

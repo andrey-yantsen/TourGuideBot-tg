@@ -112,7 +112,7 @@ class ToursCommandHandler(BaseHandlerCallback):
         is_last_section = position == len(translation.section) - 1
 
         delay_between_messages_state = await Settings.load(
-            self.db_session, SettingsKey.delay_between_messages
+            self.db_session, SettingsKey.delay_between_messages, create=True
         )
 
         for content in section.content:
