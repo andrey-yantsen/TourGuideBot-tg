@@ -1,7 +1,17 @@
 import enum
 from typing import Optional
 
-from sqlalchemy import Column, DateTime, Enum, Index, Integer, String, func, select
+from sqlalchemy import (
+    Column,
+    DateTime,
+    Enum,
+    Index,
+    Integer,
+    String,
+    Text,
+    func,
+    select,
+)
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import Base
@@ -27,7 +37,7 @@ class Settings(Base):
     id = Column(Integer, primary_key=True)
     key = Column(Enum(SettingsKey), nullable=False)
     language = Column(String)
-    value = Column(String, nullable=False)
+    value = Column(Text, nullable=False)
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
         DateTime, nullable=False, default=func.now(), onupdate=func.now()
