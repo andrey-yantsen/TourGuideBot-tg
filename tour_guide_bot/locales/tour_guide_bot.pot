@@ -92,7 +92,7 @@ msgid "Unfortunately, you don't have any tours available for the guests."
 msgstr ""
 
 #: tour_guide_bot/bot/admin/approve.py:207
-#: tour_guide_bot/bot/admin/configure/__init__.py:60
+#: tour_guide_bot/bot/admin/configure/__init__.py:62
 #: tour_guide_bot/bot/admin/configure/audio_to_voice.py:76
 #: tour_guide_bot/bot/admin/configure/audio_to_voice.py:100
 #: tour_guide_bot/bot/admin/revoke.py:216
@@ -268,7 +268,7 @@ msgctxt "admin-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/__init__.py:52
+#: tour_guide_bot/bot/admin/configure/__init__.py:54
 msgctxt "admin-configure"
 msgid "Please select the parameter you want to change."
 msgstr ""

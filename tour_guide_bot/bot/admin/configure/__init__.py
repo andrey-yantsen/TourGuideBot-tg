@@ -48,7 +48,9 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
                 ]
             )
 
-        await update.message.reply_text(
+        await self.edit_or_reply_text(
+            update,
+            context,
             t(user.language).pgettext(
                 "admin-configure", "Please select the parameter you want to change."
             ),
