@@ -45,7 +45,7 @@ class HelpCommandHandler(BaseHandlerCallback):
             )
             return
 
-        await update.message.reply_text(terms.value)
+        await update.message.reply_markdown_v2(terms.value)
 
     async def support(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         language = await self.get_language(update, context)
@@ -63,4 +63,4 @@ class HelpCommandHandler(BaseHandlerCallback):
             )
             return
 
-        await update.message.reply_text(support.value)
+        await update.message.reply_markdown_v2(support.value)

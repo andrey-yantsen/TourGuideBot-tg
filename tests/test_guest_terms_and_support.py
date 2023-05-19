@@ -29,7 +29,7 @@ async def test_has_support_message(conversation: Conversation):
     await conversation.send_message("/support")
     response: Message = await conversation.get_response()
     assert (
-        response.message == r"support \(en\)"
+        response.message == "support (en)"
     ), "Unexpected response from a configured bot"
 
 
@@ -37,9 +37,7 @@ async def test_has_support_message(conversation: Conversation):
 async def test_has_terms_message(conversation: Conversation):
     await conversation.send_message("/terms")
     response: Message = await conversation.get_response()
-    assert (
-        response.message == r"terms \(en\)"
-    ), "Unexpected response from a configured bot"
+    assert response.message == "terms (en)", "Unexpected response from a configured bot"
 
 
 @pytest.mark.enabled_languages(["en", "ru"])
@@ -49,9 +47,7 @@ async def test_has_terms_message_multilang(
 ):
     await conversation.send_message("/terms")
     response: Message = await conversation.get_response()
-    assert (
-        response.message == r"terms \(en\)"
-    ), "Unexpected response from a configured bot"
+    assert response.message == "terms (en)", "Unexpected response from a configured bot"
 
     await conversation.send_message("/language")
     msg = await conversation.get_response()
@@ -59,9 +55,7 @@ async def test_has_terms_message_multilang(
 
     await conversation.send_message("/terms")
     response: Message = await conversation.get_response()
-    assert (
-        response.message == r"terms \(ru\)"
-    ), "Unexpected response from a configured bot"
+    assert response.message == "terms (ru)", "Unexpected response from a configured bot"
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         terms = await Settings.load(session, SettingsKey.terms_message, "ru")
@@ -80,9 +74,7 @@ async def test_has_terms_message_multilang(
 
     await conversation.send_message("/terms")
     response: Message = await conversation.get_response()
-    assert (
-        response.message == r"terms \(en\)"
-    ), "Unexpected response from a configured bot"
+    assert response.message == "terms (en)", "Unexpected response from a configured bot"
 
 
 @pytest.mark.enabled_languages(["en", "ru"])
@@ -93,7 +85,7 @@ async def test_has_support_message_multilang(
     await conversation.send_message("/support")
     response: Message = await conversation.get_response()
     assert (
-        response.message == r"support \(en\)"
+        response.message == "support (en)"
     ), "Unexpected response from a configured bot"
 
     await conversation.send_message("/language")
@@ -103,7 +95,7 @@ async def test_has_support_message_multilang(
     await conversation.send_message("/support")
     response: Message = await conversation.get_response()
     assert (
-        response.message == r"support \(ru\)"
+        response.message == "support (ru)"
     ), "Unexpected response from a configured bot"
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
@@ -124,5 +116,5 @@ async def test_has_support_message_multilang(
     await conversation.send_message("/support")
     response: Message = await conversation.get_response()
     assert (
-        response.message == r"support \(en\)"
+        response.message == "support (en)"
     ), "Unexpected response from a configured bot"
