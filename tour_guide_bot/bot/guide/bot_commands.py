@@ -23,6 +23,15 @@ class BotCommandsFactory:
 
         commands.append(
             BotCommand(
+                "start",
+                t(language).pgettext(
+                    "guest-bot-command", "Display the welcome message again"
+                ),
+            )
+        )
+
+        commands.append(
+            BotCommand(
                 "tours",
                 t(language).pgettext("guest-bot-command", "Show available tours"),
             )
@@ -35,19 +44,10 @@ class BotCommandsFactory:
             )
         )
 
-        commands.append(
-            BotCommand(
-                "start",
-                t(language).pgettext(
-                    "guest-bot-command", "Display the welcome message again"
-                ),
-            )
-        )
-
         if await Settings.exists(db_session, [SettingsKey.terms_message], language):
             commands.append(
                 BotCommand(
-                    "start",
+                    "terms",
                     t(language).pgettext(
                         "guest-bot-command", "Display terms & conditions"
                     ),
@@ -57,7 +57,7 @@ class BotCommandsFactory:
         if await Settings.exists(db_session, [SettingsKey.support_message], language):
             commands.append(
                 BotCommand(
-                    "start",
+                    "support",
                     t(language).pgettext(
                         "guest-bot-command", "Display how to contact the support"
                     ),

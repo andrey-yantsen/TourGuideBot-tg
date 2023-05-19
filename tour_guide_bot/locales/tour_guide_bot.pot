@@ -92,9 +92,9 @@ msgid "Unfortunately, you don't have any tours available for the guests."
 msgstr ""
 
 #: tour_guide_bot/bot/admin/approve.py:207
-#: tour_guide_bot/bot/admin/configure.py:168
-#: tour_guide_bot/bot/admin/configure.py:192
-#: tour_guide_bot/bot/admin/configure.py:448
+#: tour_guide_bot/bot/admin/configure/__init__.py:168
+#: tour_guide_bot/bot/admin/configure/__init__.py:192
+#: tour_guide_bot/bot/admin/configure/__init__.py:448
 #: tour_guide_bot/bot/admin/revoke.py:216
 #: tour_guide_bot/bot/admin/revoke.py:273
 #: tour_guide_bot/bot/admin/tour/add_content.py:408
@@ -147,145 +147,6 @@ msgctxt "admin-bot-command"
 msgid "Change the language"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure.py:92
-#, python-format
-msgctxt "admin-configure"
-msgid ""
-"Current delay between messages is %0.1fs. Please enter a desired delay "
-"(float value between 0 and 4.5)."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:111
-#: tour_guide_bot/bot/admin/configure.py:120
-msgctxt "admin-configure"
-msgid "Please enter a float value between 0 and 4.5."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:135
-msgctxt "admin-configure"
-msgid "The delay was updated!"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:153
-msgctxt "admin-configure"
-msgid ""
-"Audio\\-to\\-voice conversion suggestions are currently *enabled*\\. "
-"Would you like to disable them?"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:162
-#: tour_guide_bot/bot/admin/configure.py:186
-#: tour_guide_bot/bot/admin/revoke.py:212
-#: tour_guide_bot/bot/admin/tour/add_content.py:705
-#: tour_guide_bot/bot/admin/tour/main.py:288
-msgctxt "bot-generic"
-msgid "Yes"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:177
-msgctxt "admin-configure"
-msgid ""
-"Audio\\-to\\-voice conversion suggestions are currently *disabled*\\. "
-"Would you like to enable them?"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:219
-msgctxt "admin-configure"
-msgid "Audio-to-voice conversion suggestions were enabled."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:226
-msgctxt "admin-configure"
-msgid "Audio-to-voice conversion suggestions were disabled."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:249
-msgctxt "admin-configure"
-msgid "Please select the language for the {} you want to edit."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:262
-msgctxt "admin-configure"
-msgid "welcome message"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:264
-msgctxt "admin-configure"
-msgid "terms & conditions"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:266
-msgctxt "admin-configure"
-msgid "support message"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:298
-#: tour_guide_bot/bot/admin/configure.py:364
-#: tour_guide_bot/bot/admin/revoke.py:78 tour_guide_bot/bot/admin/revoke.py:91
-#: tour_guide_bot/bot/admin/revoke.py:116
-#: tour_guide_bot/bot/admin/tour/main.py:239
-#: tour_guide_bot/bot/admin/tour/main.py:273
-#: tour_guide_bot/bot/admin/tour/main.py:370
-#: tour_guide_bot/bot/admin/tour/main.py:527
-#: tour_guide_bot/bot/admin/tour/main.py:594
-#: tour_guide_bot/bot/guide/tours.py:101 tour_guide_bot/bot/guide/tours.py:323
-#: tour_guide_bot/bot/guide/tours.py:371
-msgctxt "bot-generic"
-msgid "Something went wrong; please try again."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:319
-msgctxt "admin-configure"
-msgid ""
-"The bot currently has the following {}. Please send me a new one if you "
-"want to change it, or send /cancel to abort the modification."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:337
-msgctxt "admin-configure"
-msgid "The bot currently doesn't have a {}. Please send me one."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:350
-msgctxt "admin-configure"
-msgid "Please send me a regular text message."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:385
-msgctxt "admin-configure"
-msgid "Bot's {} has been changed."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:401
-msgctxt "admin-configure"
-msgid "Please select the parameter you want to change."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:408
-msgctxt "admin-bot-configure"
-msgid "Guide welcome message"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:416
-msgctxt "admin-bot-configure"
-msgid "Audio-to-voice suggestions"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:424
-msgctxt "admin-bot-configure"
-msgid "Delay between messages"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:432
-msgctxt "admin-bot-configure"
-msgid "Support message"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure.py:440
-msgctxt "admin-bot-configure"
-msgid "Terms & Conditions"
-msgstr ""
-
 #: tour_guide_bot/bot/admin/help.py:21
 msgctxt "admin-help"
 msgid "Please send me your contact."
@@ -309,6 +170,21 @@ msgid ""
 "* /guest — return to the guest mode"
 msgstr ""
 
+#: tour_guide_bot/bot/admin/configure/__init__.py:298
+#: tour_guide_bot/bot/admin/configure/__init__.py:364
+#: tour_guide_bot/bot/admin/revoke.py:78 tour_guide_bot/bot/admin/revoke.py:91
+#: tour_guide_bot/bot/admin/revoke.py:116
+#: tour_guide_bot/bot/admin/tour/main.py:239
+#: tour_guide_bot/bot/admin/tour/main.py:273
+#: tour_guide_bot/bot/admin/tour/main.py:370
+#: tour_guide_bot/bot/admin/tour/main.py:527
+#: tour_guide_bot/bot/admin/tour/main.py:594
+#: tour_guide_bot/bot/guide/tours.py:101 tour_guide_bot/bot/guide/tours.py:323
+#: tour_guide_bot/bot/guide/tours.py:371
+msgctxt "bot-generic"
+msgid "Something went wrong; please try again."
+msgstr ""
+
 #: tour_guide_bot/bot/admin/revoke.py:132
 msgctxt "admin-revoke"
 msgid "Access to \"{0}\" was revoked from +{1}."
@@ -329,6 +205,15 @@ msgstr ""
 #: tour_guide_bot/bot/admin/revoke.py:203
 msgctxt "admin-revoke"
 msgid "Are you sure you want to revoke the access to \"{0}\" from +{1}?"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:162
+#: tour_guide_bot/bot/admin/configure/__init__.py:186
+#: tour_guide_bot/bot/admin/revoke.py:212
+#: tour_guide_bot/bot/admin/tour/add_content.py:705
+#: tour_guide_bot/bot/admin/tour/main.py:288
+msgctxt "bot-generic"
+msgid "Yes"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/revoke.py:230
@@ -381,6 +266,121 @@ msgstr ""
 #: tour_guide_bot/bot/admin/start.py:206
 msgctxt "admin-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:92
+#, python-format
+msgctxt "admin-configure"
+msgid ""
+"Current delay between messages is %0.1fs. Please enter a desired delay "
+"(float value between 0 and 4.5)."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:111
+#: tour_guide_bot/bot/admin/configure/__init__.py:120
+msgctxt "admin-configure"
+msgid "Please enter a float value between 0 and 4.5."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:135
+msgctxt "admin-configure"
+msgid "The delay was updated!"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:153
+msgctxt "admin-configure"
+msgid ""
+"Audio\\-to\\-voice conversion suggestions are currently *enabled*\\. "
+"Would you like to disable them?"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:177
+msgctxt "admin-configure"
+msgid ""
+"Audio\\-to\\-voice conversion suggestions are currently *disabled*\\. "
+"Would you like to enable them?"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:219
+msgctxt "admin-configure"
+msgid "Audio-to-voice conversion suggestions were enabled."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:226
+msgctxt "admin-configure"
+msgid "Audio-to-voice conversion suggestions were disabled."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:249
+msgctxt "admin-configure"
+msgid "Please select the language for the {} you want to edit."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:262
+msgctxt "admin-configure"
+msgid "welcome message"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:264
+msgctxt "admin-configure"
+msgid "terms & conditions"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:266
+msgctxt "admin-configure"
+msgid "support message"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:319
+msgctxt "admin-configure"
+msgid ""
+"The bot currently has the following {}. Please send me a new one if you "
+"want to change it, or send /cancel to abort the modification."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:337
+msgctxt "admin-configure"
+msgid "The bot currently doesn't have a {}. Please send me one."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:350
+msgctxt "admin-configure"
+msgid "Please send me a regular text message."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:385
+msgctxt "admin-configure"
+msgid "Bot's {} has been changed."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:401
+msgctxt "admin-configure"
+msgid "Please select the parameter you want to change."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:408
+msgctxt "admin-bot-configure"
+msgid "Guide welcome message"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:416
+msgctxt "admin-bot-configure"
+msgid "Audio-to-voice suggestions"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:424
+msgctxt "admin-bot-configure"
+msgid "Delay between messages"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:432
+msgctxt "admin-bot-configure"
+msgid "Support message"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/__init__.py:440
+msgctxt "admin-bot-configure"
+msgid "Terms & Conditions"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/tour/add_content.py:165
@@ -690,17 +690,17 @@ msgstr ""
 
 #: tour_guide_bot/bot/guide/bot_commands.py:27
 msgctxt "guest-bot-command"
+msgid "Display the welcome message again"
+msgstr ""
+
+#: tour_guide_bot/bot/guide/bot_commands.py:36
+msgctxt "guest-bot-command"
 msgid "Show available tours"
 msgstr ""
 
-#: tour_guide_bot/bot/guide/bot_commands.py:34
+#: tour_guide_bot/bot/guide/bot_commands.py:43
 msgctxt "guest-bot-command"
 msgid "Change the language"
-msgstr ""
-
-#: tour_guide_bot/bot/guide/bot_commands.py:41
-msgctxt "guest-bot-command"
-msgid "Display the welcome message again"
 msgstr ""
 
 #: tour_guide_bot/bot/guide/bot_commands.py:51
