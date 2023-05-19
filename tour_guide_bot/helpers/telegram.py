@@ -184,6 +184,12 @@ class AdminProtectedBaseHandlerCallback(BaseHandlerCallback):
             return await callback(handler, update, context)
 
 
+class ConfigureSubcommandHandler(AdminProtectedBaseHandlerCallback):
+    @staticmethod
+    def get_name(language: str) -> str:
+        raise NotImplementedError()
+
+
 def get_tour_title(
     tour: Tour, current_language: str, context: ContextTypes.DEFAULT_TYPE
 ) -> str:
