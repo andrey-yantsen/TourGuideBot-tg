@@ -6,7 +6,7 @@ from tour_guide_bot.models.settings import SettingsKey
 class SupportMessage(MessagesBase):
     @staticmethod
     def get_name(language: str) -> str:
-        return t(language).pgettext("admin-bot-configure", "Support message")
+        return t(language).pgettext("admin-configure", "Support message")
 
     @staticmethod
     def get_message_name(language: str) -> str:

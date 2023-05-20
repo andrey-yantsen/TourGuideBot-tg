@@ -18,7 +18,7 @@ class DelayBetweenMessages(ConfigureSubcommandHandler):
 
     @staticmethod
     def get_name(language: str) -> str:
-        return t(language).pgettext("admin-bot-configure", "Delay between messages")
+        return t(language).pgettext("admin-configure", "Delay between messages")
 
     @classmethod
     def get_handlers(cls):

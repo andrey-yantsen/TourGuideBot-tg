@@ -2,6 +2,8 @@ import enum
 from typing import Optional
 
 from sqlalchemy import (
+    JSON,
+    Boolean,
     Column,
     DateTime,
     Enum,
@@ -104,3 +106,22 @@ class Settings(Base):
         existing_keys = (await db_session.scalars(stmt)).all()
 
         return len(set(existing_keys)) == len(set(keys))
+
+
+class PaymentProvider(Base):
+    __tablename__ = "payment_provider"
+    __mapper_args__ = {"eager_defaults": True}
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    language = Column(String)
+    enabled = Column(Boolean, nullable=False, default=False)
+    config = Column(JSON, nullable=False)
+    created_ts = Column(DateTime, nullable=False, server_default=func.now())
+    updated_ts = Column(
+        DateTime, nullable=False, default=func.now(), onupdate=func.now()
+    )
+
+    __table_args__ = (
+        Index("ix_payment_provider_language_enabled", "language", "enabled"),
+    )

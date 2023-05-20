@@ -12,6 +12,7 @@ from tour_guide_bot.bot.admin.configure.delay_between_messages import (
 from tour_guide_bot.bot.admin.configure.messages.support import SupportMessage
 from tour_guide_bot.bot.admin.configure.messages.terms import TermsMessage
 from tour_guide_bot.bot.admin.configure.messages.welcome import WelcomeMessage
+from tour_guide_bot.bot.admin.configure.payments import PaymentsSubcommand
 from tour_guide_bot.helpers.telegram import AdminProtectedBaseHandlerCallback
 
 
@@ -20,6 +21,7 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         WelcomeMessage,
         TermsMessage,
         SupportMessage,
+        PaymentsSubcommand,
         AudioToVoice,
         DelayBetweenMessages,
     ]
@@ -39,6 +41,9 @@ class ConfigureCommandHandler(AdminProtectedBaseHandlerCallback):
         keyboard = []
 
         for item in self.CONFIGURATION_ITEMS:
+            if not await item.available(self.db_session):
+                continue
+
             keyboard.append(
                 [
                     InlineKeyboardButton(

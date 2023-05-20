@@ -189,6 +189,10 @@ class ConfigureSubcommandHandler(AdminProtectedBaseHandlerCallback):
     def get_name(language: str) -> str:
         raise NotImplementedError()
 
+    @classmethod
+    async def available(cls, db_session: AsyncSession) -> bool:
+        return True
+
 
 def get_tour_title(
     tour: Tour, current_language: str, context: ContextTypes.DEFAULT_TYPE

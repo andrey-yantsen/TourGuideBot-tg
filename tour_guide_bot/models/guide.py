@@ -16,6 +16,8 @@ from sqlalchemy import (
 from sqlalchemy.ext.mutable import MutableDict
 from sqlalchemy.orm import object_session, relationship
 
+from tour_guide_bot.models.settings import PaymentProvider
+
 from . import Base
 
 
@@ -133,6 +135,52 @@ class TourSectionContent(Base):
             "media_group_id",
             unique=True,
         ),
+    )
+
+
+class Product(Base):
+    __tablename__ = "product"
+    __mapper_args__ = {"eager_defaults": True}
+
+    id = Column(Integer, primary_key=True)
+    tour_id = Column(Integer, ForeignKey("tour.id"), nullable=False)
+    tour = relationship("Tour")
+    payment_provider_id = Column(
+        Integer, ForeignKey("payment_provider.id"), nullable=False
+    )
+    payment_provider = relationship(PaymentProvider)
+    currency = Column(Integer, nullable=False)
+    price = Column(Integer, nullable=False)
+    duration_days = Column(Integer, nullable=False)
+    available = Column(Boolean, nullable=False, default=True)
+    created_ts = Column(DateTime, nullable=False, server_default=func.now())
+    updated_ts = Column(
+        DateTime, nullable=False, default=func.now(), onupdate=func.now()
+    )
+
+
+class Invoice(Base):
+    __tablename__ = "invoice"
+    __mapper_args__ = {"eager_defaults": True}
+
+    id = Column(Integer, primary_key=True)
+    product_id = Column(Integer, ForeignKey("product.id"), nullable=False)
+    product = relationship("Product")
+    tour_id = Column(Integer, ForeignKey("tour.id"), nullable=False)
+    tour = relationship("Tour")
+    payment_provider_id = Column(
+        Integer, ForeignKey("payment_provider.id"), nullable=False
+    )
+    payment_provider = relationship(PaymentProvider)
+    currency = Column(Integer, nullable=False)
+    price = Column(Integer, nullable=False)
+    duration_days = Column(Integer, nullable=False)
+    paid = Column(Boolean, nullable=False, default=False)
+    subscription_id = Column(Integer, ForeignKey("subscription.id"), nullable=True)
+    subscription = relationship("Subscription")
+    created_ts = Column(DateTime, nullable=False, server_default=func.now())
+    updated_ts = Column(
+        DateTime, nullable=False, default=func.now(), onupdate=func.now()
     )
 
 

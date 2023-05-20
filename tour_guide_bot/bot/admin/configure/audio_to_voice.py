@@ -19,7 +19,7 @@ class AudioToVoice(ConfigureSubcommandHandler):
 
     @staticmethod
     def get_name(language: str) -> str:
-        return t(language).pgettext("admin-bot-configure", "Audio-to-voice suggestions")
+        return t(language).pgettext("admin-configure", "Audio-to-voice suggestions")
 
     @classmethod
     def get_handlers(cls):

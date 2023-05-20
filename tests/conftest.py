@@ -24,7 +24,7 @@ from tour_guide_bot.models.guide import (
     TourSectionContent,
     TourTranslation,
 )
-from tour_guide_bot.models.settings import Settings, SettingsKey
+from tour_guide_bot.models.settings import PaymentProvider, Settings, SettingsKey
 from tour_guide_bot.models.telegram import TelegramUser
 
 
@@ -60,6 +60,18 @@ def mtproto_api_hash():
         api_hash
     ), "Please set the telegram app api hash via TOUR_GUIDE_TELEGRAM_APP_API_HASH env variable"
     return api_hash
+
+
+@pytest.fixture(scope="session")
+def payment_token() -> str:
+    token = environ.get("TOUR_GUIDE_TELEGRAM_PAYMENT_TOKEN")
+
+    if not token:
+        pytest.skip(
+            "No payment token found in TOUR_GUIDE_TELEGRAM_PAYMENT_TOKEN env variable"
+        )
+
+    return token
 
 
 @pytest.fixture(scope="session")
@@ -271,7 +283,10 @@ async def unconfigured_app(unitialized_app: Application):
 
 @pytest.fixture
 async def app(
-    unconfigured_app: Application, db_engine: AsyncEngine, enabled_languages: list[str]
+    request: pytest.FixtureRequest,
+    unconfigured_app: Application,
+    db_engine: AsyncEngine,
+    enabled_languages: list[str],
 ):
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         for lang in enabled_languages:
@@ -296,9 +311,38 @@ async def app(
             )
             session.add(support)
 
+        skip_payment_token_stub = request.node.get_closest_marker(
+            "skip_payment_token_stub"
+        )
+        if skip_payment_token_stub is None:
+            provider = PaymentProvider(
+                name="test provider", config={"token": "fake_token"}, enabled=True
+            )
+            session.add(provider)
+
         await session.commit()
 
     yield unconfigured_app
+
+
+@pytest.fixture()
+async def payment_provider(db_engine: AsyncEngine, payment_token: str):
+    async with AsyncSession(db_engine, expire_on_commit=False) as session:
+        stmt = select(PaymentProvider).where(PaymentProvider.enabled == True)
+        provider = await session.scalar(stmt)
+
+        if provider is None:
+            provider = PaymentProvider(
+                name="test provider", config={"token": payment_token}, enabled=True
+            )
+        else:
+            provider.token = {"token": payment_token}
+
+        session.add(provider)
+
+        await session.commit()
+
+    return payment_token
 
 
 @pytest.fixture(scope="session")
