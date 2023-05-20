@@ -1,7 +1,7 @@
 import datetime
 import re
 
-import dateparser
+from babel.dates import format_datetime
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
@@ -68,19 +68,16 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
     async def duration(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
-        d = dateparser.parse(
-            update.message.text,
-            languages=context.application.enabled_languages,
-        )
+        try:
+            d = int(update.message.text)
+        except ValueError:
+            d = None
 
-        now = datetime.datetime.now()
-
-        if not d or d < now:
+        if not d or d <= 0:
             await update.message.reply_text(
                 t(user.language).pgettext(
                     "admin-approve",
-                    "I've failed to parse your input; please try again."
-                    ' Enter something like "in 6 months", "in 1 week" and so on.',
+                    "I've failed to parse your input; please enter a valid positive number.",
                 )
             )
             return self.STATE_DURATION
@@ -98,7 +95,9 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             guest = Guest(phone=context.user_data["phone_number"])
             self.db_session.add(guest)
 
-        purchase = Subscription(guest=guest, tour=tour, expire_ts=d)
+        now = datetime.datetime.now()
+        expire_ts = now + datetime.timedelta(days=d)
+        purchase = Subscription(guest=guest, tour=tour, expire_ts=expire_ts)
         if guest.id:
             existing_purchase = await self.db_session.scalar(
                 select(Subscription).where(
@@ -108,7 +107,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
                 )
             )
             if existing_purchase:
-                existing_purchase.expire_ts = d
+                existing_purchase.expire_ts = expire_ts
                 purchase = existing_purchase
 
         self.db_session.add(purchase)
@@ -123,7 +122,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             .format(
                 guest.phone,
                 get_tour_title(tour, user.language, context),
-                d.strftime("%Y-%m-%d %H:%M:%S"),
+                format_datetime(expire_ts, locale=user.language),
             )
         )
         return ConversationHandler.END
@@ -151,7 +150,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
         await update.message.reply_text(
             t(user.language).pgettext(
                 "admin-approve",
-                'When the access should expire? Enter something like "in 6 months", "in 1 week" and so on.',
+                "How long the user should have access? Please enter a duration in days.",
             )
         )
 

@@ -37,11 +37,11 @@ async def test_approve_known_user(
     await admin_conversation.send_message(admin.phone)
     response: Message = await admin_conversation.get_response()
     assert (
-        "When should the access expire?" in response.message
+        "How long the user should have access" in response.message
     ), "Unexpected grant duration request message"
 
     now = datetime.now()
-    await admin_conversation.send_message("in 1 week")
+    await admin_conversation.send_message("7")
     response: Message = await admin_conversation.get_response()
     assert (
         "was approved for the tour" in response.message
@@ -82,10 +82,10 @@ async def test_approve_unknown_user(
     await admin_conversation.send_message(admin.phone)
     response: Message = await admin_conversation.get_response()
     assert (
-        "When should the access expire?" in response.message
+        "How long the user should have access" in response.message
     ), "Unexpected grant duration request message"
 
-    await admin_conversation.send_message("in 1 hour")
+    await admin_conversation.send_message("1")
     response: Message = await admin_conversation.get_response()
     assert (
         "was approved for the tour" in response.message
