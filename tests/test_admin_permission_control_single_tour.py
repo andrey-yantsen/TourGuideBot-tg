@@ -28,7 +28,9 @@ async def test_approve_known_user(
         "Please select the tour." == response.message
     ), "Unexpected response to the /approve command"
 
-    response = await response.click(text=tours_as_dicts[0]["en"]["title"])
+    response = await response.click(
+        text=tours_as_dicts[0]["translations"]["en"]["title"]
+    )
     assert isinstance(response, BotCallbackAnswer)
 
     event: MessageEdited.Event = await admin_conversation.wait_event(MessageEdited())
@@ -73,7 +75,9 @@ async def test_approve_unknown_user(
         "Please select the tour." == response.message
     ), "Unexpected response to the /approve command"
 
-    response = await response.click(text=tours_as_dicts[0]["en"]["title"])
+    response = await response.click(
+        text=tours_as_dicts[0]["translations"]["en"]["title"]
+    )
     assert isinstance(response, BotCallbackAnswer)
 
     event: MessageEdited.Event = await admin_conversation.wait_event(MessageEdited())
@@ -117,7 +121,9 @@ async def test_revoke(
 
     assert "Please select the tour" in response.message
 
-    response = await response.click(text=tours_as_dicts[0]["en"]["title"])
+    response = await response.click(
+        text=tours_as_dicts[0]["translations"]["en"]["title"]
+    )
     assert isinstance(response, BotCallbackAnswer)
 
     event: MessageEdited.Event = await admin_conversation.wait_event(MessageEdited())

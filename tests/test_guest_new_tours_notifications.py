@@ -17,7 +17,8 @@ async def test_single_tour(
     await app.check_new_approved_tours(ctx)
     response: Message = await conversation.get_response()
     assert (
-        'You have a new tour available — "%s"' % tours_as_dicts[0]["en"]["title"]
+        'You have a new tour available — "%s"'
+        % tours_as_dicts[0]["translations"]["en"]["title"]
         in response.message
     )
 
@@ -25,53 +26,57 @@ async def test_single_tour(
 @pytest.mark.approved_tour_ids(1, 2)
 @pytest.mark.tours(
     {
-        "en": {
-            "title": "Test tour 1",
-            "sections": [
-                {
-                    "title": "Test section 1.1",
-                    "content": [
-                        {
-                            "type": MessageType.text,
-                            "content": {"text": r"Test text 1\.1\.1"},
-                        },
-                    ],
-                },
-                {
-                    "title": "Test section 1.2",
-                    "content": [
-                        {
-                            "type": MessageType.text,
-                            "content": {"text": r"Test text 1\.2\.1"},
-                        },
-                    ],
-                },
-            ],
+        "translations": {
+            "en": {
+                "title": "Test tour 1",
+                "sections": [
+                    {
+                        "title": "Test section 1.1",
+                        "content": [
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": r"Test text 1\.1\.1"},
+                            },
+                        ],
+                    },
+                    {
+                        "title": "Test section 1.2",
+                        "content": [
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": r"Test text 1\.2\.1"},
+                            },
+                        ],
+                    },
+                ],
+            }
         }
     },
     {
-        "en": {
-            "title": "Test tour 2",
-            "sections": [
-                {
-                    "title": "Test section 2.1",
-                    "content": [
-                        {
-                            "type": MessageType.text,
-                            "content": {"text": r"Test text 2\.1\.1"},
-                        },
-                    ],
-                },
-                {
-                    "title": "Test section 2.2",
-                    "content": [
-                        {
-                            "type": MessageType.text,
-                            "content": {"text": r"Test text 2\.2\.1"},
-                        },
-                    ],
-                },
-            ],
+        "translations": {
+            "en": {
+                "title": "Test tour 2",
+                "sections": [
+                    {
+                        "title": "Test section 2.1",
+                        "content": [
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": r"Test text 2\.1\.1"},
+                            },
+                        ],
+                    },
+                    {
+                        "title": "Test section 2.2",
+                        "content": [
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": r"Test text 2\.2\.1"},
+                            },
+                        ],
+                    },
+                ],
+            }
         }
     },
 )
@@ -83,7 +88,7 @@ async def test_multiple_tours(
     await conversation.send_message("x")
     await app.check_new_approved_tours(ctx)
 
-    tours_titles = [tour["en"]["title"] for tour in tours_as_dicts]
+    tours_titles = [tour["translations"]["en"]["title"] for tour in tours_as_dicts]
 
     response: Message = await conversation.get_response()
     expected_msg = 'You have a new tour available — "%s".' % tours_titles[0]
@@ -104,53 +109,57 @@ async def test_multiple_tours(
 @pytest.mark.approved_tour_ids(2)
 @pytest.mark.tours(
     {
-        "en": {
-            "title": "Test tour 1",
-            "sections": [
-                {
-                    "title": "Test section 1.1",
-                    "content": [
-                        {
-                            "type": MessageType.text,
-                            "content": {"text": r"Test text 1\.1\.1"},
-                        },
-                    ],
-                },
-                {
-                    "title": "Test section 1.2",
-                    "content": [
-                        {
-                            "type": MessageType.text,
-                            "content": {"text": r"Test text 1\.2\.1"},
-                        },
-                    ],
-                },
-            ],
+        "translations": {
+            "en": {
+                "title": "Test tour 1",
+                "sections": [
+                    {
+                        "title": "Test section 1.1",
+                        "content": [
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": r"Test text 1\.1\.1"},
+                            },
+                        ],
+                    },
+                    {
+                        "title": "Test section 1.2",
+                        "content": [
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": r"Test text 1\.2\.1"},
+                            },
+                        ],
+                    },
+                ],
+            }
         }
     },
     {
-        "en": {
-            "title": "Test tour 2",
-            "sections": [
-                {
-                    "title": "Test section 2.1",
-                    "content": [
-                        {
-                            "type": MessageType.text,
-                            "content": {"text": r"Test text 2\.1\.1"},
-                        },
-                    ],
-                },
-                {
-                    "title": "Test section 2.2",
-                    "content": [
-                        {
-                            "type": MessageType.text,
-                            "content": {"text": r"Test text 2\.2\.1"},
-                        },
-                    ],
-                },
-            ],
+        "translations": {
+            "en": {
+                "title": "Test tour 2",
+                "sections": [
+                    {
+                        "title": "Test section 2.1",
+                        "content": [
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": r"Test text 2\.1\.1"},
+                            },
+                        ],
+                    },
+                    {
+                        "title": "Test section 2.2",
+                        "content": [
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": r"Test text 2\.2\.1"},
+                            },
+                        ],
+                    },
+                ],
+            }
         }
     },
 )
@@ -164,6 +173,7 @@ async def test_multiple_tours_single_approved(
     response: Message = await conversation.get_response()
 
     assert (
-        'You have a new tour available — "%s"' % tours_as_dicts[1]["en"]["title"]
+        'You have a new tour available — "%s"'
+        % tours_as_dicts[1]["translations"]["en"]["title"]
         in response.message
     )

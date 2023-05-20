@@ -4,6 +4,7 @@ from os import environ
 from pathlib import Path
 
 import pytest
+from pytest_mock import MockerFixture
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.orm import selectinload
@@ -14,10 +15,12 @@ from telethon.tl.types import KeyboardButtonRequestPhone
 
 from tour_guide_bot.bot.app import Application
 from tour_guide_bot.cli import prepare_app
+from tour_guide_bot.helpers.currency import Currency
 from tour_guide_bot.models.admin import Admin, AdminPermissions
 from tour_guide_bot.models.guide import (
     Guest,
     MessageType,
+    Product,
     Subscription,
     Tour,
     TourSection,
@@ -124,32 +127,54 @@ def enabled_languages(request: pytest.FixtureRequest) -> list[str]:
 @pytest.fixture
 def default_tour() -> dict:
     return {
-        "en": {
-            "title": "Test tour",
-            "sections": [
-                {
-                    "title": "Test section 1",
-                    "content": [
-                        {"type": MessageType.text, "content": {"text": "Test text 1"}},
-                        {
-                            "type": MessageType.location,
-                            "content": {
-                                "latitude": 51.5072046,
-                                "longitude": -0.1758395,
+        "products": [
+            {
+                "currency": "USD",
+                "payment_provider_id": 1,
+                "price": 100,
+                "duration_days": 1,
+            },
+        ],
+        "translations": {
+            "en": {
+                "title": "Test tour",
+                "sections": [
+                    {
+                        "title": "Test section 1",
+                        "content": [
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": "Test text 1"},
                             },
-                        },
-                        {"type": MessageType.text, "content": {"text": "Test text 2"}},
-                    ],
-                },
-                {
-                    "title": "Test section 2",
-                    "content": [
-                        {"type": MessageType.text, "content": {"text": "Test text 3"}},
-                        {"type": MessageType.text, "content": {"text": "Test text 4"}},
-                    ],
-                },
-            ],
-        }
+                            {
+                                "type": MessageType.location,
+                                "content": {
+                                    "latitude": 51.5072046,
+                                    "longitude": -0.1758395,
+                                },
+                            },
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": "Test text 2"},
+                            },
+                        ],
+                    },
+                    {
+                        "title": "Test section 2",
+                        "content": [
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": "Test text 3"},
+                            },
+                            {
+                                "type": MessageType.text,
+                                "content": {"text": "Test text 4"},
+                            },
+                        ],
+                    },
+                ],
+            }
+        },
     }
 
 
@@ -166,6 +191,7 @@ async def tours_as_dicts(request: pytest.FixtureRequest, default_tour: dict) -> 
 
 @pytest.fixture
 async def tours(
+    request: pytest.FixtureRequest,
     db_engine: AsyncEngine,
     tours_as_dicts: list[dict],
     conversation: Conversation,
@@ -179,7 +205,7 @@ async def tours(
             tour_model = Tour()
             session.add(tour_model)
 
-            for lang, data in tour.items():
+            for lang, data in tour.get("translations", {}).items():
                 tour_translation = TourTranslation(
                     language=lang, tour=tour_model, title=data["title"]
                 )
@@ -212,6 +238,14 @@ async def tours(
                             content=content["content"],
                         )
                         session.add(content)
+
+            skip_payment_token_stub = request.node.get_closest_marker(
+                "skip_payment_token_stub"
+            )
+            if skip_payment_token_stub is None:
+                for product_config in tour.get("products", []):
+                    product = Product(tour=tour_model, **product_config)
+                    session.add(product)
 
             ret.append(tour_model)
 
@@ -477,3 +511,67 @@ async def get_phone_number_request(conversation: Conversation):
         response.reply_markup.rows[0].buttons[0], KeyboardButtonRequestPhone
     ), "No request phone button"
     return response
+
+
+async def get_currency_config():
+    return {
+        "AED": {
+            "code": "AED",
+            "title": "United Arab Emirates Dirham",
+            "symbol": "AED",
+            "native": "د.إ.‏",
+            "thousands_sep": ",",
+            "decimal_sep": ".",
+            "symbol_left": True,
+            "space_between": True,
+            "exp": 2,
+            "min_amount": "367",
+            "max_amount": "3672304",
+        },
+        "USD": {
+            "code": "USD",
+            "title": "United States Dollar",
+            "symbol": "$",
+            "native": "$",
+            "thousands_sep": ",",
+            "decimal_sep": ".",
+            "symbol_left": True,
+            "space_between": False,
+            "exp": 2,
+            "min_amount": "100",
+            "max_amount": 1000000,
+        },
+        "CLP": {
+            "code": "CLP",
+            "title": "Chilean Peso",
+            "symbol": "CLP",
+            "native": "$",
+            "thousands_sep": ".",
+            "decimal_sep": ",",
+            "symbol_left": False,
+            "space_between": True,
+            "exp": 0,
+            "min_amount": "794",
+            "max_amount": "7942624",
+        },
+        "XXX": {
+            "code": "XXX",
+            "title": "Chilean Peso",
+            "symbol": "XXX",
+            "native": "$",
+            "thousands_sep": ".",
+            "decimal_sep": ",",
+            "symbol_left": False,
+            "space_between": False,
+            "exp": 0,
+            "min_amount": "794",
+            "max_amount": "7942624",
+        },
+    }
+
+
+@pytest.fixture
+async def mock_currency_config(mocker: MockerFixture):
+    Currency.cache = None
+    Currency.last_cache_update = None
+    mocker.patch.object(Currency, "load_currencies_config", new=get_currency_config)

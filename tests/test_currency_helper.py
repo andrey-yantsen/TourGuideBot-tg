@@ -1,73 +1,9 @@
 from datetime import datetime, timedelta
 
 import pytest
-from pytest_mock import MockerFixture
 
+from tests.conftest import get_currency_config
 from tour_guide_bot.helpers.currency import Currency
-
-
-async def get_currency_config():
-    return {
-        "AED": {
-            "code": "AED",
-            "title": "United Arab Emirates Dirham",
-            "symbol": "AED",
-            "native": "د.إ.‏",
-            "thousands_sep": ",",
-            "decimal_sep": ".",
-            "symbol_left": True,
-            "space_between": True,
-            "exp": 2,
-            "min_amount": "367",
-            "max_amount": "3672304",
-        },
-        "USD": {
-            "code": "USD",
-            "title": "United States Dollar",
-            "symbol": "$",
-            "native": "$",
-            "thousands_sep": ",",
-            "decimal_sep": ".",
-            "symbol_left": True,
-            "space_between": False,
-            "exp": 2,
-            "min_amount": "100",
-            "max_amount": 1000000,
-        },
-        "CLP": {
-            "code": "CLP",
-            "title": "Chilean Peso",
-            "symbol": "CLP",
-            "native": "$",
-            "thousands_sep": ".",
-            "decimal_sep": ",",
-            "symbol_left": False,
-            "space_between": True,
-            "exp": 0,
-            "min_amount": "794",
-            "max_amount": "7942624",
-        },
-        "XXX": {
-            "code": "XXX",
-            "title": "Chilean Peso",
-            "symbol": "XXX",
-            "native": "$",
-            "thousands_sep": ".",
-            "decimal_sep": ",",
-            "symbol_left": False,
-            "space_between": False,
-            "exp": 0,
-            "min_amount": "794",
-            "max_amount": "7942624",
-        },
-    }
-
-
-@pytest.fixture
-async def mock_currency_config(mocker: MockerFixture):
-    Currency.cache = None
-    Currency.last_cache_update = None
-    mocker.patch.object(Currency, "load_currencies_config", new=get_currency_config)
 
 
 @pytest.mark.usefixtures("mock_currency_config")
