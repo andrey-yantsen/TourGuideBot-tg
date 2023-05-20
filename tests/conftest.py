@@ -370,7 +370,7 @@ async def payment_provider(db_engine: AsyncEngine, payment_token: str):
                 name="test provider", config={"token": payment_token}, enabled=True
             )
         else:
-            provider.token = {"token": payment_token}
+            provider.config = {"token": payment_token}
 
         session.add(provider)
 

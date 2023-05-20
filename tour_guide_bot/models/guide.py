@@ -32,6 +32,9 @@ class Tour(Base):
     purchases = relationship(
         "Subscription", cascade="all, delete-orphan", back_populates="tour"
     )
+    products = relationship(
+        "Product", back_populates="tour", order_by="Product.currency, Product.price"
+    )
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
         DateTime, nullable=False, default=func.now(), onupdate=func.now()
@@ -168,6 +171,8 @@ class Invoice(Base):
     product = relationship("Product")
     tour_id = Column(Integer, ForeignKey("tour.id"), nullable=False)
     tour = relationship("Tour")
+    guest_id = Column(Integer, ForeignKey("guest.id"), nullable=False)
+    guest = relationship("Guest")
     payment_provider_id = Column(
         Integer, ForeignKey("payment_provider.id"), nullable=False
     )

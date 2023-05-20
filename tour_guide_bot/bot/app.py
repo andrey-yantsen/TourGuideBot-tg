@@ -11,6 +11,7 @@ from tour_guide_bot.bot.admin.start import (
     StartCommandHandler as AdminStartCommandHandler,
 )
 from tour_guide_bot.bot.guide.help import HelpCommandHandler
+from tour_guide_bot.bot.guide.purchase import PurchaseCommandHandler
 from tour_guide_bot.bot.guide.start import StartCommandHandler
 from tour_guide_bot.bot.guide.tours import ToursCommandHandler
 from tour_guide_bot.helpers.language import LanguageHandler
@@ -33,6 +34,7 @@ class Application(BaseApplication):
 
         self.add_handlers(StartCommandHandler.get_handlers())
         self.add_handlers(ToursCommandHandler.get_handlers())
+        self.add_handlers(PurchaseCommandHandler.get_handlers())
         self.add_handlers(LanguageHandler.get_handlers())
         self.add_handlers(HelpCommandHandler.get_handlers())
 

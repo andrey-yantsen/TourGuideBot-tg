@@ -1,7 +1,9 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from telegram import Bot, BotCommand, BotCommandScopeChat
 
 from tour_guide_bot import t
+from tour_guide_bot.models.guide import Product
 from tour_guide_bot.models.settings import Settings, SettingsKey
 from tour_guide_bot.models.telegram import TelegramUser
 
@@ -36,6 +38,18 @@ class BotCommandsFactory:
                 t(language).pgettext("guest-bot-command", "Show available tours"),
             )
         )
+
+        stmt = select(Product).where(Product.available == True)
+        product = await db_session.scalar(stmt)
+        if product is not None:
+            commands.append(
+                BotCommand(
+                    "purchase",
+                    t(language).pgettext(
+                        "guest-bot-command", "Purchase (or extend) access to a tour"
+                    ),
+                )
+            )
 
         commands.append(
             BotCommand(

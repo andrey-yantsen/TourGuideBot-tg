@@ -45,7 +45,7 @@ msgctxt "cli"
 msgid "Up and runnig!"
 msgstr ""
 
-#: tour_guide_bot/bot/app.py:89
+#: tour_guide_bot/bot/app.py:91
 msgctxt "guide-bot-notification"
 msgid ""
 "Hey! You have a new tour available — \"{0}\". Send /tours to start the "
@@ -183,6 +183,8 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour/main.py:370
 #: tour_guide_bot/bot/admin/tour/main.py:527
 #: tour_guide_bot/bot/admin/tour/main.py:594
+#: tour_guide_bot/bot/guide/purchase.py:99
+#: tour_guide_bot/bot/guide/purchase.py:134
 #: tour_guide_bot/bot/guide/tours.py:101 tour_guide_bot/bot/guide/tours.py:323
 #: tour_guide_bot/bot/guide/tours.py:371
 msgctxt "bot-generic"
@@ -761,32 +763,37 @@ msgctxt "admin-tours"
 msgid "Delete a tour"
 msgstr ""
 
-#: tour_guide_bot/bot/guide/bot_commands.py:20
+#: tour_guide_bot/bot/guide/bot_commands.py:22
 msgctxt "guest-bot-command"
 msgid "Enter admin mode"
 msgstr ""
 
-#: tour_guide_bot/bot/guide/bot_commands.py:27
+#: tour_guide_bot/bot/guide/bot_commands.py:29
 msgctxt "guest-bot-command"
 msgid "Display the welcome message again"
 msgstr ""
 
-#: tour_guide_bot/bot/guide/bot_commands.py:36
+#: tour_guide_bot/bot/guide/bot_commands.py:38
 msgctxt "guest-bot-command"
 msgid "Show available tours"
 msgstr ""
 
-#: tour_guide_bot/bot/guide/bot_commands.py:43
+#: tour_guide_bot/bot/guide/bot_commands.py:48
+msgctxt "guest-bot-command"
+msgid "Purchase (or extend) access to a tour"
+msgstr ""
+
+#: tour_guide_bot/bot/guide/bot_commands.py:57
 msgctxt "guest-bot-command"
 msgid "Change the language"
 msgstr ""
 
-#: tour_guide_bot/bot/guide/bot_commands.py:51
+#: tour_guide_bot/bot/guide/bot_commands.py:65
 msgctxt "guest-bot-command"
 msgid "Display terms & conditions"
 msgstr ""
 
-#: tour_guide_bot/bot/guide/bot_commands.py:61
+#: tour_guide_bot/bot/guide/bot_commands.py:75
 msgctxt "guest-bot-command"
 msgid "Display how to contact the support"
 msgstr ""
@@ -810,6 +817,38 @@ msgstr ""
 #: tour_guide_bot/bot/guide/help.py:59
 msgctxt "guest-help"
 msgid "There are no support details yet. Please, try again later."
+msgstr ""
+
+#: tour_guide_bot/bot/guide/purchase.py:75
+msgctxt "guest-tour-purchase"
+msgid ""
+"Thank you for the purchase! You can now access the tour by sending /tours"
+" and following the instructions. Access to the tour will expire at {} "
+"UTC."
+msgstr ""
+
+#: tour_guide_bot/bot/guide/purchase.py:158
+msgctxt "guest-tour-purchase"
+msgid "Tour access"
+msgstr ""
+
+#: tour_guide_bot/bot/guide/purchase.py:162
+msgctxt "guest-tour-purchase"
+msgid "Access to {} for {} day"
+msgid_plural "Access to {} for {} days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: tour_guide_bot/bot/guide/purchase.py:185
+msgctxt "guest-tour-purchase"
+msgid "{} day access"
+msgid_plural "{} days access"
+msgstr[0] ""
+msgstr[1] ""
+
+#: tour_guide_bot/bot/guide/purchase.py:215
+msgctxt "guest-tour-purchase"
+msgid "Only one tour available for purchasing online at the moment."
 msgstr ""
 
 #: tour_guide_bot/bot/guide/start.py:57
