@@ -1,6 +1,7 @@
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.constants import ParseMode
 from telegram.ext import (
     CallbackQueryHandler,
     CommandHandler,
@@ -13,11 +14,13 @@ from telegram.ext import (
 from tour_guide_bot import t
 from tour_guide_bot.bot.admin import log
 from tour_guide_bot.bot.admin.tour.add_content import AddContentCommandHandler
+from tour_guide_bot.helpers.currency import Currency
 from tour_guide_bot.helpers.telegram import (
     AdminProtectedBaseHandlerCallback,
     get_tour_title,
 )
-from tour_guide_bot.models.guide import Tour, TourSection, TourTranslation
+from tour_guide_bot.models.guide import Product, Tour, TourSection, TourTranslation
+from tour_guide_bot.models.settings import PaymentProvider
 
 
 class TourCommandHandler(AdminProtectedBaseHandlerCallback):
@@ -31,9 +34,14 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
     STATE_TOUR_ADD_SECTION = 8
     STATE_TOUR_EDIT_SELECT_LANGUAGE = 9
     STATE_TOUR_EDIT = 10
+    STATE_TOUR_EDIT_PRICE = 10
+    STATE_TOUR_EDIT_PRICE_WAITING_CURRENCY = 11
+    STATE_TOUR_EDIT_PRICE_WAITING_PRICE = 12
+    STATE_TOUR_EDIT_PRICE_WAITING_DURATION = 13
 
     CALLBACK_DATA_ADD_TOUR = "add_tour"
     CALLBACK_DATA_EDIT_TOUR = "edit_tour"
+    CALLBACK_DATA_EDIT_TOUR_PRICE = "edit_tour_price"
     CALLBACK_DATA_DELETE_TOUR = "delete_tour"
 
     CALLBACK_DATA_TOUR_RENAME = "tour_rename"
@@ -56,6 +64,10 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                         CallbackQueryHandler(
                             cls.partial(cls.select_tour),
                             r"^%s$" % (cls.CALLBACK_DATA_EDIT_TOUR,),
+                        ),
+                        CallbackQueryHandler(
+                            cls.partial(cls.select_tour),
+                            r"^%s$" % (cls.CALLBACK_DATA_EDIT_TOUR_PRICE,),
                         ),
                         CallbackQueryHandler(
                             cls.partial(cls.select_tour),
@@ -84,6 +96,30 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                         CallbackQueryHandler(
                             cls.partial(cls.request_tour_title),
                             r"^%s:(\d+)$" % (cls.CALLBACK_DATA_TOUR_RENAME,),
+                        ),
+                    ],
+                    cls.STATE_TOUR_EDIT_PRICE: [
+                        CallbackQueryHandler(
+                            cls.partial(cls.request_new_price),
+                            r"^%s:(\d+)$" % (cls.CALLBACK_DATA_EDIT_TOUR_PRICE,),
+                        ),
+                    ],
+                    cls.STATE_TOUR_EDIT_PRICE_WAITING_CURRENCY: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            cls.partial(cls.save_new_currency),
+                        ),
+                    ],
+                    cls.STATE_TOUR_EDIT_PRICE_WAITING_PRICE: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            cls.partial(cls.save_new_price),
+                        ),
+                    ],
+                    cls.STATE_TOUR_EDIT_PRICE_WAITING_DURATION: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            cls.partial(cls.save_new_duration),
                         ),
                     ],
                     cls.STATE_TOUR_DELETE: [
@@ -298,6 +334,212 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             ),
         )
         return self.STATE_TOUR_DELETE
+
+    async def save_new_currency(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        language = await self.get_language(update, context)
+        currency = update.message.text.strip().upper()
+
+        if not await Currency.is_known_currency(currency):
+            await update.message.reply_text(
+                t(language).pgettext(
+                    "admin-tours",
+                    "Unknown currency provided. Please try again.",
+                )
+            )
+            return ConversationHandler.WAITING
+
+        context.user_data["currency"] = currency
+
+        await update.message.reply_text(
+            t(language)
+            .pgettext(
+                "admin-tours",
+                "Please send me the price of the tour in {}.",
+            )
+            .format(currency)
+        )
+
+        return self.STATE_TOUR_EDIT_PRICE_WAITING_PRICE
+
+    async def save_new_price(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        language = await self.get_language(update, context)
+        price = update.message.text.strip()
+
+        currency = context.user_data["currency"]
+
+        try:
+            price = await Currency.price_to_telegram(currency, price)
+        except ValueError:
+            price = None
+
+        if not price or not await Currency.is_valid(currency, price):
+            await update.message.reply_text(
+                t(language).pgettext(
+                    "admin-tours",
+                    "Invalid value provided, please try again.",
+                )
+            )
+            return ConversationHandler.WAITING
+
+        context.user_data["price"] = price
+
+        await update.message.reply_text(
+            t(language)
+            .pgettext(
+                "admin-tours",
+                "How long (in days) {} should buy?",
+            )
+            .format(await Currency.price_from_telegram(currency, price))
+        )
+
+        return self.STATE_TOUR_EDIT_PRICE_WAITING_DURATION
+
+    async def save_new_duration(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        language = await self.get_language(update, context)
+        duration = update.message.text.strip()
+
+        try:
+            duration = int(duration)
+        except ValueError:
+            duration = None
+
+        if not duration:
+            await update.message.reply_text(
+                t(language).pgettext(
+                    "admin-tours",
+                    "Invalid value provided, please try again.",
+                )
+            )
+            self.cleanup_context(context)
+            return ConversationHandler.WAITING
+
+        currency = context.user_data["currency"]
+        price = context.user_data["price"]
+
+        tour = await self.db_session.scalar(
+            select(Tour)
+            .where(Tour.id == context.user_data["tour_id"])
+            .options(selectinload(Tour.translation))
+        )
+
+        product = await self.db_session.scalar(
+            select(Product).where((Product.tour == tour) & (Product.available == True))
+        )
+
+        if product:
+            product.available = False
+            self.db_session.add(product)
+
+        payment_provider = await self.db_session.scalar(
+            select(PaymentProvider).where(PaymentProvider.enabled == True)
+        )
+
+        if not payment_provider:
+            await self.edit_or_reply_text(
+                update,
+                context,
+                t(language).pgettext(
+                    "bot-generic", "Something went wrong; please try again."
+                ),
+            )
+            self.cleanup_context(context)
+            return ConversationHandler.END
+
+        product = Product(
+            tour=tour,
+            currency=currency,
+            price=price,
+            duration_days=duration,
+            payment_provider=payment_provider,
+        )
+
+        self.db_session.add(product)
+        await self.db_session.commit()
+
+        await update.message.reply_text(
+            t(language)
+            .npgettext(
+                "admin-tours",
+                "From now on users can buy {}-day access to {} for {}.",
+                "From now on users can buy {}-days access to {} for {}.",
+                product.duration_days,
+            )
+            .format(
+                product.duration_days,
+                get_tour_title(tour, language, context),
+                await Currency.price_from_telegram(currency, price),
+            )
+        )
+
+        return ConversationHandler.END
+
+    async def request_new_price(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        user = await self.get_user(update, context)
+        tour = await self.db_session.scalar(
+            select(Tour)
+            .where(Tour.id == context.matches[0].group(1))
+            .options(selectinload(Tour.translation), selectinload(Tour.products))
+        )
+
+        if not tour:
+            await self.edit_or_reply_text(
+                update,
+                context,
+                t(user.language).pgettext(
+                    "bot-generic", "Something went wrong; please try again."
+                ),
+            )
+            self.cleanup_context(context)
+            return ConversationHandler.END
+
+        context.user_data["tour_id"] = tour.id
+
+        available_products = [product for product in tour.products if product.available]
+
+        await update.callback_query.answer()
+        if available_products:
+            product = available_products[0]
+            msg = (
+                t(user.language)
+                .npgettext(
+                    "admin-tours",
+                    r"Current price is {} for {} day\.",
+                    r"Current price is {} for {} days\.",
+                    product.duration_days,
+                )
+                .format(
+                    await Currency.price_from_telegram(product.currency, product.price),
+                    product.duration_days,
+                )
+            )
+
+            msg += " " + t(user.language).pgettext(
+                "admin-tours",
+                r"Please send me the currency for the new price, or /cancel to abort\.",
+            )
+        else:
+            msg = t(user.language).pgettext(
+                "admin-tours",
+                r"Please send me the currency in which you want to charge your users, or /cancel to abort\.",
+            )
+
+        msg += "\n\n" + t(user.language).pgettext(
+            "admin-tours",
+            r"You can find more details about available currencies [here](https://core.telegram.org/bots/payments#supported-currencies)\.",
+        )
+
+        await update.callback_query.edit_message_text(
+            msg,
+            parse_mode=ParseMode.MARKDOWN_V2,
+            disable_web_page_preview=True,
+        )
+        return self.STATE_TOUR_EDIT_PRICE_WAITING_CURRENCY
 
     async def save_tour_translation(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
@@ -582,6 +824,10 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             message = t(current_language).pgettext(
                 "admin-tours", "Please select the tour you want to delete."
             )
+        elif callback_data == self.CALLBACK_DATA_EDIT_TOUR_PRICE:
+            message = t(current_language).pgettext(
+                "admin-tours", "Please select the tour for updating the price."
+            )
         else:
             log.warning(
                 t()
@@ -607,6 +853,8 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             return self.STATE_TOUR_EDIT_SELECT_LANGUAGE
         elif callback_data == self.CALLBACK_DATA_DELETE_TOUR:
             return self.STATE_TOUR_DELETE_CONFIRM
+        elif callback_data == self.CALLBACK_DATA_EDIT_TOUR_PRICE:
+            return self.STATE_TOUR_EDIT_PRICE
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
@@ -632,6 +880,14 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                         InlineKeyboardButton(
                             t(user.language).pgettext("admin-tours", "Add a new one"),
                             callback_data=self.CALLBACK_DATA_ADD_TOUR,
+                        )
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            t(user.language).pgettext(
+                                "admin-tours", "Set/change tour price"
+                            ),
+                            callback_data=self.CALLBACK_DATA_EDIT_TOUR_PRICE,
                         )
                     ],
                     [

@@ -204,10 +204,12 @@ class PurchaseCommandHandler(BaseHandlerCallback):
     ):
         language = await self.get_language(update, context)
 
-        if len(tour.products) == 0:
+        available_products = [product for product in tour.products if product.available]
+
+        if len(available_products) == 0:
             raise NotImplementedError()
 
-        if len(tour.products) == 1:
+        if len(available_products) == 1:
             if is_short_path:
                 await self.edit_or_reply_text(
                     update,
@@ -218,7 +220,7 @@ class PurchaseCommandHandler(BaseHandlerCallback):
                     ),
                 )
 
-            await self.purchase(update, context, tour.products[0].id)
+            await self.purchase(update, context, available_products[0].id)
 
             return
 

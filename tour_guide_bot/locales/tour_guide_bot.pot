@@ -98,10 +98,10 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour/add_content.py:465
 #: tour_guide_bot/bot/admin/tour/add_content.py:506
 #: tour_guide_bot/bot/admin/tour/add_content.py:544
-#: tour_guide_bot/bot/admin/tour/main.py:293
-#: tour_guide_bot/bot/admin/tour/main.py:441
-#: tour_guide_bot/bot/admin/tour/main.py:571
-#: tour_guide_bot/bot/admin/tour/main.py:653
+#: tour_guide_bot/bot/admin/tour/main.py:329
+#: tour_guide_bot/bot/admin/tour/main.py:683
+#: tour_guide_bot/bot/admin/tour/main.py:813
+#: tour_guide_bot/bot/admin/tour/main.py:909
 #: tour_guide_bot/bot/guide/tours.py:283 tour_guide_bot/bot/guide/tours.py:464
 #: tour_guide_bot/helpers/telegram.py:155
 msgctxt "bot-generic"
@@ -178,11 +178,13 @@ msgstr ""
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:75
 #: tour_guide_bot/bot/admin/revoke.py:78 tour_guide_bot/bot/admin/revoke.py:91
 #: tour_guide_bot/bot/admin/revoke.py:116
-#: tour_guide_bot/bot/admin/tour/main.py:239
-#: tour_guide_bot/bot/admin/tour/main.py:273
-#: tour_guide_bot/bot/admin/tour/main.py:370
-#: tour_guide_bot/bot/admin/tour/main.py:527
-#: tour_guide_bot/bot/admin/tour/main.py:594
+#: tour_guide_bot/bot/admin/tour/main.py:275
+#: tour_guide_bot/bot/admin/tour/main.py:309
+#: tour_guide_bot/bot/admin/tour/main.py:445
+#: tour_guide_bot/bot/admin/tour/main.py:494
+#: tour_guide_bot/bot/admin/tour/main.py:612
+#: tour_guide_bot/bot/admin/tour/main.py:769
+#: tour_guide_bot/bot/admin/tour/main.py:840
 #: tour_guide_bot/bot/guide/purchase.py:99
 #: tour_guide_bot/bot/guide/purchase.py:134
 #: tour_guide_bot/bot/guide/tours.py:101 tour_guide_bot/bot/guide/tours.py:323
@@ -218,7 +220,7 @@ msgstr ""
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:92
 #: tour_guide_bot/bot/admin/revoke.py:212
 #: tour_guide_bot/bot/admin/tour/add_content.py:705
-#: tour_guide_bot/bot/admin/tour/main.py:288
+#: tour_guide_bot/bot/admin/tour/main.py:324
 msgctxt "bot-generic"
 msgid "Yes"
 msgstr ""
@@ -635,130 +637,194 @@ msgid ""
 "video note."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:134
+#: tour_guide_bot/bot/admin/tour/main.py:170
 msgctxt "admin-tours"
 msgid "Unfortunately, I can't process modifications of the existing messages."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:178
+#: tour_guide_bot/bot/admin/tour/main.py:214
 msgctxt "admin-tours"
 msgid "Done!"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:196
+#: tour_guide_bot/bot/admin/tour/main.py:232
 msgctxt "admin-tour"
 msgid ""
 "Now send me location, text, photo, audio, video, animation, voice or "
 "video note messages, and send /done when finished with the section."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:219
+#: tour_guide_bot/bot/admin/tour/main.py:255
 msgctxt "admin-tours"
 msgid ""
 "Done! Send me the title of the next tour section, or send /done if you're"
 " finished."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:253
+#: tour_guide_bot/bot/admin/tour/main.py:289
 msgctxt "admin-tours"
 msgid "The tour \"{0}\" was removed."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:282
+#: tour_guide_bot/bot/admin/tour/main.py:318
 msgctxt "admin-tours"
 msgid "Do you really want to delete the tour \"{0}\"?"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:338
+#: tour_guide_bot/bot/admin/tour/main.py:346
+msgctxt "admin-tours"
+msgid "Unknown currency provided. Please try again."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:357
+msgctxt "admin-tours"
+msgid "Please send me the price of the tour in {}."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:379
+#: tour_guide_bot/bot/admin/tour/main.py:412
+msgctxt "admin-tours"
+msgid "Invalid value provided, please try again."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:390
+msgctxt "admin-tours"
+msgid "How long (in days) {} should buy?"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:465
+msgctxt "admin-tours"
+msgid "From now on users can buy {}-day access to {} for {}."
+msgid_plural "From now on users can buy {}-days access to {} for {}."
+msgstr[0] ""
+msgstr[1] ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:510
+msgctxt "admin-tours"
+msgid "Current price is {} for {} day\\."
+msgid_plural "Current price is {} for {} days\\."
+msgstr[0] ""
+msgstr[1] ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:522
+msgctxt "admin-tours"
+msgid "Please send me the currency for the new price, or /cancel to abort\\."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:527
+msgctxt "admin-tours"
+msgid ""
+"Please send me the currency in which you want to charge your users, or "
+"/cancel to abort\\."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:532
+msgctxt "admin-tours"
+msgid ""
+"You can find more details about available currencies "
+"[here](https://core.telegram.org/bots/payments#supported-currencies)\\."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:580
 msgctxt "admin-tour"
 msgid ""
 "Terrific! Let's add some content now! Send me the title for the new "
 "section."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:346
+#: tour_guide_bot/bot/admin/tour/main.py:588
 msgctxt "admin-tour"
 msgid "Great! The title was updated."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:395
+#: tour_guide_bot/bot/admin/tour/main.py:637
 msgctxt "admin-tour"
 msgid ""
 "The tour doesn't have a translation to the selected language. Let's add "
 "one then! Please send me the title."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:406
+#: tour_guide_bot/bot/admin/tour/main.py:648
 msgctxt "admin-tour"
 msgid "Please select the action."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:411
+#: tour_guide_bot/bot/admin/tour/main.py:653
 msgctxt "admin-tour"
 msgid "Rename"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:421
+#: tour_guide_bot/bot/admin/tour/main.py:663
 msgctxt "admin-tour"
 msgid "Remove a section"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:431
+#: tour_guide_bot/bot/admin/tour/main.py:673
 msgctxt "admin-tour"
 msgid "Edit a section"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:468
+#: tour_guide_bot/bot/admin/tour/main.py:710
 msgctxt "admin-tour"
 msgid "Please select the language you want to update."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:476
+#: tour_guide_bot/bot/admin/tour/main.py:718
 msgctxt "admin-tour"
 msgid "Please select the language for the new tour."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:539
+#: tour_guide_bot/bot/admin/tour/main.py:781
 msgctxt "admin-tour"
 msgid "Please send me the title for the tour, or send /cancel to abort."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:578
+#: tour_guide_bot/bot/admin/tour/main.py:820
 msgctxt "admin-tours"
 msgid "Please select the tour you want to edit."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:582
+#: tour_guide_bot/bot/admin/tour/main.py:824
 msgctxt "admin-tours"
 msgid "Please select the tour you want to delete."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:588
+#: tour_guide_bot/bot/admin/tour/main.py:828
+msgctxt "admin-tours"
+msgid "Please select the tour for updating the price."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:834
 msgctxt "cli"
 msgid "Unexpected callback data received in select_tour(): \"{0}\""
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:618
+#: tour_guide_bot/bot/admin/tour/main.py:866
 msgctxt "admin-tours"
 msgid "You don't have any tours yet; let's add one!"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:625
+#: tour_guide_bot/bot/admin/tour/main.py:873
 msgctxt "admin-tours"
 msgid "I see you have some tours already, what do you want to do?"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:633
+#: tour_guide_bot/bot/admin/tour/main.py:881
 msgctxt "admin-tours"
 msgid "Add a new one"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:639
+#: tour_guide_bot/bot/admin/tour/main.py:887
+msgctxt "admin-tours"
+msgid "Set/change tour price"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/main.py:895
 msgctxt "admin-tours"
 msgid "Edit an existing tour"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/main.py:647
+#: tour_guide_bot/bot/admin/tour/main.py:903
 msgctxt "admin-tours"
 msgid "Delete a tour"
 msgstr ""
@@ -846,7 +912,7 @@ msgid_plural "{} days access"
 msgstr[0] ""
 msgstr[1] ""
 
-#: tour_guide_bot/bot/guide/purchase.py:215
+#: tour_guide_bot/bot/guide/purchase.py:217
 msgctxt "guest-tour-purchase"
 msgid "Only one tour available for purchasing online at the moment."
 msgstr ""
