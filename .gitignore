@@ -131,3 +131,5 @@ dmypy.json
 persistent/
 
 docker-compose.yml
+
+poetry.lock
