@@ -32,7 +32,7 @@ class DeletePaymentProvider(PaymentProviderBase):
         ]
 
     @classmethod
-    async def available(cls, db_session: AsyncSession) -> bool:
+    async def is_available(cls, db_session: AsyncSession) -> bool:
         stmt = select(PaymentProvider).where(PaymentProvider.enabled == True)
         provider: PaymentProvider | None = await db_session.scalar(stmt)
         return provider is not None

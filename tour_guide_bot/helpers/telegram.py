@@ -1,3 +1,4 @@
+import abc
 from functools import partial
 
 from babel import Locale
@@ -5,7 +6,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Message, Update
-from telegram.ext import ContextTypes, ConversationHandler
+from telegram.ext import (
+    BaseHandler,
+    CallbackQueryHandler,
+    ContextTypes,
+    ConversationHandler,
+)
 
 from tour_guide_bot import t
 from tour_guide_bot.models.guide import Tour
@@ -15,17 +21,18 @@ from . import log
 
 
 class BaseHandlerCallback:
+    __metaclass__ = abc.ABCMeta
+
     def __init__(self, db_session: AsyncSession):
         self.db_session: AsyncSession = db_session
         self.user = None
 
     @classmethod
-    def get_handlers(cls) -> list:
-        raise NotImplementedError()
+    @abc.abstractmethod
+    def get_handlers(cls) -> list[BaseHandler]:
+        pass
 
-    async def cancel(
-        self, update: Update, context: ContextTypes.DEFAULT_TYPE
-    ) -> Message:
+    async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
         if hasattr(self, "cleanup_context"):
@@ -65,11 +72,9 @@ class BaseHandlerCallback:
 
         return await reply(text, **kwargs)
 
-    async def unknown_command(
-        self, update: Update, context: ContextTypes.DEFAULT_TYPE
-    ) -> Message:
+    async def unknown_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         language = await self.get_language(update, context)
-        return await update.message.reply_text(
+        await update.message.reply_text(
             t(language).pgettext("bot-generic", "Unknown command.")
         )
 
@@ -188,14 +193,117 @@ class AdminProtectedBaseHandlerCallback(BaseHandlerCallback):
             return await callback(handler, update, context)
 
 
-class ConfigureSubcommandHandler(AdminProtectedBaseHandlerCallback):
+class SubcommandHandler(AdminProtectedBaseHandlerCallback):
+    __metaclass__ = abc.ABCMeta
+
     @staticmethod
+    @abc.abstractmethod
     def get_name(language: str) -> str:
-        raise NotImplementedError()
+        pass
 
     @classmethod
-    async def available(cls, db_session: AsyncSession) -> bool:
+    async def is_available(cls, db_session: AsyncSession) -> bool:
         return True
+
+
+class MenuCommandHandler(AdminProtectedBaseHandlerCallback):
+    __metaclass__ = abc.ABCMeta
+
+    MENU_ITEMS: list[type[SubcommandHandler]] = []
+
+    @classmethod
+    @abc.abstractmethod
+    def get_main_handlers(cls) -> list[BaseHandler]:
+        pass
+
+    @abc.abstractmethod
+    def get_main_menu_text(self, language: str) -> str:
+        pass
+
+    @abc.abstractmethod
+    def get_main_menu_unavailable_text(self, language: str) -> str:
+        pass
+
+    async def is_menu_available(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> bool:
+        return True
+
+    @classmethod
+    def get_handlers(cls):
+        ret = cls.get_main_handlers()
+
+        for item in cls.MENU_ITEMS:
+            ret += item.get_handlers()
+
+        ret.append(CallbackQueryHandler(cls.partial(cls.cancel), "cancel"))
+
+        return ret
+
+    async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        # Skipping returning ConversationHandler.END to prevent finishing the current
+        # conversation
+        await super().cancel(update, context)
+
+    async def get_extra_buttons(
+        self,
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE,
+    ) -> list[list[InlineKeyboardButton]]:
+        return [
+            [
+                InlineKeyboardButton(
+                    t(await self.get_language(update, context)).pgettext(
+                        "bot-generic", "Abort"
+                    ),
+                    callback_data="cancel",
+                )
+            ],
+        ]
+
+    async def get_menu(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> list[list[InlineKeyboardButton]]:
+        keyboard = []
+
+        for item in self.MENU_ITEMS:
+            if not await item.is_available(self.db_session):
+                continue
+
+            keyboard.append(
+                [
+                    InlineKeyboardButton(
+                        item.get_name(await self.get_language(update, context)),
+                        callback_data=item.__name__,
+                    )
+                ]
+            )
+
+        return keyboard
+
+    async def main_entrypoint(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> None:
+        user = await self.get_user(update, context)
+
+        if await self.is_menu_available(update, context):
+            keyboard = await self.get_menu(update, context)
+            msg = self.get_main_menu_text(user.language)
+        else:
+            keyboard = []
+            msg = self.get_main_menu_unavailable_text(user.language)
+
+        keyboard += await self.get_extra_buttons(update, context)
+
+        if update.callback_query:
+            await update.callback_query.answer()
+
+        await self.edit_or_reply_text(
+            update,
+            context,
+            msg,
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard),
+        )
 
 
 def get_tour_title(

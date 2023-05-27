@@ -9,12 +9,12 @@ from telegram.ext import (
 
 from tour_guide_bot import t
 from tour_guide_bot.helpers.telegram import (
-    ConfigureSubcommandHandler,
+    SubcommandHandler,
 )
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 
-class AudioToVoice(ConfigureSubcommandHandler):
+class AudioToVoice(SubcommandHandler):
     STATE_AUDIO_TO_VOICE = 1
 
     @staticmethod

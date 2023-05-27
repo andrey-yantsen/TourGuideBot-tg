@@ -88,7 +88,6 @@ msgid "Unfortunately, you don't have any tours available for the guests."
 msgstr ""
 
 #: tour_guide_bot/bot/admin/approve.py:208
-#: tour_guide_bot/bot/admin/configure/__init__.py:67
 #: tour_guide_bot/bot/admin/configure/audio_to_voice.py:76
 #: tour_guide_bot/bot/admin/configure/audio_to_voice.py:100
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:96
@@ -103,7 +102,8 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour/main.py:815
 #: tour_guide_bot/bot/admin/tour/main.py:911
 #: tour_guide_bot/bot/guide/tours.py:283 tour_guide_bot/bot/guide/tours.py:466
-#: tour_guide_bot/helpers/telegram.py:159
+#: tour_guide_bot/helpers/telegram.py:164
+#: tour_guide_bot/helpers/telegram.py:256
 msgctxt "bot-generic"
 msgid "Abort"
 msgstr ""
@@ -158,7 +158,6 @@ msgstr ""
 msgctxt "admin-help"
 msgid ""
 "You can use the following commands:\n"
-"* /start — to see the welcome message again\n"
 "* /configure — to change the bot's settings\n"
 "* /tours — to manage your tours\n"
 "* /approve — to allow the access to a tour to somebody\n"
@@ -167,8 +166,8 @@ msgid ""
 "* /guest — return to the guest mode"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:109
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:169
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:113
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:173
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:95
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:117
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:142
@@ -277,7 +276,7 @@ msgctxt "admin-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/__init__.py:59
+#: tour_guide_bot/bot/admin/configure/__init__.py:30
 msgctxt "admin-configure"
 msgid "Please select the parameter you want to change."
 msgstr ""
@@ -335,30 +334,30 @@ msgctxt "admin-configure"
 msgid "The delay was updated!"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:82
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:86
 msgctxt "admin-configure"
 msgid "Please select the language for the {} you want to edit."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:127
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:131
 msgctxt "admin-configure"
 msgid ""
 "The bot currently has the following {}. Please send me a new one if you "
 "want to change it, or send /cancel to abort the modification."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:143
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:147
 msgctxt "admin-configure"
 msgid "The bot currently doesn't have a {}. Please send me one."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:155
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:159
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:74
 msgctxt "admin-configure"
 msgid "Please send me a regular text message."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:190
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:194
 msgctxt "admin-configure"
 msgid "Bot's {} has been changed."
 msgstr ""
@@ -398,19 +397,19 @@ msgctxt "admin-configure"
 msgid "Payments"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/payments/__init__.py:72
+#: tour_guide_bot/bot/admin/configure/payments/__init__.py:53
+msgctxt "bot-generic"
+msgid "« Back"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/configure/payments/__init__.py:70
 msgctxt "admin-configure"
 msgid "Please select the payment-related parameter you want to change."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/payments/__init__.py:90
+#: tour_guide_bot/bot/admin/configure/payments/__init__.py:76
 msgctxt "admin-configure"
 msgid "You need to set up Terms & Conditions and support messages first."
-msgstr ""
-
-#: tour_guide_bot/bot/admin/configure/payments/__init__.py:105
-msgctxt "bot-generic"
-msgid "« Back"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:26
@@ -466,7 +465,7 @@ msgid "Are you sure you want to delete the payment token?"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/tour/add_content.py:165
-#: tour_guide_bot/helpers/telegram.py:39
+#: tour_guide_bot/helpers/telegram.py:46
 msgctxt "bot-generic"
 msgid "Cancelled."
 msgstr ""
@@ -1024,23 +1023,23 @@ msgctxt "any-bot"
 msgid "Please select the language you prefer"
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:73
+#: tour_guide_bot/helpers/telegram.py:78
 msgctxt "bot-generic"
 msgid "Unknown command."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:184
+#: tour_guide_bot/helpers/telegram.py:189
 msgctxt "admin-bot"
 msgid "Access denied."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:210
+#: tour_guide_bot/helpers/telegram.py:318
 msgctxt "bot-generic"
 msgid "Tour #{0} doesn't have any translations."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:219
-#: tour_guide_bot/helpers/telegram.py:237
+#: tour_guide_bot/helpers/telegram.py:327
+#: tour_guide_bot/helpers/telegram.py:345
 msgctxt "bot-generic"
 msgid "Tour #{0} doesn't have a translation for the default language ({1})."
 msgstr ""

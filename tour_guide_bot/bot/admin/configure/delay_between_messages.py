@@ -9,11 +9,11 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
-from tour_guide_bot.helpers.telegram import ConfigureSubcommandHandler
+from tour_guide_bot.helpers.telegram import SubcommandHandler
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 
-class DelayBetweenMessages(ConfigureSubcommandHandler):
+class DelayBetweenMessages(SubcommandHandler):
     STATE_DELAY_BETWEEN_MESSAGES = 1
 
     @staticmethod

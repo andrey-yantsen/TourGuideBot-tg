@@ -37,7 +37,6 @@ class HelpCommandHandler(BaseHandlerCallback):
             t(language).pgettext(
                 "admin-help",
                 "You can use the following commands:\n"
-                "* /start — to see the welcome message again\n"
                 "* /configure — to change the bot's settings\n"
                 "* /tours — to manage your tours\n"
                 "* /approve — to allow the access to a tour to somebody\n"

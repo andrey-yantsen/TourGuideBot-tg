@@ -19,7 +19,7 @@ class ChangePaymentProvider(AddPaymentProvider):
         return t(language).pgettext("admin-configure", "Change payment token")
 
     @classmethod
-    async def available(cls, db_session: AsyncSession) -> bool:
+    async def is_available(cls, db_session: AsyncSession) -> bool:
         stmt = select(PaymentProvider).where(PaymentProvider.enabled == True)
         provider: PaymentProvider | None = await db_session.scalar(stmt)
         return provider is not None
@@ -29,7 +29,7 @@ class ChangePaymentProvider(AddPaymentProvider):
     ):
         lang = await self.get_language(update, context)
 
-        if not await self.available(self.db_session):
+        if not await self.is_available(self.db_session):
             await update.callback_query.answer()
             await update.callback_query.edit_message_text(
                 t(lang).pgettext(
@@ -51,7 +51,7 @@ class ChangePaymentProvider(AddPaymentProvider):
     async def set_token(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         lang = await self.get_language(update, context)
 
-        if not await self.available(self.db_session):
+        if not await self.is_available(self.db_session):
             await update.message.reply_text(
                 t(lang).pgettext(
                     "bot-generic", "Something went wrong; please try again."

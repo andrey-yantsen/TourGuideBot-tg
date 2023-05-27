@@ -1,5 +1,5 @@
-from tour_guide_bot.helpers.telegram import ConfigureSubcommandHandler
+from tour_guide_bot.helpers.telegram import SubcommandHandler
 
 
-class PaymentProviderBase(ConfigureSubcommandHandler):
+class PaymentProviderBase(SubcommandHandler):
     pass

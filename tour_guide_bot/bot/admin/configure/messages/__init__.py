@@ -1,3 +1,5 @@
+import abc
+
 from sqlalchemy import select
 from telegram import Update
 from telegram.constants import ParseMode
@@ -11,21 +13,23 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
-from tour_guide_bot.helpers.telegram import ConfigureSubcommandHandler
+from tour_guide_bot.helpers.telegram import SubcommandHandler
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 
-class MessagesBase(ConfigureSubcommandHandler):
+class MessagesBase(SubcommandHandler):
     STATE_MESSAGE_LANGUAGE = 1
     STATE_CHANGE_MESSAGE = 2
 
     @staticmethod
+    @abc.abstractmethod
     def get_message_name(language: str) -> str:
-        raise NotImplementedError()
+        pass
 
     @staticmethod
+    @abc.abstractmethod
     def get_message_settings_key() -> SettingsKey:
-        raise NotImplementedError()
+        pass
 
     @classmethod
     def get_handlers(cls):
