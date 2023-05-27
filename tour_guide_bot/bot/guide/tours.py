@@ -64,7 +64,7 @@ class ToursCommandHandler(BaseHandlerCallback):
         ]
 
     async def get_tour(self, guest_id: int, tour_id: int) -> Subscription | None:
-        bought_tour = await self.db_session.scalar(
+        bought_tour: Subscription | None = await self.db_session.scalar(
             select(Subscription)
             .options(
                 selectinload(Subscription.tour)
@@ -357,7 +357,7 @@ class ToursCommandHandler(BaseHandlerCallback):
     ):
         user = await self.get_user(update, context)
 
-        translation = await self.db_session.scalar(
+        translation: TourTranslation | None = await self.db_session.scalar(
             select(TourTranslation)
             .options(
                 selectinload(TourTranslation.section).selectinload(TourSection.content)
@@ -397,19 +397,21 @@ class ToursCommandHandler(BaseHandlerCallback):
 
         # TODO: rewrite this
         # Currently done in the stupidiest way possible for self.display_first_section()
-        bought_tours = await self.db_session.scalars(
-            select(Subscription)
-            .options(
-                selectinload(Subscription.tour)
-                .selectinload(Tour.translation)
-                .selectinload(TourTranslation.section)
-                .selectinload(TourSection.content)
+        bought_tours: list[Subscription] = (
+            await self.db_session.scalars(
+                select(Subscription)
+                .options(
+                    selectinload(Subscription.tour)
+                    .selectinload(Tour.translation)
+                    .selectinload(TourTranslation.section)
+                    .selectinload(TourSection.content)
+                )
+                .where(
+                    (Subscription.guest == user.guest)
+                    & (Subscription.expire_ts >= datetime.now())
+                )
             )
-            .where(
-                (Subscription.guest == user.guest)
-                & (Subscription.expire_ts >= datetime.now())
-            )
-        )
+        ).all()
 
         keyboard = []
 

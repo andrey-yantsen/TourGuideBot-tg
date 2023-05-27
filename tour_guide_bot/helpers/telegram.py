@@ -4,7 +4,7 @@ from babel import Locale
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Message, Update
 from telegram.ext import ContextTypes, ConversationHandler
 
 from tour_guide_bot import t
@@ -15,15 +15,17 @@ from . import log
 
 
 class BaseHandlerCallback:
-    def __init__(self, db_session):
-        self.db_session = db_session
+    def __init__(self, db_session: AsyncSession):
+        self.db_session: AsyncSession = db_session
         self.user = None
 
     @classmethod
-    def get_handlers(cls):
+    def get_handlers(cls) -> list:
         raise NotImplementedError()
 
-    async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def cancel(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> Message:
         user = await self.get_user(update, context)
 
         if hasattr(self, "cleanup_context"):
@@ -50,7 +52,7 @@ class BaseHandlerCallback:
     @staticmethod
     async def reply_text(
         update: Update, context: ContextTypes.DEFAULT_TYPE, text: str, **kwargs
-    ):
+    ) -> Message:
         async def _reply(*args, **kwargs):
             return await context.application.bot.send_message(
                 update.effective_chat.id, *args, **kwargs
@@ -63,9 +65,11 @@ class BaseHandlerCallback:
 
         return await reply(text, **kwargs)
 
-    async def unknown_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def unknown_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> Message:
         language = await self.get_language(update, context)
-        await update.message.reply_text(
+        return await update.message.reply_text(
             t(language).pgettext("bot-generic", "Unknown command.")
         )
 
@@ -80,7 +84,7 @@ class BaseHandlerCallback:
             return await callback(handler, update, context)
 
     @classmethod
-    def partial(cls, callback):
+    def partial(cls, callback) -> callable:
         return partial(cls.build_and_run, callback)
 
     async def get_language(
@@ -99,7 +103,7 @@ class BaseHandlerCallback:
             .where(TelegramUser.id == update.effective_user.id)
             .options(selectinload(TelegramUser.admin), selectinload(TelegramUser.guest))
         )
-        user = await self.db_session.scalar(stmt)
+        user: TelegramUser | None = await self.db_session.scalar(stmt)
 
         if not user:
             user = TelegramUser(id=update.effective_user.id)
@@ -125,7 +129,7 @@ class BaseHandlerCallback:
         context: ContextTypes.DEFAULT_TYPE,
         callback_data_prefix: str = "language:",
         with_abort: bool = False,
-    ):
+    ) -> InlineKeyboardMarkup:
         keyboard = []
 
         for locale_name in context.application.enabled_languages:

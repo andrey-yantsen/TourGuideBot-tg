@@ -82,10 +82,10 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             )
             return self.STATE_DURATION
 
-        guest = await self.db_session.scalar(
+        guest: Guest | None = await self.db_session.scalar(
             select(Guest).where(Guest.phone == context.user_data["phone_number"])
         )
-        tour = await self.db_session.scalar(
+        tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.user_data["tour_id"])
             .options(selectinload(Tour.translation))
@@ -99,7 +99,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
         expire_ts = now + datetime.timedelta(days=d)
         purchase = Subscription(guest=guest, tour=tour, expire_ts=expire_ts)
         if guest.id:
-            existing_purchase = await self.db_session.scalar(
+            existing_purchase: Subscription | None = await self.db_session.scalar(
                 select(Subscription).where(
                     (Subscription.guest == guest)
                     & (Subscription.tour == tour)
@@ -173,9 +173,11 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
-        tours = await self.db_session.scalars(
-            select(Tour).options(selectinload(Tour.translation))
-        )
+        tours: list[Tour] = (
+            await self.db_session.scalars(
+                select(Tour).options(selectinload(Tour.translation))
+            )
+        ).all()
         keyboard = []
 
         user = await self.get_user(update, context)

@@ -8,7 +8,7 @@ __translations = {}
 __fallback_locale = "en"
 
 
-def set_fallback_locale(locale: str):
+def set_fallback_locale(locale: str) -> None:
     global __fallback_locale
     __fallback_locale = locale
 

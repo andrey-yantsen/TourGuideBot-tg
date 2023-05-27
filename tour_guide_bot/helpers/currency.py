@@ -10,7 +10,7 @@ class Currency:
     last_cache_update = None
 
     @classmethod
-    async def ensure_cache(cls):
+    async def ensure_cache(cls) -> None:
         if cls.last_cache_update is not None:
             cache_lifetime = datetime.now() - cls.last_cache_update
             force_cache_update = cache_lifetime.total_seconds() > CACHE_TTL
@@ -29,7 +29,7 @@ class Currency:
                 return await response.json()
 
     @classmethod
-    async def update_cache(cls):
+    async def update_cache(cls) -> None:
         cls.cache = await cls.load_currencies_config()
         cls.last_cache_update = datetime.now()
 

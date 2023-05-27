@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from telegram import Update
 from telegram.ext import Application as BaseApplication
-from telegram.ext import ContextTypes, TypeHandler
+from telegram.ext import ApplicationBuilder, ContextTypes, TypeHandler
 
 from tour_guide_bot import t
 from tour_guide_bot.bot import log
@@ -22,7 +22,7 @@ from tour_guide_bot.models.telegram import TelegramUser
 
 class Application(BaseApplication):
     @classmethod
-    def builder(cls):
+    def builder(cls) -> ApplicationBuilder:
         builder = super().builder()
         builder.application_class(cls)
         return builder
@@ -46,7 +46,7 @@ class Application(BaseApplication):
 
     async def debug_log_handler(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
-    ):
+    ) -> None:
         log.debug(
             "[{0}] received update: {1}".format(
                 context.application.__class__.__name__, update
@@ -81,7 +81,7 @@ class Application(BaseApplication):
                         & (Subscription.is_user_notified == False)
                     )
                 )
-                bought_tours = await session.scalars(stmt)
+                bought_tours: list[Subscription] = await session.scalars(stmt)
                 for purchase in bought_tours:
                     language = telegram_user.language
 

@@ -41,11 +41,11 @@ class PurchaseCommandHandler(BaseHandlerCallback):
     ):
         user = await self.get_user(update, context)
         invoice_id = int(update.message.successful_payment.invoice_payload[2:])
-        invoice = await self.db_session.scalar(
+        invoice: Invoice | None = await self.db_session.scalar(
             select(Invoice).where(Invoice.id == invoice_id)
         )
 
-        subscription = await self.db_session.scalar(
+        subscription: Subscription = await self.db_session.scalar(
             select(Subscription).where(
                 (Subscription.guest_id == user.guest_id)
                 & (Subscription.tour_id == invoice.tour_id)
@@ -87,7 +87,7 @@ class PurchaseCommandHandler(BaseHandlerCallback):
             return
 
         invoice_id = int(query.invoice_payload[2:])
-        invoice = await self.db_session.scalar(
+        invoice: Invoice | None = await self.db_session.scalar(
             select(Invoice).where(Invoice.id == invoice_id)
         )
 
@@ -112,7 +112,7 @@ class PurchaseCommandHandler(BaseHandlerCallback):
     ):
         language = await self.get_language(update, context)
         user = await self.get_user(update, context)
-        product = await self.db_session.scalar(
+        product: Product | None = await self.db_session.scalar(
             select(Product)
             .options(
                 selectinload(Product.tour)
@@ -227,7 +227,7 @@ class PurchaseCommandHandler(BaseHandlerCallback):
         raise NotImplementedError()
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        tours_with_products = (
+        tours_with_products: list[Tour] = (
             await self.db_session.scalars(
                 select(Tour)
                 .options(

@@ -52,7 +52,7 @@ async def test_change_welcome_message_single_language(
             (Settings.key == SettingsKey.guide_welcome_message)
             & (Settings.language == "en")
         )
-        welcome_en = await session.scalar(stmt)
+        welcome_en: Settings | None = await session.scalar(stmt)
 
         assert (
             welcome_en.value == "new welcome message"
@@ -62,7 +62,7 @@ async def test_change_welcome_message_single_language(
             (Settings.key == SettingsKey.guide_welcome_message)
             & (Settings.language == "ru")
         )
-        welcome_ru = await session.scalar(stmt)
+        welcome_ru: Settings | None = await session.scalar(stmt)
 
         assert welcome_ru is None
 
@@ -154,7 +154,7 @@ async def test_change_welcome_message_multiple_language(
             (Settings.key == SettingsKey.guide_welcome_message)
             & (Settings.language == "en")
         )
-        welcome_en = await session.scalar(stmt)
+        welcome_en: Settings | None = await session.scalar(stmt)
 
         assert welcome_en is not None
         assert (
@@ -165,7 +165,7 @@ async def test_change_welcome_message_multiple_language(
             (Settings.key == SettingsKey.guide_welcome_message)
             & (Settings.language == "ru")
         )
-        welcome_ru = await session.scalar(stmt)
+        welcome_ru: Settings | None = await session.scalar(stmt)
 
         assert welcome_ru is not None
         assert (

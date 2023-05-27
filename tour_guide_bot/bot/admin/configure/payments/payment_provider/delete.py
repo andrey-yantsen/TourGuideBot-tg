@@ -34,7 +34,7 @@ class DeletePaymentProvider(PaymentProviderBase):
     @classmethod
     async def available(cls, db_session: AsyncSession) -> bool:
         stmt = select(PaymentProvider).where(PaymentProvider.enabled == True)
-        provider = await db_session.scalar(stmt)
+        provider: PaymentProvider | None = await db_session.scalar(stmt)
         return provider is not None
 
     async def delete_confirm(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -43,7 +43,7 @@ class DeletePaymentProvider(PaymentProviderBase):
         stmt = select(PaymentProvider).where(
             PaymentProvider.id == int(context.matches[0].group(1))
         )
-        provider = await self.db_session.scalar(stmt)
+        provider: PaymentProvider | None = await self.db_session.scalar(stmt)
 
         if not provider:
             await update.callback_query.answer()
@@ -67,7 +67,7 @@ class DeletePaymentProvider(PaymentProviderBase):
         lang = await self.get_language(update, context)
 
         stmt = select(PaymentProvider).where(PaymentProvider.enabled == True)
-        provider = await self.db_session.scalar(stmt)
+        provider: PaymentProvider | None = await self.db_session.scalar(stmt)
 
         if not provider:
             await update.callback_query.answer()

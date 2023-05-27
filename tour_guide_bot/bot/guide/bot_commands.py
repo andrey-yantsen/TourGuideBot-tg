@@ -40,7 +40,7 @@ class BotCommandsFactory:
         )
 
         stmt = select(Product).where(Product.available == True)
-        product = await db_session.scalar(stmt)
+        product: Product | None = await db_session.scalar(stmt)
         if product is not None:
             commands.append(
                 BotCommand(

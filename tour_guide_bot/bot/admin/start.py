@@ -101,7 +101,7 @@ class StartCommandHandler(BaseHandlerCallback):
         user.phone = re.sub(r"\D+", "", update.message.contact.phone_number)
 
         stmt = select(Admin).where(Admin.phone == user.phone)
-        admin = await self.db_session.scalar(stmt)
+        admin: Admin | None = await self.db_session.scalar(stmt)
 
         if admin:
             user.admin = admin
@@ -212,7 +212,7 @@ class StartCommandHandler(BaseHandlerCallback):
             return self.STATE_CONTACT
         else:
             stmt = select(Admin).where(Admin.phone == user.phone)
-            admin = await self.db_session.scalar(stmt)
+            admin: Admin | None = await self.db_session.scalar(stmt)
 
             if admin:
                 user.admin = admin

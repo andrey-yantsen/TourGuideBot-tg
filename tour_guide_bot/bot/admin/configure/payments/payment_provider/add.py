@@ -81,7 +81,7 @@ class AddPaymentProvider(PaymentProviderBase):
     @classmethod
     async def available(cls, db_session: AsyncSession) -> bool:
         stmt = select(PaymentProvider).where(PaymentProvider.enabled == True)
-        provider = await db_session.scalar(stmt)
+        provider: PaymentProvider | None = await db_session.scalar(stmt)
         return provider is None
 
     async def payment_token_init(

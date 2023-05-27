@@ -57,6 +57,6 @@ async def test_success_auth_flow(
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         stmt = select(Subscription).where(Subscription.guest == guest)
-        s = await session.scalar(stmt)
+        s: Subscription | None = await session.scalar(stmt)
 
         assert (s.expire_ts - now).days == 1, "Unexpected subscription duration"

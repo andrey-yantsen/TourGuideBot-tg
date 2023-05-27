@@ -79,7 +79,7 @@ async def test_delete_payment_token(
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         stmt = select(PaymentProvider)
-        provider = await session.scalar(stmt)
+        provider: PaymentProvider | None = await session.scalar(stmt)
 
         assert provider is not None
         assert not provider.enabled
@@ -113,7 +113,7 @@ async def test_update_payment_token(
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         stmt = select(PaymentProvider)
-        provider = await session.scalar(stmt)
+        provider: PaymentProvider | None = await session.scalar(stmt)
 
         assert provider is not None
         assert provider.enabled
@@ -154,7 +154,7 @@ async def test_add_payment_token(
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         stmt = select(PaymentProvider)
-        provider = await session.scalar(stmt)
+        provider: PaymentProvider | None = await session.scalar(stmt)
 
         assert provider is not None
         assert provider.enabled

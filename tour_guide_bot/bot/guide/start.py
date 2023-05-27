@@ -103,7 +103,7 @@ class StartCommandHandler(BaseHandlerCallback):
         user.phone = re.sub(r"\D+", "", update.message.contact.phone_number)
 
         stmt = select(Guest).where(Guest.phone == user.phone)
-        guest = await self.db_session.scalar(stmt)
+        guest: Guest | None = await self.db_session.scalar(stmt)
 
         if not guest:
             guest = Guest(phone=user.phone)
@@ -119,7 +119,7 @@ class StartCommandHandler(BaseHandlerCallback):
     async def process_guest(
         self, user: TelegramUser, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
-        active_tours_cnt = await self.db_session.scalar(
+        active_tours_cnt: int = await self.db_session.scalar(
             select(func.count(Subscription.id)).where(
                 (Subscription.guest == user.guest)
                 & (Subscription.expire_ts >= datetime.now())
@@ -160,7 +160,7 @@ class StartCommandHandler(BaseHandlerCallback):
             (Settings.key == SettingsKey.guide_welcome_message)
             & (Settings.language == user.language)
         )
-        welcome_message = await self.db_session.scalar(stmt)
+        welcome_message: Settings | None = await self.db_session.scalar(stmt)
 
         if not welcome_message:
             await update.message.reply_text(
@@ -187,7 +187,7 @@ class StartCommandHandler(BaseHandlerCallback):
             return self.STATE_CONTACT
         else:
             stmt = select(Guest).where(Guest.phone == user.phone)
-            guest = await self.db_session.scalar(stmt)
+            guest: Guest | None = await self.db_session.scalar(stmt)
 
             if guest:
                 user.guest = guest

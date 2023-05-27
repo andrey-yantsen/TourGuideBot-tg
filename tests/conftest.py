@@ -363,7 +363,7 @@ async def app(
 async def payment_provider(db_engine: AsyncEngine, payment_token: str):
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         stmt = select(PaymentProvider).where(PaymentProvider.enabled == True)
-        provider = await session.scalar(stmt)
+        provider: PaymentProvider | None = await session.scalar(stmt)
 
         if provider is None:
             provider = PaymentProvider(
@@ -444,7 +444,7 @@ async def get_telegram_user(
         .where(TelegramUser.id == user_id)
         .options(selectinload(TelegramUser.admin), selectinload(TelegramUser.guest))
     )
-    user = await session.scalar(stmt)
+    user: TelegramUser | None = await session.scalar(stmt)
 
     if not user:
         user = TelegramUser(id=user_id, language=language)

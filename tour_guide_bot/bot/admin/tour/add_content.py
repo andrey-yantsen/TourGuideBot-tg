@@ -180,7 +180,7 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
         is_first = True
         async with context.application.content_add_lock:
             if media_group_id:
-                content = await self.db_session.scalar(
+                content: TourSectionContent | None = await self.db_session.scalar(
                     select(TourSectionContent).where(
                         (
                             TourSectionContent.tour_section_id

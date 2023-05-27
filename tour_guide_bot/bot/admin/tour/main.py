@@ -262,7 +262,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
 
     async def delete_tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
-        tour = await self.db_session.scalar(
+        tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.matches[0].group(1))
             .options(selectinload(Tour.translation))
@@ -296,7 +296,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         user = await self.get_user(update, context)
-        tour = await self.db_session.scalar(
+        tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.matches[0].group(1))
             .options(selectinload(Tour.translation))
@@ -420,13 +420,13 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         currency = context.user_data["currency"]
         price = context.user_data["price"]
 
-        tour = await self.db_session.scalar(
+        tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.user_data["tour_id"])
             .options(selectinload(Tour.translation))
         )
 
-        product = await self.db_session.scalar(
+        product: Product | None = await self.db_session.scalar(
             select(Product).where((Product.tour == tour) & (Product.available == True))
         )
 
@@ -434,7 +434,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             product.available = False
             self.db_session.add(product)
 
-        payment_provider = await self.db_session.scalar(
+        payment_provider: PaymentProvider | None = await self.db_session.scalar(
             select(PaymentProvider).where(PaymentProvider.enabled == True)
         )
 
@@ -481,7 +481,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         user = await self.get_user(update, context)
-        tour = await self.db_session.scalar(
+        tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.matches[0].group(1))
             .options(selectinload(Tour.translation), selectinload(Tour.products))
@@ -547,7 +547,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         user = await self.get_user(update, context)
 
         if "tour_id" in context.user_data:
-            tour = await self.db_session.scalar(
+            tour: Tour | None = await self.db_session.scalar(
                 select(Tour).where(Tour.id == context.user_data["tour_id"])
             )
         else:
@@ -557,7 +557,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         is_new_translation = True
         if "tour_translation_id" in context.user_data:
             is_new_translation = False
-            tour_translation = await self.db_session.scalar(
+            tour_translation: TourTranslation | None = await self.db_session.scalar(
                 select(TourTranslation).where(
                     TourTranslation.id == context.user_data["tour_translation_id"]
                 )
@@ -621,7 +621,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         if update.callback_query:
             await update.callback_query.answer()
 
-        tour_translation = await self.db_session.scalar(
+        tour_translation: TourTranslation | None = await self.db_session.scalar(
             select(TourTranslation).where(
                 (TourTranslation.tour_id == context.user_data["tour_id"])
                 & (TourTranslation.language == target_language)
@@ -787,9 +787,11 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         return self.STATE_TOUR_SAVE_TITLE
 
     async def select_tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        tours = await self.db_session.scalars(
-            select(Tour).options(selectinload(Tour.translation))
-        )
+        tours: list[Tour] | None = (
+            await self.db_session.scalars(
+                select(Tour).options(selectinload(Tour.translation))
+            )
+        ).all()
         keyboard = []
 
         user = await self.get_user(update, context)
@@ -859,7 +861,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
-        tours_count = await self.db_session.scalar(select(func.count(Tour.id)))
+        tours_count: int = await self.db_session.scalar(select(func.count(Tour.id)))
 
         if not tours_count:
             await update.message.reply_text(

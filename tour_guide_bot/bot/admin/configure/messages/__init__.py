@@ -116,7 +116,7 @@ class MessagesBase(ConfigureSubcommandHandler):
             (Settings.key == self.get_message_settings_key())
             & (Settings.language == target_language)
         )
-        message = await self.db_session.scalar(stmt)
+        message: Settings | None = await self.db_session.scalar(stmt)
 
         await update.callback_query.answer()
         if message:

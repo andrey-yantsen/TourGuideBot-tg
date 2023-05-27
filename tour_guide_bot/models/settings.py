@@ -1,5 +1,4 @@
 import enum
-from typing import Optional
 
 from sqlalchemy import (
     JSON,
@@ -78,11 +77,11 @@ class Settings(Base):
         key: SettingsKey,
         language: str | None = None,
         create: bool = False,
-    ) -> Optional["Settings"]:
+    ) -> "Settings":
         stmt = select(Settings).where(
             (Settings.key == key) & (Settings.language == language)
         )
-        setting = await db_session.scalar(stmt)
+        setting: Settings | None = await db_session.scalar(stmt)
         if not setting and create:
             setting = Settings(
                 key=key, language=language, value=Settings.__settings_default.get(key)
@@ -103,7 +102,7 @@ class Settings(Base):
 
         stmt = stmt.with_only_columns(Settings.key)
 
-        existing_keys = (await db_session.scalars(stmt)).all()
+        existing_keys: list[str] = (await db_session.scalars(stmt)).all()
 
         return len(set(existing_keys)) == len(set(keys))
 

@@ -81,7 +81,9 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
             )
             return ConversationHandler.END
 
-        guest = await self.db_session.scalar(select(Guest).where(Guest.id == guest_id))
+        guest: Guest | None = await self.db_session.scalar(
+            select(Guest).where(Guest.id == guest_id)
+        )
 
         if not guest:
             await update.callback_query.answer()
@@ -94,13 +96,13 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
             )
             return ConversationHandler.END
 
-        tour = await self.db_session.scalar(
+        tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == tour_id)
             .options(selectinload(Tour.translation))
         )
 
-        purchase = await self.db_session.scalar(
+        purchase: Subscription | None = await self.db_session.scalar(
             select(Subscription).where(
                 (Subscription.guest == guest)
                 & (Subscription.tour == tour)
@@ -155,7 +157,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
 
         phone_number = re.sub(r"\D+", "", phone_number)
 
-        guest = await self.db_session.scalar(
+        guest: Guest | None = await self.db_session.scalar(
             select(Guest).where(Guest.phone == phone_number)
         )
 
@@ -168,13 +170,13 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
             )
             return
 
-        tour = await self.db_session.scalar(
+        tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.user_data["tour_id"])
             .options(selectinload(Tour.translation))
         )
 
-        purchase = await self.db_session.scalar(
+        purchase: Subscription | None = await self.db_session.scalar(
             select(Subscription).where(
                 (Subscription.guest == guest)
                 & (Subscription.tour == tour)
@@ -240,9 +242,11 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
-        tours = await self.db_session.scalars(
-            select(Tour).options(selectinload(Tour.translation))
-        )
+        tours: list[Tour] = (
+            await self.db_session.scalars(
+                select(Tour).options(selectinload(Tour.translation))
+            )
+        ).all()
         keyboard = []
 
         user = await self.get_user(update, context)

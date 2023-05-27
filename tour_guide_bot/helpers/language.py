@@ -9,7 +9,7 @@ from .telegram import BaseHandlerCallback
 
 class LanguageHandler(BaseHandlerCallback):
     @classmethod
-    def get_handlers(cls):
+    def get_handlers(cls) -> list:
         return [
             CommandHandler("language", cls.partial(cls.start)),
             CallbackQueryHandler(
@@ -17,7 +17,9 @@ class LanguageHandler(BaseHandlerCallback):
             ),
         ]
 
-    async def set_language(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def set_language(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> None:
         required_language = context.matches[0].group(1)
         current_language = await self.get_language(update, context)
 
@@ -42,7 +44,7 @@ class LanguageHandler(BaseHandlerCallback):
                 )
             )
 
-    async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         current_language = await self.get_language(update, context)
 
         if len(context.application.enabled_languages) == 1:
