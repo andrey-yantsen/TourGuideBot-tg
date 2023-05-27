@@ -51,6 +51,7 @@ filterwarnings = [
     # Warning from past/builtins/misc, which out of our control
     "ignore:the imp module is deprecated in favour of importlib:DeprecationWarning",
     "ignore:'imghdr' is deprecated and slated for removal:DeprecationWarning",
+    "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
 ]
 markers = [
     "enabled_languages",
