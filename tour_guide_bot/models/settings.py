@@ -1,4 +1,5 @@
 import enum
+from typing import Optional
 
 from sqlalchemy import (
     JSON,
@@ -14,6 +15,7 @@ from sqlalchemy import (
     select,
 )
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Mapped
 
 from . import Base
 
@@ -35,10 +37,10 @@ class Settings(Base):
     # Global default is None
     __settings_default = {SettingsKey.delay_between_messages: "4"}
 
-    id = Column(Integer, primary_key=True)
-    key = Column(Enum(SettingsKey), nullable=False)
-    language = Column(String)
-    value = Column(Text, nullable=False)
+    id: Mapped[int] = Column(Integer, primary_key=True)
+    key: Mapped[str] = Column(Enum(SettingsKey), nullable=False)
+    language: Mapped[Optional[str]] = Column(String)
+    value: Mapped[str] = Column(Text, nullable=False)
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
         DateTime, nullable=False, default=func.now(), onupdate=func.now()
@@ -111,11 +113,11 @@ class PaymentProvider(Base):
     __tablename__ = "payment_provider"
     __mapper_args__ = {"eager_defaults": True}
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    language = Column(String)
-    enabled = Column(Boolean, nullable=False, default=False)
-    config = Column(JSON, nullable=False)
+    id: Mapped[int] = Column(Integer, primary_key=True)
+    name: Mapped[str] = Column(String, nullable=False)
+    language: Mapped[Optional[str]] = Column(String)
+    enabled: Mapped[bool] = Column(Boolean, nullable=False, default=False)
+    config: Mapped[dict] = Column(JSON, nullable=False)
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
         DateTime, nullable=False, default=func.now(), onupdate=func.now()

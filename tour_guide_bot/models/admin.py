@@ -1,6 +1,7 @@
 import enum
 
 from sqlalchemy import Column, DateTime, Enum, Integer, String, func
+from sqlalchemy.orm import Mapped
 
 from . import Base
 
@@ -13,9 +14,11 @@ class Admin(Base):
     __tablename__ = "admin"
     __mapper_args__ = {"eager_defaults": True}
 
-    id = Column(Integer, primary_key=True)
-    phone = Column(String, index=True, unique=True, nullable=False)
-    permissions = Column(Enum(AdminPermissions))
+    id: Mapped[int] = Column(Integer, primary_key=True)
+    phone: Mapped[str] = Column(String, index=True, unique=True, nullable=False)
+    permissions: Mapped[AdminPermissions] = Column(
+        Enum(AdminPermissions), nullable=False
+    )
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
         DateTime, nullable=False, default=func.now(), onupdate=func.now()
