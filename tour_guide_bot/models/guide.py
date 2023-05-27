@@ -27,13 +27,22 @@ class Tour(Base):
 
     id = Column(Integer, primary_key=True)
     translations = relationship(
-        "TourTranslation", back_populates="tour", cascade="all, delete-orphan"
+        "TourTranslation",
+        back_populates="tour",
+        cascade="all, delete-orphan",
+        order_by="TourTranslation.id",
     )
     purchases = relationship(
         "Subscription", cascade="all, delete-orphan", back_populates="tour"
     )
+    invoices = relationship(
+        "Invoice", cascade="all, delete-orphan", back_populates="tour"
+    )
     products = relationship(
-        "Product", back_populates="tour", order_by="Product.currency, Product.price"
+        "Product",
+        back_populates="tour",
+        cascade="all, delete-orphan",
+        order_by="Product.currency, Product.price",
     )
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
