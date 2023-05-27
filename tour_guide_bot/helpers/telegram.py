@@ -14,10 +14,9 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
+from tour_guide_bot.models import log
 from tour_guide_bot.models.guide import Tour
 from tour_guide_bot.models.telegram import TelegramUser
-
-from . import log
 
 
 class BaseHandlerCallback:

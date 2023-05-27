@@ -102,8 +102,8 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour/main.py:819
 #: tour_guide_bot/bot/admin/tour/main.py:915
 #: tour_guide_bot/bot/guide/tours.py:283 tour_guide_bot/bot/guide/tours.py:466
-#: tour_guide_bot/helpers/telegram.py:163
-#: tour_guide_bot/helpers/telegram.py:255
+#: tour_guide_bot/helpers/telegram.py:162
+#: tour_guide_bot/helpers/telegram.py:254
 msgctxt "bot-generic"
 msgid "Abort"
 msgstr ""
@@ -465,7 +465,7 @@ msgid "Are you sure you want to delete the payment token?"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/tour/add_content.py:165
-#: tour_guide_bot/helpers/telegram.py:45
+#: tour_guide_bot/helpers/telegram.py:44
 msgctxt "bot-generic"
 msgid "Cancelled."
 msgstr ""
@@ -1003,43 +1003,43 @@ msgctxt "guide-tour"
 msgid "Please select a tour you want to start."
 msgstr ""
 
-#: tour_guide_bot/helpers/language.py:35
+#: tour_guide_bot/helpers/language.py:34
 msgctxt "any-bot"
 msgid "The language has been changed to {0}."
 msgstr ""
 
-#: tour_guide_bot/helpers/language.py:42
+#: tour_guide_bot/helpers/language.py:41
 msgctxt "any-bot"
 msgid "Something went wrong, please try again."
 msgstr ""
 
-#: tour_guide_bot/helpers/language.py:52
+#: tour_guide_bot/helpers/language.py:51
 msgctxt "any-bot"
 msgid "Unfortunately, you can`t change the language — this bot supports only one."
 msgstr ""
 
-#: tour_guide_bot/helpers/language.py:59
+#: tour_guide_bot/helpers/language.py:58
 msgctxt "any-bot"
 msgid "Please select the language you prefer"
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:77
+#: tour_guide_bot/helpers/telegram.py:76
 msgctxt "bot-generic"
 msgid "Unknown command."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:188
+#: tour_guide_bot/helpers/telegram.py:187
 msgctxt "admin-bot"
 msgid "Access denied."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:317
+#: tour_guide_bot/helpers/telegram.py:316
 msgctxt "bot-generic"
 msgid "Tour #{0} doesn't have any translations."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:326
-#: tour_guide_bot/helpers/telegram.py:344
+#: tour_guide_bot/helpers/telegram.py:325
+#: tour_guide_bot/helpers/telegram.py:343
 msgctxt "bot-generic"
 msgid "Tour #{0} doesn't have a translation for the default language ({1})."
 msgstr ""

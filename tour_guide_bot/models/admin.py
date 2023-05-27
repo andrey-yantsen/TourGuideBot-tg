@@ -3,7 +3,7 @@ import enum
 from sqlalchemy import Column, DateTime, Enum, Integer, String, func
 from sqlalchemy.orm import Mapped
 
-from . import Base
+from tour_guide_bot.models import Base
 
 
 class AdminPermissions(enum.Enum):

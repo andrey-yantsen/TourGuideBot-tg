@@ -17,7 +17,7 @@ from sqlalchemy import (
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped
 
-from . import Base
+from tour_guide_bot.models import Base
 
 
 class SettingsKey(enum.Enum):

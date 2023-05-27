@@ -3,9 +3,9 @@ from typing import Optional
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func
 from sqlalchemy.orm import Mapped, relationship
 
-from . import Base
-from .admin import Admin
-from .guide import Guest
+from tour_guide_bot.models import Base
+from tour_guide_bot.models.admin import Admin
+from tour_guide_bot.models.guide import Guest
 
 
 class TelegramUser(Base):

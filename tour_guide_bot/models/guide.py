@@ -17,9 +17,8 @@ from sqlalchemy import (
 from sqlalchemy.ext.mutable import MutableDict
 from sqlalchemy.orm import Mapped, object_session, relationship
 
+from tour_guide_bot.models import Base
 from tour_guide_bot.models.settings import PaymentProvider
-
-from . import Base
 
 
 class Tour(Base):
