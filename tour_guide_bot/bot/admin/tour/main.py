@@ -269,6 +269,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         )
 
         if not tour:
+            await update.callback_query.answer()
             await self.edit_or_reply_text(
                 update,
                 context,
@@ -284,6 +285,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         await self.db_session.delete(tour)
         await self.db_session.commit()
 
+        await update.callback_query.answer()
         await update.callback_query.edit_message_text(
             t(user.language)
             .pgettext("admin-tours", 'The tour "{0}" was removed.')
@@ -301,6 +303,8 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
             .where(Tour.id == context.matches[0].group(1))
             .options(selectinload(Tour.translations))
         )
+
+        await update.callback_query.answer()
 
         if not tour:
             await self.edit_or_reply_text(
@@ -567,7 +571,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
                 language=context.user_data["tour_language"], tour=tour
             )
 
-        tour_translation.title = update.message.text_markdown_v2_urled
+        tour_translation.title = update.message.text
         self.db_session.add(tour_translation)
 
         await self.db_session.commit()

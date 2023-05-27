@@ -40,9 +40,8 @@ class BaseHandlerCallback:
 
         if update.callback_query:
             await update.callback_query.answer()
-            await update.callback_query.delete_message()
 
-        await self.reply_text(
+        await self.edit_or_reply_text(
             update, context, t(user.language).pgettext("bot-generic", "Cancelled.")
         )
         return ConversationHandler.END
