@@ -161,7 +161,7 @@ class Product(Base):
         Integer, ForeignKey("payment_provider.id"), nullable=False
     )
     payment_provider = relationship(PaymentProvider)
-    currency = Column(Integer, nullable=False)
+    currency: str = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     duration_days = Column(Integer, nullable=False)
     available = Column(Boolean, nullable=False, default=True)
@@ -186,7 +186,7 @@ class Invoice(Base):
         Integer, ForeignKey("payment_provider.id"), nullable=False
     )
     payment_provider = relationship(PaymentProvider)
-    currency = Column(Integer, nullable=False)
+    currency: str = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     duration_days = Column(Integer, nullable=False)
     paid = Column(Boolean, nullable=False, default=False)
