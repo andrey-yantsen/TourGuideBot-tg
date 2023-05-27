@@ -14,7 +14,7 @@ from tour_guide_bot.models.guide import Guest, Subscription
 
 
 @pytest.mark.usefixtures("app", "tours", "payment_provider")
-async def test_success_auth_flow(
+async def test_success_payment(
     conversation: Conversation,
     telegram_client: TelegramClient,
     db_engine: AsyncEngine,
@@ -38,7 +38,7 @@ async def test_success_auth_flow(
     ), "Only stripe is supported in the test for now"
 
     # https://stripe.com/docs/testing?testing-method=tokens#cards
-    payload = {"type": "card", "id": "tok_visa"}
+    payload = {"type": "token", "id": "tok_visa"}
 
     now = datetime.now()
     _purchase: types.payments.PaymentForm = await telegram_client(
