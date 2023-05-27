@@ -40,7 +40,7 @@ async def test_has_terms_message(conversation: Conversation):
     assert response.message == "terms (en)", "Unexpected response from a configured bot"
 
 
-@pytest.mark.enabled_languages(["en", "ru"])
+@pytest.mark.enabled_languages("en", "ru")
 @pytest.mark.usefixtures("app", "guest")
 async def test_has_terms_message_multilang(
     conversation: Conversation, db_engine: AsyncEngine
@@ -77,7 +77,7 @@ async def test_has_terms_message_multilang(
     assert response.message == "terms (en)", "Unexpected response from a configured bot"
 
 
-@pytest.mark.enabled_languages(["en", "ru"])
+@pytest.mark.enabled_languages("en", "ru")
 @pytest.mark.usefixtures("app", "guest")
 async def test_has_support_message_multilang(
     conversation: Conversation, db_engine: AsyncEngine

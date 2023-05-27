@@ -9,7 +9,7 @@ from tour_guide_bot.models.settings import Settings, SettingsKey
 
 
 @pytest.mark.usefixtures("app", "guest")
-@pytest.mark.enabled_languages(["en"])
+@pytest.mark.enabled_languages("en")
 async def test_change_support_message_single_language(
     admin_conversation: Conversation, db_engine: AsyncEngine
 ):
@@ -59,7 +59,7 @@ async def test_change_support_message_single_language(
 
 
 @pytest.mark.usefixtures("unconfigured_app", "guest")
-@pytest.mark.enabled_languages(["en"])
+@pytest.mark.enabled_languages("en")
 async def test_set_support_message_single_language(
     admin_conversation: Conversation, db_engine: AsyncEngine
 ):
@@ -103,7 +103,7 @@ async def test_set_support_message_single_language(
 
 
 @pytest.mark.usefixtures("unconfigured_app", "guest")
-@pytest.mark.enabled_languages(["en", "ru"])
+@pytest.mark.enabled_languages("en", "ru")
 async def test_set_support_message_multiple_language(
     admin_conversation: Conversation, db_engine: AsyncEngine
 ):

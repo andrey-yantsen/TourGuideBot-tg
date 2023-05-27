@@ -6,7 +6,7 @@ from telethon.tl.types.messages import BotCallbackAnswer
 
 
 @pytest.mark.usefixtures("app", "guest")
-@pytest.mark.enabled_languages(["en"])
+@pytest.mark.enabled_languages("en")
 async def test_single_language(conversation: Conversation):
     await conversation.send_message("/language")
     response: Message = await conversation.get_response()
@@ -16,7 +16,7 @@ async def test_single_language(conversation: Conversation):
 
 
 @pytest.mark.usefixtures("app", "guest")
-@pytest.mark.enabled_languages(["en", "ru"])
+@pytest.mark.enabled_languages("en", "ru")
 async def test_multiple_languages(conversation: Conversation):
     await conversation.send_message("/language")
     response: Message = await conversation.get_response()

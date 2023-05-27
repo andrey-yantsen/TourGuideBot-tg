@@ -119,7 +119,7 @@ def enabled_languages(request: pytest.FixtureRequest) -> list[str]:
     if marker is None:
         data = ["en", "ru"]
     else:
-        data = marker.args[0]
+        data = marker.args
 
     return data
 
