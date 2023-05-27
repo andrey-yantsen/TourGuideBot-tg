@@ -179,7 +179,9 @@ def default_tour() -> dict:
 
 
 @pytest.fixture
-async def tours_as_dicts(request: pytest.FixtureRequest, default_tour: dict) -> dict:
+async def tours_as_dicts(
+    request: pytest.FixtureRequest, default_tour: dict
+) -> list[dict]:
     marker = request.node.get_closest_marker("tours")
     if marker is None:
         tours = [default_tour]
