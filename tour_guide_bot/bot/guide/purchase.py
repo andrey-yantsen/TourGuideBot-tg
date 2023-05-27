@@ -116,8 +116,8 @@ class PurchaseCommandHandler(BaseHandlerCallback):
             select(Product)
             .options(
                 selectinload(Product.tour)
-                .selectinload(Tour.translation)
-                .selectinload(TourTranslation.section),
+                .selectinload(Tour.translations)
+                .selectinload(TourTranslation.sections),
                 selectinload(Product.payment_provider),
             )
             .where(
@@ -232,8 +232,8 @@ class PurchaseCommandHandler(BaseHandlerCallback):
                 select(Tour)
                 .options(
                     selectinload(Tour.products),
-                    selectinload(Tour.translation).selectinload(
-                        TourTranslation.section
+                    selectinload(Tour.translations).selectinload(
+                        TourTranslation.sections
                     ),
                 )
                 .where(Tour.products.any(available=True))

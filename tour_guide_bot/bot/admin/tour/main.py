@@ -265,7 +265,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.matches[0].group(1))
-            .options(selectinload(Tour.translation))
+            .options(selectinload(Tour.translations))
         )
 
         if not tour:
@@ -299,7 +299,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.matches[0].group(1))
-            .options(selectinload(Tour.translation))
+            .options(selectinload(Tour.translations))
         )
 
         if not tour:
@@ -423,7 +423,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.user_data["tour_id"])
-            .options(selectinload(Tour.translation))
+            .options(selectinload(Tour.translations))
         )
 
         product: Product | None = await self.db_session.scalar(
@@ -484,7 +484,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
         tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.matches[0].group(1))
-            .options(selectinload(Tour.translation), selectinload(Tour.products))
+            .options(selectinload(Tour.translations), selectinload(Tour.products))
         )
 
         if not tour:
@@ -789,7 +789,7 @@ class TourCommandHandler(AdminProtectedBaseHandlerCallback):
     async def select_tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         tours: list[Tour] | None = (
             await self.db_session.scalars(
-                select(Tour).options(selectinload(Tour.translation))
+                select(Tour).options(selectinload(Tour.translations))
             )
         ).all()
         keyboard = []

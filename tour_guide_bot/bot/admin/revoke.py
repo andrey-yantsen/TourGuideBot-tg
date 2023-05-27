@@ -99,7 +99,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == tour_id)
-            .options(selectinload(Tour.translation))
+            .options(selectinload(Tour.translations))
         )
 
         purchase: Subscription | None = await self.db_session.scalar(
@@ -173,7 +173,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
         tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.user_data["tour_id"])
-            .options(selectinload(Tour.translation))
+            .options(selectinload(Tour.translations))
         )
 
         purchase: Subscription | None = await self.db_session.scalar(
@@ -244,7 +244,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
 
         tours: list[Tour] = (
             await self.db_session.scalars(
-                select(Tour).options(selectinload(Tour.translation))
+                select(Tour).options(selectinload(Tour.translations))
             )
         ).all()
         keyboard = []

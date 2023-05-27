@@ -88,7 +88,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
         tour: Tour | None = await self.db_session.scalar(
             select(Tour)
             .where(Tour.id == context.user_data["tour_id"])
-            .options(selectinload(Tour.translation))
+            .options(selectinload(Tour.translations))
         )
 
         if not guest:
@@ -175,7 +175,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
 
         tours: list[Tour] = (
             await self.db_session.scalars(
-                select(Tour).options(selectinload(Tour.translation))
+                select(Tour).options(selectinload(Tour.translations))
             )
         ).all()
         keyboard = []

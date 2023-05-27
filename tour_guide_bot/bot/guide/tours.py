@@ -68,8 +68,8 @@ class ToursCommandHandler(BaseHandlerCallback):
             select(Subscription)
             .options(
                 selectinload(Subscription.tour)
-                .selectinload(Tour.translation)
-                .selectinload(TourTranslation.section)
+                .selectinload(Tour.translations)
+                .selectinload(TourTranslation.sections)
                 .selectinload(TourSection.content)
             )
             .where(
@@ -94,7 +94,7 @@ class ToursCommandHandler(BaseHandlerCallback):
 
         user = await self.get_user(update, context)
 
-        if position < 0 or len(translation.section) <= position:
+        if position < 0 or len(translation.sections) <= position:
             await self.edit_or_reply_text(
                 update,
                 context,
@@ -104,12 +104,12 @@ class ToursCommandHandler(BaseHandlerCallback):
             )
             return
 
-        section = translation.section[position]
+        section = translation.sections[position]
 
         bot = context.bot
         chat_id = update.effective_chat.id
 
-        is_last_section = position == len(translation.section) - 1
+        is_last_section = position == len(translation.sections) - 1
 
         delay_between_messages_state = await Settings.load(
             self.db_session, SettingsKey.delay_between_messages, create=True
@@ -295,7 +295,7 @@ class ToursCommandHandler(BaseHandlerCallback):
         self, tour: Tour, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         translations = {
-            translation.language: translation for translation in tour.translation
+            translation.language: translation for translation in tour.translations
         }
 
         user = await self.get_user(update, context)
@@ -360,7 +360,7 @@ class ToursCommandHandler(BaseHandlerCallback):
         translation: TourTranslation | None = await self.db_session.scalar(
             select(TourTranslation)
             .options(
-                selectinload(TourTranslation.section).selectinload(TourSection.content)
+                selectinload(TourTranslation.sections).selectinload(TourSection.content)
             )
             .where(TourTranslation.id == int(context.matches[0].group(1)))
         )
@@ -402,8 +402,8 @@ class ToursCommandHandler(BaseHandlerCallback):
                 select(Subscription)
                 .options(
                     selectinload(Subscription.tour)
-                    .selectinload(Tour.translation)
-                    .selectinload(TourTranslation.section)
+                    .selectinload(Tour.translations)
+                    .selectinload(TourTranslation.sections)
                     .selectinload(TourSection.content)
                 )
                 .where(

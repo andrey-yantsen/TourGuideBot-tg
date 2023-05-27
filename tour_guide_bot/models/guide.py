@@ -26,7 +26,7 @@ class Tour(Base):
     __mapper_args__ = {"eager_defaults": True}
 
     id = Column(Integer, primary_key=True)
-    translation = relationship(
+    translations = relationship(
         "TourTranslation", back_populates="tour", cascade="all, delete-orphan"
     )
     purchases = relationship(
@@ -58,8 +58,8 @@ class TourTranslation(Base):
     language = Column(String, nullable=False)
     tour_id = Column(Integer, ForeignKey("tour.id"), nullable=False)
     title = Column(String, nullable=False)
-    tour = relationship("Tour", back_populates="translation")
-    section = relationship(
+    tour = relationship("Tour", back_populates="translations")
+    sections = relationship(
         "TourSection", cascade="all, delete-orphan", order_by="TourSection.position"
     )
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
@@ -88,7 +88,7 @@ class TourSection(Base):
     tour_translation_id = Column(
         Integer, ForeignKey("tour_translation.id"), nullable=False
     )
-    tour_translation = relationship("TourTranslation", back_populates="section")
+    tour_translation = relationship("TourTranslation", back_populates="sections")
     title = Column(String, nullable=False)
     position = Column(SmallInteger, nullable=False)
     content = relationship(

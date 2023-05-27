@@ -73,7 +73,7 @@ class Application(BaseApplication):
                 stmt = (
                     select(Subscription)
                     .options(
-                        selectinload(Subscription.tour).selectinload(Tour.translation),
+                        selectinload(Subscription.tour).selectinload(Tour.translations),
                         selectinload(Subscription.guest),
                     )
                     .where(

@@ -311,17 +311,17 @@ def get_tour_title(
 ) -> str:
     default_language = context.application.default_language
 
-    if len(tour.translation) == 0:
+    if len(tour.translations) == 0:
         title = "Unnamed tour #%d" % tour.id
         log.warning(
             t()
             .pgettext("bot-generic", "Tour #{0} doesn't have any translations.")
             .format(tour.id)
         )
-    elif len(tour.translation) == 1:
-        title = tour.translation[0].title
+    elif len(tour.translations) == 1:
+        title = tour.translations[0].title
 
-        if tour.translation[0].language != default_language:
+        if tour.translations[0].language != default_language:
             log.error(
                 t()
                 .pgettext(
@@ -332,7 +332,7 @@ def get_tour_title(
             )
     else:
         translations = {
-            translation.language: translation for translation in tour.translation
+            translation.language: translation for translation in tour.translations
         }
 
         if current_language in translations:
