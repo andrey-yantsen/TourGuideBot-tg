@@ -938,14 +938,18 @@ msgctxt "guest-bot-start"
 msgid "Please send me your contact number and not somebody else's."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/start.py:132
+#: tour_guide_bot/bot/guide/start.py:133
 msgctxt "guest-bot-start"
 msgid ""
-"I see you have some tours available; thank you for the support! Send "
+"I see you have a tour available; thank you for the support! Send /tours "
+"to start exploring!"
+msgid_plural ""
+"I see you have {0} tours available; thank you for the support! Send "
 "/tours to start exploring!"
-msgstr ""
+msgstr[0] ""
+msgstr[1] ""
 
-#: tour_guide_bot/bot/guide/start.py:141 tour_guide_bot/bot/guide/tours.py:440
+#: tour_guide_bot/bot/guide/start.py:146 tour_guide_bot/bot/guide/tours.py:440
 msgctxt "guest-tour"
 msgid ""
 "Unfortunately, no tours are available for you at the moment. Approving "
@@ -954,12 +958,12 @@ msgid ""
 "the required info."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/start.py:167
+#: tour_guide_bot/bot/guide/start.py:172
 msgctxt "guest-bot-start"
 msgid "The bot is not configured yet; please try again later."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/start.py:181
+#: tour_guide_bot/bot/guide/start.py:186
 msgctxt "guest-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr ""

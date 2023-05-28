@@ -129,11 +129,16 @@ class StartCommandHandler(BaseHandlerCallback):
 
         if active_tours_cnt:
             await update.message.reply_text(
-                t(language).pgettext(
+                t(language)
+                .npgettext(
                     "guest-bot-start",
-                    "I see you have some tours available;"
+                    "I see you have a tour available;"
                     " thank you for the support! Send /tours to start exploring!",
-                ),
+                    "I see you have {0} tours available;"
+                    " thank you for the support! Send /tours to start exploring!",
+                    active_tours_cnt,
+                )
+                .format(active_tours_cnt),
                 reply_markup=ReplyKeyboardRemove(),
             )
         else:
