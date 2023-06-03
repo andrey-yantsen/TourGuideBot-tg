@@ -32,7 +32,7 @@ class AddPaymentProvider(PaymentProviderBase):
                 entry_points=[
                     CallbackQueryHandler(
                         cls.partial(cls.payment_token_init),
-                        "^" + cls.__name__ + "$",
+                        cls.get_callback_data_pattern(),
                     )
                 ],
                 states={
@@ -76,7 +76,7 @@ class AddPaymentProvider(PaymentProviderBase):
             )
         )
 
-        return ConversationHandler.WAITING
+        return None
 
     @classmethod
     async def is_available(cls, db_session: AsyncSession) -> bool:

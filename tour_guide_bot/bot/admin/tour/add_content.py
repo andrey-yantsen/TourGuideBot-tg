@@ -1,4 +1,6 @@
 import os
+from abc import ABC
+from typing import ClassVar
 
 import ffmpeg
 from sqlalchemy import select
@@ -20,12 +22,12 @@ from tour_guide_bot.models.guide import MessageType, TourSectionContent
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 
-class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
-    STATE_TOUR_AUDIO_CONVERT_CONFIRMATION = 1
-    STATE_TOUR_AUDIO_CONVERT_VOICE_CHECK = 2
+class AddContentCommandHandler(AdminProtectedBaseHandlerCallback, ABC):
+    STATE_TOUR_AUDIO_CONVERT_CONFIRMATION: ClassVar[int] = -30
+    STATE_TOUR_AUDIO_CONVERT_VOICE_CHECK: ClassVar[int] = -31
 
     @classmethod
-    def get_handlers(cls):
+    def get_add_content_handlers(cls):
         return [
             MessageHandler(
                 filters.TEXT & ~filters.COMMAND & ~filters.UpdateType.EDITED,
@@ -119,44 +121,15 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
             ),
         ]
 
-    def cleanup_context(self, context: ContextTypes.DEFAULT_TYPE):
-        for key in ("tour_language", "tour_id", "action"):
-            if key in context.user_data:
-                del context.user_data[key]
-
-        self.cleanup_context_tour_translation(context)
-
-    def cleanup_context_tour_translation(self, context: ContextTypes.DEFAULT_TYPE):
-        for key in ("tour_translation_id",):
-            if key in context.user_data:
-                del context.user_data[key]
-
-        self.cleanup_context_tour_translation_section(context)
-
-    def cleanup_context_tour_translation_section(
-        self, context: ContextTypes.DEFAULT_TYPE
+    async def after_content_added(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
-        for key in ("tour_section_content_position", "tour_section_position"):
-            if key in context.user_data:
-                del context.user_data[key]
-
-        self.cleanup_context_audio_conversion(context)
-
-    def cleanup_context_audio_conversion(self, context: ContextTypes.DEFAULT_TYPE):
-        for key in (
-            "audio_message_id",
-            "audio_file_id",
-            "audio_caption",
-            "voice_file_path",
-        ):
-            if key in context.user_data:
-                del context.user_data[key]
+        pass
 
     async def cancel_audio_conversion(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         user = await self.get_user(update, context)
-        self.cleanup_context_audio_conversion(context)
         if update.callback_query:
             await update.callback_query.answer()
             await update.callback_query.delete_message()
@@ -598,7 +571,6 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
             file_caption=context.user_data["audio_caption"],
         )
         await self._report_voice_saved(update, context)
-        self.cleanup_context_audio_conversion(context)
 
         return ConversationHandler.END
 
@@ -613,7 +585,6 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
             file_caption=context.user_data["audio_caption"],
         )
         await self._report_audio_saved(update, context)
-        self.cleanup_context_audio_conversion(context)
 
         return ConversationHandler.END
 
@@ -636,7 +607,6 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback):
             file_caption=context.user_data["audio_caption"],
         )
         await self._report_audio_saved(update, context)
-        self.cleanup_context_audio_conversion(context)
 
         language = await self.get_language(update, context)
         await self.reply_text(

@@ -28,7 +28,7 @@ class AudioToVoice(SubcommandHandler):
                 entry_points=[
                     CallbackQueryHandler(
                         cls.partial(cls.change_audio_to_voice_init),
-                        "^" + cls.__name__ + "$",
+                        cls.get_callback_data_pattern(),
                     ),
                 ],
                 states={

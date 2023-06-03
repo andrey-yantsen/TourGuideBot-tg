@@ -27,7 +27,7 @@ class DelayBetweenMessages(SubcommandHandler):
                 entry_points=[
                     CallbackQueryHandler(
                         cls.partial(cls.change_delay_between_messages_init),
-                        "^" + cls.__name__ + "$",
+                        cls.get_callback_data_pattern(),
                     )
                 ],
                 states={

@@ -58,7 +58,7 @@ class LanguageHandler(BaseHandlerCallback):
                 t(current_language).pgettext(
                     "any-bot", "Please select the language you prefer"
                 ),
-                reply_markup=self.get_language_select_inline_keyboard(
+                reply_markup=await self.get_language_select_inline_keyboard(
                     current_language, context, "change_user_language:"
                 ),
             )

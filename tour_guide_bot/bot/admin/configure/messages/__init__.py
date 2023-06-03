@@ -38,7 +38,7 @@ class MessagesBase(SubcommandHandler):
                 entry_points=[
                     CallbackQueryHandler(
                         cls.partial(cls.change_message_init),
-                        "^" + cls.__name__ + "$",
+                        cls.get_callback_data_pattern(),
                     )
                 ],
                 states={
@@ -63,7 +63,7 @@ class MessagesBase(SubcommandHandler):
                     CommandHandler("cancel", cls.partial(cls.cancel)),
                     CallbackQueryHandler(cls.partial(cls.cancel), "cancel"),
                 ],
-                name="admin-configure-" + cls.__name__.lower(),
+                name="admin-configure-" + cls.__module__ + "." + cls.__name__.lower(),
                 persistent=True,
             )
         ]
@@ -86,7 +86,7 @@ class MessagesBase(SubcommandHandler):
                     self.get_message_name(user.language)
                 ),
             ),
-            reply_markup=self.get_language_select_inline_keyboard(
+            reply_markup=await self.get_language_select_inline_keyboard(
                 user.language, context, "language:", True
             ),
         )
@@ -127,7 +127,8 @@ class MessagesBase(SubcommandHandler):
             await update.callback_query.edit_message_text(
                 t(user.language).pgettext(
                     "admin-configure",
-                    "The bot currently has the following {}. Please send me a new one if you want to change it, or send /cancel to abort the modification.".format(
+                    "The bot currently has the following {}. Please send me a new one if you want to change it, "
+                    "or send /cancel to abort the modification.".format(
                         self.get_message_name(user.language)
                     ),
                 )

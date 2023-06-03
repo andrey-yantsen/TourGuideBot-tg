@@ -361,6 +361,7 @@ files = [
 ]
 
 [package.dependencies]
+aiohttp = {version = ">=3.7.4", optional = true, markers = "extra == \"d\""}
 click = ">=8.0.0"
 mypy-extensions = ">=0.4.3"
 packaging = ">=22.0"
@@ -1660,4 +1661,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10 <3.12"
-content-hash = "163665a31adce93104c0a748f0af462c7fac1a711198f550812fef9a4f521b7f"
+content-hash = "0cb4ebbc0f40bc0325ae0bb150c4444ee2e5517e99cbb49c70e2b252218fa275"

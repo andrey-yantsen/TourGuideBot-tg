@@ -1,5 +1,6 @@
 import datetime
 import re
+from typing import Sequence
 
 from babel.dates import format_datetime
 from sqlalchemy import select
@@ -171,9 +172,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
         return self.STATE_PHONE_NUMBER
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        user = await self.get_user(update, context)
-
-        tours: list[Tour] = (
+        tours: Sequence[Tour] = (
             await self.db_session.scalars(
                 select(Tour).options(selectinload(Tour.translations))
             )

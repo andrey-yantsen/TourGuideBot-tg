@@ -106,7 +106,7 @@ async def test_approve_unknown_user(
 
     response: Message = await admin_conversation.get_response()
     assert (
-        "I see you have some tours available" in response.message
+        "I see you have a tour available" in response.message
     ), "Unexpected response to a user with a single tour"
 
 

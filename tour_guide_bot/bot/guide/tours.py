@@ -1,5 +1,6 @@
 from asyncio import sleep
 from datetime import datetime
+from typing import Sequence
 
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -396,8 +397,8 @@ class ToursCommandHandler(BaseHandlerCallback):
         language = user.language
 
         # TODO: rewrite this
-        # Currently done in the stupidiest way possible for self.display_first_section()
-        bought_tours: list[Subscription] = (
+        # Currently done in the stupidest way possible for self.display_first_section()
+        bought_tours: Sequence[Subscription] = (
             await self.db_session.scalars(
                 select(Subscription)
                 .options(

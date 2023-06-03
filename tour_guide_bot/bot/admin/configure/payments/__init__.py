@@ -34,11 +34,11 @@ class PaymentsSubcommand(MenuCommandHandler, SubcommandHandler):
         return [
             CallbackQueryHandler(
                 cls.partial(cls.main_entrypoint),
-                "^" + cls.__name__ + "$",
+                cls.get_callback_data_pattern(),
             ),
             CallbackQueryHandler(
                 cls.partial(cls.back),
-                "^" + cls.__name__ + ":root$",
+                cls.get_callback_data_pattern("root"),
             ),
         ]
 
@@ -53,7 +53,7 @@ class PaymentsSubcommand(MenuCommandHandler, SubcommandHandler):
                     t(await self.get_language(update, context)).pgettext(
                         "bot-generic", "« Back"
                     ),
-                    callback_data=self.__class__.__name__ + ":root",
+                    callback_data=self.get_callback_data("root"),
                 )
             ],
         ]

@@ -7,7 +7,7 @@ import pkgutil
 
 # thanks to https://stackoverflow.com/a/25562415
 def import_submodules(package, recursive=True):
-    """ Import all submodules of a module, recursively, including subpackages
+    """Import all submodules of a module, recursively, including subpackages
 
     :param package: package (name or actual module)
     :type package: str | module
@@ -23,13 +23,13 @@ def import_submodules(package, recursive=True):
         if recursive and is_pkg:
             results.update(import_submodules(full_name))
         else:
-            full_name = package.__name__ + '.' + name
+            full_name = package.__name__ + "." + name
             results[full_name] = importlib.import_module(full_name)
 
     return results
 
 
-models_package = import_submodules('tour_guide_bot.models')
+models_package = import_submodules("tour_guide_bot.models")
 
 
 # this is the Alembic Config object, which provides
@@ -43,7 +43,7 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-target_metadata = models_package['tour_guide_bot.models'].Base.metadata
+target_metadata = models_package["tour_guide_bot.models"].Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -52,7 +52,7 @@ target_metadata = models_package['tour_guide_bot.models'].Base.metadata
 
 
 def get_url():
-    url = context.get_x_argument(as_dictionary=True).get('db')
+    url = context.get_x_argument(as_dictionary=True).get("db")
     assert url, "Database URL must be specified on command line with -x db=<DB_URL>"
     return url
 
@@ -91,9 +91,7 @@ def run_migrations_online() -> None:
     connectable = create_engine(get_url())
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

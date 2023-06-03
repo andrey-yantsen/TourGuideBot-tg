@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Sequence
 
 from babel.dates import format_datetime
 from sqlalchemy import select
@@ -227,7 +228,7 @@ class PurchaseCommandHandler(BaseHandlerCallback):
         raise NotImplementedError()
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        tours_with_products: list[Tour] = (
+        tours_with_products: Sequence[Tour] = (
             await self.db_session.scalars(
                 select(Tour)
                 .options(

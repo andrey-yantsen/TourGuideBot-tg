@@ -18,7 +18,7 @@ async def test_single_tour(conversation: Conversation, tours_as_dicts: list[dict
 
     response: Message = await conversation.get_response()
     assert (
-        "I see you have some tours available" in response.message
+        "I see you have a tour available" in response.message
     ), "Unexpected response to a user with a single tour"
 
     await conversation.send_message("/tours")
@@ -124,7 +124,7 @@ async def test_multiple_tours(conversation: Conversation, tours_as_dicts: list[d
 
     response: Message = await conversation.get_response()
     assert (
-        "I see you have some tours available" in response.message
+        "I see you have 2 tours available" in response.message
     ), "Unexpected response to a user with a single tour"
 
     await conversation.send_message("/tours")
@@ -219,7 +219,7 @@ async def test_multiple_tours_one_approved(
 
     response: Message = await conversation.get_response()
     assert (
-        "I see you have some tours available" in response.message
+        "I see you have a tour available" in response.message
     ), "Unexpected response to a user with a single tour"
 
     await conversation.send_message("/tours")

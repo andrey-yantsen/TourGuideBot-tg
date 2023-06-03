@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -63,7 +65,7 @@ class Application(BaseApplication):
             select(TelegramUser)
             .join(Guest)
             .join(Subscription, Guest.id == Subscription.guest_id)
-            .where(Subscription.is_user_notified == False)
+            .where(Subscription.is_user_notified == False)  # noqa
         )
 
         async with AsyncSession(
@@ -78,10 +80,12 @@ class Application(BaseApplication):
                     )
                     .where(
                         (Subscription.guest_id == telegram_user.guest_id)
-                        & (Subscription.is_user_notified == False)
+                        & (Subscription.is_user_notified == False)  # noqa
                     )
                 )
-                bought_tours: list[Subscription] = await session.scalars(stmt)
+                bought_tours: Sequence[Subscription] = (
+                    await session.scalars(stmt)
+                ).all()
                 for purchase in bought_tours:
                     language = telegram_user.language
 

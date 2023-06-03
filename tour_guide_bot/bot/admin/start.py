@@ -16,7 +16,7 @@ from tour_guide_bot.bot.admin.bot_commands import BotCommandsFactory
 from tour_guide_bot.bot.admin.configure import ConfigureCommandHandler
 from tour_guide_bot.bot.admin.help import HelpCommandHandler
 from tour_guide_bot.bot.admin.revoke import RevokeCommandHandler
-from tour_guide_bot.bot.admin.tour.main import TourCommandHandler
+from tour_guide_bot.bot.admin.tour import TourCommandHandler
 from tour_guide_bot.bot.guide.bot_commands import (
     BotCommandsFactory as GuestBotCommandsFactory,
 )

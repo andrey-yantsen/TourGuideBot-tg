@@ -23,11 +23,11 @@ class DeletePaymentProvider(PaymentProviderBase):
         return [
             CallbackQueryHandler(
                 cls.partial(cls.delete_init),
-                "^" + cls.__name__ + "$",
+                cls.get_callback_data_pattern(),
             ),
             CallbackQueryHandler(
                 cls.partial(cls.delete_confirm),
-                r"^provider_delete_confirm:(\d+)$",
+                cls.get_callback_data_pattern(r"(\d+)"),
             ),
         ]
 
@@ -90,7 +90,7 @@ class DeletePaymentProvider(PaymentProviderBase):
                     [
                         InlineKeyboardButton(
                             t(lang).pgettext("bot-generic", "Yes"),
-                            callback_data="provider_delete_confirm:%d" % (provider.id,),
+                            callback_data=self.get_callback_data(provider.id),
                         ),
                         InlineKeyboardButton(
                             t(lang).pgettext("bot-generic", "Abort"),

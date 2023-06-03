@@ -1,5 +1,5 @@
 import enum
-from typing import Optional
+from typing import Optional, Sequence
 
 from sqlalchemy import (
     JSON,
@@ -104,7 +104,7 @@ class Settings(Base):
 
         stmt = stmt.with_only_columns(Settings.key)
 
-        existing_keys: list[str] = (await db_session.scalars(stmt)).all()
+        existing_keys: Sequence[str] = (await db_session.scalars(stmt)).all()
 
         return len(set(existing_keys)) == len(set(keys))
 

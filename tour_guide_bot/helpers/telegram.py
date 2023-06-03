@@ -1,5 +1,7 @@
 import abc
+from binascii import crc32
 from functools import partial
+from inspect import isawaitable
 
 from babel import Locale
 from sqlalchemy import select
@@ -24,7 +26,7 @@ class BaseHandlerCallback:
 
     def __init__(self, db_session: AsyncSession):
         self.db_session: AsyncSession = db_session
-        self.user = None
+        self.user: TelegramUser | None = None
 
     @classmethod
     @abc.abstractmethod
@@ -35,7 +37,10 @@ class BaseHandlerCallback:
         user = await self.get_user(update, context)
 
         if hasattr(self, "cleanup_context"):
-            self.cleanup_context(context)
+            cleanup_result = self.cleanup_context(context)
+
+            if isawaitable(cleanup_result):
+                await cleanup_result
 
         if update.callback_query:
             await update.callback_query.answer()
@@ -126,19 +131,17 @@ class BaseHandlerCallback:
 
         return self.user
 
-    def get_language_select_inline_keyboard(
+    async def get_languages(
         self,
         current_language: str,
         context: ContextTypes.DEFAULT_TYPE,
-        callback_data_prefix: str = "language:",
-        with_abort: bool = False,
-    ) -> InlineKeyboardMarkup:
-        keyboard = []
-
+        language_friendly: bool = True,
+    ):
+        ret = []
         for locale_name in context.application.enabled_languages:
             locale = Locale.parse(locale_name)
 
-            if locale_name != current_language:
+            if locale_name != current_language and language_friendly:
                 locale_text = "%s (%s)" % (
                     locale.get_language_name(current_language),
                     locale.get_language_name(locale_name),
@@ -146,6 +149,23 @@ class BaseHandlerCallback:
             else:
                 locale_text = locale.get_language_name(locale_name)
 
+            ret.append((locale_name, locale_text))
+
+        return ret
+
+    async def get_language_select_inline_keyboard(
+        self,
+        current_language: str,
+        context: ContextTypes.DEFAULT_TYPE,
+        callback_data_prefix: str = "language:",
+        with_abort: bool = False,
+        language_friendly: bool = True,
+    ) -> InlineKeyboardMarkup:
+        keyboard = []
+
+        for locale_name, locale_text in await self.get_languages(
+            current_language, context, language_friendly
+        ):
             keyboard.append(
                 [
                     InlineKeyboardButton(
@@ -167,11 +187,27 @@ class BaseHandlerCallback:
 
         return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
+    @classmethod
+    def get_callback_data(cls, *args) -> str:
+        ret = str(crc32((cls.__module__ + "." + cls.__name__).encode("ascii")))
+
+        if args:
+            ret += ":" + ":".join([str(a) for a in args])
+
+        return ret
+
+    @classmethod
+    def get_callback_data_pattern(cls, *args) -> str:
+        return f"^{cls.get_callback_data(*args)}$"
+
 
 class AdminProtectedBaseHandlerCallback(BaseHandlerCallback):
     @classmethod
     async def build_and_run(
-        cls, callback, update: Update, context: ContextTypes.DEFAULT_TYPE
+        cls: BaseHandlerCallback,
+        callback,
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE,
     ):
         async with AsyncSession(
             context.application.db_engine, expire_on_commit=False
@@ -222,23 +258,65 @@ class MenuCommandHandler(AdminProtectedBaseHandlerCallback):
     def get_main_menu_unavailable_text(self, language: str) -> str:
         pass
 
+    async def handle_menu_unavailable(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        msg = self.get_main_menu_unavailable_text(
+            await self.get_language(update, context)
+        )
+
+        keyboard = await self.get_extra_buttons(update, context)
+
+        await self.edit_or_reply_text(
+            update,
+            context,
+            msg,
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard),
+        )
+
+    async def handle_menu_available(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        keyboard = await self.get_menu(update, context) + await self.get_extra_buttons(
+            update, context
+        )
+        await self.edit_or_reply_text(
+            update,
+            context,
+            self.get_main_menu_text(await self.get_language(update, context)),
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard),
+        )
+
     async def is_menu_available(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> bool:
         return True
 
     @classmethod
-    def get_handlers(cls):
-        ret = cls.get_main_handlers()
+    def get_submenu_handlers(cls) -> list[BaseHandler]:
+        ret = []
 
         for item in cls.MENU_ITEMS:
             ret += item.get_handlers()
 
-        ret.append(CallbackQueryHandler(cls.partial(cls.cancel), "cancel"))
+        return ret
+
+    @classmethod
+    def get_handlers(cls):
+        ret = cls.get_main_handlers()
+        ret += cls.get_submenu_handlers()
+        ret.append(
+            CallbackQueryHandler(
+                cls.partial(cls.cancel_without_conversation),
+                cls.get_callback_data_pattern("cancel"),
+            )
+        )
 
         return ret
 
-    async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def cancel_without_conversation(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
         # Skipping returning ConversationHandler.END to prevent finishing the current
         # conversation
         await super().cancel(update, context)
@@ -254,7 +332,7 @@ class MenuCommandHandler(AdminProtectedBaseHandlerCallback):
                     t(await self.get_language(update, context)).pgettext(
                         "bot-generic", "Abort"
                     ),
-                    callback_data="cancel",
+                    callback_data=self.get_callback_data("cancel"),
                 )
             ],
         ]
@@ -272,7 +350,7 @@ class MenuCommandHandler(AdminProtectedBaseHandlerCallback):
                 [
                     InlineKeyboardButton(
                         item.get_name(await self.get_language(update, context)),
-                        callback_data=item.__name__,
+                        callback_data=item.get_callback_data(),
                     )
                 ]
             )
@@ -282,26 +360,13 @@ class MenuCommandHandler(AdminProtectedBaseHandlerCallback):
     async def main_entrypoint(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
-        user = await self.get_user(update, context)
-
-        if await self.is_menu_available(update, context):
-            keyboard = await self.get_menu(update, context)
-            msg = self.get_main_menu_text(user.language)
-        else:
-            keyboard = []
-            msg = self.get_main_menu_unavailable_text(user.language)
-
-        keyboard += await self.get_extra_buttons(update, context)
-
         if update.callback_query:
             await update.callback_query.answer()
 
-        await self.edit_or_reply_text(
-            update,
-            context,
-            msg,
-            reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard),
-        )
+        if await self.is_menu_available(update, context):
+            return await self.handle_menu_available(update, context)
+
+        return await self.handle_menu_unavailable(update, context)
 
 
 def get_tour_title(
@@ -316,18 +381,6 @@ def get_tour_title(
             .pgettext("bot-generic", "Tour #{0} doesn't have any translations.")
             .format(tour.id)
         )
-    elif len(tour.translations) == 1:
-        title = tour.translations[0].title
-
-        if tour.translations[0].language != default_language:
-            log.error(
-                t()
-                .pgettext(
-                    "bot-generic",
-                    "Tour #{0} doesn't have a translation for the default language ({1}).",
-                )
-                .format(tour.id, default_language)
-            )
     else:
         translations = {
             translation.language: translation for translation in tour.translations

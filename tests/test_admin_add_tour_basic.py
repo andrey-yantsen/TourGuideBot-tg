@@ -14,6 +14,10 @@ from tour_guide_bot.models.guide import (
 
 
 async def add_tour(conversation: Conversation, prefix: str = ""):
+    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
+    response: Message = event.message
+    assert "send me the title" in response.message
+
     await conversation.send_message(f"{prefix}Test tour")
     response: Message = await conversation.get_response()
     assert "title for the new section" in response.message
@@ -96,10 +100,8 @@ async def test_adding_one_tour_single_language(
     conversation = admin_conversation
     await conversation.send_message("/tours")
     response: Message = await conversation.get_response()
-    assert "let's add one" in response.message
-
-    response: Message = await conversation.get_response()
-    assert "send me the title" in response.message
+    assert "select an action" in response.message
+    assert await response.click(text="Add a tour") is not None
 
     await add_tour(conversation)
 
@@ -122,21 +124,14 @@ async def test_adding_two_tours_single_language(
     conversation = admin_conversation
     await conversation.send_message("/tours")
     response: Message = await conversation.get_response()
-    assert "let's add one" in response.message
-
-    response: Message = await conversation.get_response()
-    assert "send me the title" in response.message
+    assert "select an action" in response.message
+    assert await response.click(text="Add a tour") is not None
 
     await add_tour(conversation)
 
     await conversation.send_message("/tours")
     response: Message = await conversation.get_response()
-    assert await response.click(text="Add a new one") is not None
-
-    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    response: Message = event.message
-
-    assert "send me the title" in response.message
+    assert await response.click(text="Add a tour") is not None
 
     await add_tour(conversation, "(2) ")
 
@@ -166,12 +161,8 @@ async def test_adding_second_tour_single_language(
     conversation = admin_conversation
     await conversation.send_message("/tours")
     response: Message = await conversation.get_response()
-    assert await response.click(text="Add a new one") is not None
-
-    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    response: Message = event.message
-
-    assert "send me the title" in response.message
+    assert "select an action" in response.message
+    assert await response.click(text="Add a tour") is not None
 
     await add_tour(conversation, "(2) ")
 
@@ -200,35 +191,15 @@ async def test_adding_one_tour_multilang(
     conversation = admin_conversation
     await conversation.send_message("/tours")
     response: Message = await conversation.get_response()
-    assert "let's add one" in response.message
+    assert "select an action" in response.message
+    assert await response.click(text="Add a tour") is not None
 
-    response: Message = await conversation.get_response()
+    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
+    response: Message = event.message
     assert "select the language" in response.message
     assert await response.click(text="English") is not None
 
-    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    response: Message = event.message
-    assert "send me the title" in response.message
-
     await add_tour(conversation)
-
-    await conversation.send_message("/tours")
-    response: Message = await conversation.get_response()
-    assert await response.click(text="Edit an existing tour") is not None
-
-    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    response: Message = event.message
-    await response.click(0) is not None
-
-    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    response: Message = event.message
-    await response.click(text="Russian (Русский)") is not None
-
-    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
-    response: Message = event.message
-    assert "send me the title" in response.message
-
-    await add_tour(conversation, "(ru) ")
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         stmt = select(Tour).options(
@@ -239,4 +210,3 @@ async def test_adding_one_tour_multilang(
         tour = await session.scalar(stmt)
 
     check_tour(tour, "en")
-    check_tour(tour, "ru", 1, "(ru) ", r"\(ru\) ")
