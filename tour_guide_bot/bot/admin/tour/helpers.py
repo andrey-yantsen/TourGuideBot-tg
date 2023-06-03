@@ -33,14 +33,17 @@ class SelectTourHandler(BaseHandlerCallback, ABC):
     def get_tour_selection_message(self, language: str) -> str:
         pass
 
-    async def send_tour_selector(
-        self, update: Update, context: ContextTypes.DEFAULT_TYPE
-    ):
-        tours: Sequence[Tour] = (
+    async def get_acceptable_tours(self) -> Sequence[Tour]:
+        return (
             await self.db_session.scalars(
                 select(Tour).options(selectinload(Tour.translations))
             )
         ).all()
+
+    async def send_tour_selector(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        tours: Sequence[Tour] = self.get_acceptable_tours()
 
         if len(tours) == 1 and self.SKIP_TOUR_SELECTION_IF_SINGLE:
             if update.callback_query:

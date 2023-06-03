@@ -98,7 +98,7 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour/add_content.py:479
 #: tour_guide_bot/bot/admin/tour/add_content.py:517
 #: tour_guide_bot/bot/admin/tour/delete.py:83
-#: tour_guide_bot/bot/admin/tour/helpers.py:78
+#: tour_guide_bot/bot/admin/tour/helpers.py:81
 #: tour_guide_bot/bot/guide/tours.py:284 tour_guide_bot/bot/guide/tours.py:467
 #: tour_guide_bot/helpers/telegram.py:182
 #: tour_guide_bot/helpers/telegram.py:332
@@ -176,8 +176,8 @@ msgstr ""
 #: tour_guide_bot/bot/admin/revoke.py:79 tour_guide_bot/bot/admin/revoke.py:94
 #: tour_guide_bot/bot/admin/revoke.py:119
 #: tour_guide_bot/bot/admin/tour/delete.py:110
-#: tour_guide_bot/bot/admin/tour/helpers.py:111
-#: tour_guide_bot/bot/admin/tour/helpers.py:187
+#: tour_guide_bot/bot/admin/tour/helpers.py:114
+#: tour_guide_bot/bot/admin/tour/helpers.py:190
 #: tour_guide_bot/bot/admin/tour/pricing.py:265
 #: tour_guide_bot/bot/guide/purchase.py:100
 #: tour_guide_bot/bot/guide/purchase.py:135
@@ -393,7 +393,6 @@ msgid "Payments"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/configure/payments/__init__.py:53
-#: tour_guide_bot/bot/admin/tour/edit/__init__.py:53
 msgctxt "bot-generic"
 msgid "« Back"
 msgstr ""
@@ -460,7 +459,7 @@ msgctxt "admin-configure"
 msgid "Are you sure you want to delete the payment token?"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/__init__.py:26
+#: tour_guide_bot/bot/admin/tour/__init__.py:24
 msgctxt "admin-tour"
 msgid "Please select an action."
 msgstr ""
@@ -698,7 +697,7 @@ msgctxt "admin-tour"
 msgid "Please select the tour you want to delete."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/helpers.py:59
+#: tour_guide_bot/bot/admin/tour/helpers.py:62
 msgctxt "bot-admin"
 msgid "No tours found."
 msgstr ""
@@ -766,16 +765,6 @@ msgid "From now on users can buy {}-day access to {} for {}."
 msgid_plural "From now on users can buy {}-days access to {} for {}."
 msgstr[0] ""
 msgstr[1] ""
-
-#: tour_guide_bot/bot/admin/tour/edit/__init__.py:30
-msgctxt "admin-tour"
-msgid "Edit a tour"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/tour/edit/__init__.py:70
-msgctxt "admin-tours"
-msgid "Please select the tour you want to edit."
-msgstr ""
 
 #: tour_guide_bot/bot/guide/bot_commands.py:22
 msgctxt "guest-bot-command"
