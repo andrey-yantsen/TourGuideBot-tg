@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func
+from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, Integer, String, func
 from sqlalchemy.orm import Mapped, relationship
 
 from tour_guide_bot.models import Base
@@ -12,7 +12,7 @@ class TelegramUser(Base):
     __tablename__ = "telegram_user"
     __mapper_args__ = {"eager_defaults": True}
 
-    id: Mapped[int] = Column(Integer, primary_key=True, autoincrement=False)
+    id: Mapped[int] = Column(BigInteger, primary_key=True, autoincrement=False)
     phone: Mapped[Optional[str]] = Column(String)
     language: Mapped[Optional[str]] = Column(String)
     guest_id: Mapped[Optional[int]] = Column(Integer, ForeignKey("guest.id"))
