@@ -3,15 +3,22 @@ import asyncio
 import logging
 import sys
 from os import mkdir, sep
-from os.path import dirname
+from os.path import dirname, realpath
 from warnings import filterwarnings
 
+import aiohttp_jinja2
+import aiohttp_session
+import jinja2
+from aiohttp import web
+from aiohttp_session.cookie_storage import EncryptedCookieStorage
+from cryptography import fernet
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 from telegram.ext import PicklePersistence
 from telegram.warnings import PTBUserWarning
 
 from tour_guide_bot import log, set_fallback_locale, t
 from tour_guide_bot.bot.app import Application
+from tour_guide_bot.web import routes
 
 
 def prepare_app(
@@ -82,8 +89,43 @@ def run():
         type=str,
         required=True,
     )
+    parser.add_argument(
+        "--enable-http-server",
+        help=t().pgettext("cli", "Enable HTTP server."),
+        action="store_true",
+    )
+    parser.add_argument(
+        "--http-host",
+        help=t().pgettext("cli", "HTTP-server host."),
+        default="0.0.0.0",
+        type=str,
+    )
+    parser.add_argument(
+        "--http-port",
+        help=t().pgettext("cli", "HTTP-server port."),
+        default=8080,
+        type=int,
+    )
+    parser.add_argument(
+        "--http-cookie-key",
+        help=t().pgettext("cli", "Cookie encryption key."),
+        type=str,
+    )
 
     args = parser.parse_args()
+
+    if args.enable_http_server and not args.http_cookie_key:
+        fernet_key = fernet.Fernet.generate_key()
+        print(
+            t()
+            .pgettext(
+                "cli",
+                "You need to provide a cookie encryption key for the HTTP server to work. "
+                "Please re-run the server providing argument --http-cookie-key='{}'",
+            )
+            .format(fernet_key.decode("ascii"))
+        )
+        exit(1)
 
     if len(args.enabled_languages) == 0:
         parser.error(
@@ -139,9 +181,40 @@ def run():
     loop.run_until_complete(app.updater.start_polling())
     loop.run_until_complete(app.start())
 
+    if args.enable_http_server:
+        web_path = dirname(realpath(__file__)) + "/web/"
+        webapp = web.Application()
+
+        for static_path in ("js", "css"):
+            webapp.add_routes(
+                [web.static(f"/{static_path}", f"{web_path}static/{static_path}")]
+            )
+
+        aiohttp_jinja2.setup(
+            webapp,
+            loader=jinja2.FileSystemLoader(web_path + "templates"),
+        )
+
+        aiohttp_session.setup(webapp, EncryptedCookieStorage(args.http_cookie_key))
+
+        webapp.bot_user_info = loop.run_until_complete(app.bot.get_me())
+        webapp.bot = app.bot
+        webapp.db_engine = engine
+
+        webapp.add_routes(routes)
+
     try:
         log.info(t().pgettext("cli", "Up and runnig!"))
-        loop.run_forever()
+        if args.enable_http_server:
+            web.run_app(
+                webapp,
+                host=args.http_host,
+                port=args.http_port,
+                loop=loop,
+                print=False,
+            )
+        else:
+            loop.run_forever()
     finally:
         loop.run_until_complete(app.update_persistence())
 
