@@ -190,15 +190,18 @@ def run():
                 [web.static(f"/{static_path}", f"{web_path}static/{static_path}")]
             )
 
-        aiohttp_jinja2.setup(
+        jinja_env = aiohttp_jinja2.setup(
             webapp,
             loader=jinja2.FileSystemLoader(web_path + "templates"),
+            extensions=["jinja2.ext.i18n"],
         )
+        jinja_env.install_gettext_translations(t(args.default_language), newstyle=True)
 
         aiohttp_session.setup(webapp, EncryptedCookieStorage(args.http_cookie_key))
 
         webapp.bot_user_info = loop.run_until_complete(app.bot.get_me())
         webapp.bot = app.bot
+        webapp.default_language = args.default_language
         webapp.db_engine = engine
 
         webapp.add_routes(routes)

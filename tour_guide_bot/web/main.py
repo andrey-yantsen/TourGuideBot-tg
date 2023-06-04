@@ -6,8 +6,10 @@ import aiohttp_jinja2
 import aiohttp_session
 from aiohttp.web import HTTPForbidden, HTTPTemporaryRedirect, Request
 
+from tour_guide_bot import t
 
-@aiohttp_jinja2.template("index.html.j2")
+
+@aiohttp_jinja2.template("index.html")
 async def index(request: Request):
     return {
         "bot_info": request.app.bot_user_info,
@@ -32,10 +34,14 @@ async def auth(request: Request):
     )
 
     if hash != hash_check:
-        raise HTTPForbidden(text="Invalid hash")
+        raise HTTPForbidden(
+            text=t(request.app.default_language).pgettext("web-auth", "Invalid hash")
+        )
 
     if time() - int(request.query.get("auth_date", 0)) > 900:
-        raise HTTPForbidden(text="Data is too old")
+        raise HTTPForbidden(
+            text=t(request.app.default_language).pgettext("web-auth", "Data is too old")
+        )
 
     session = await aiohttp_session.get_session(request)
     session["user_info"] = {

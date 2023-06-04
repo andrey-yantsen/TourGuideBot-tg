@@ -67,7 +67,7 @@ msgctxt "cli"
 msgid "the default language must be in the list of enabled languages"
 msgstr ""
 
-#: tour_guide_bot/cli.py:207
+#: tour_guide_bot/cli.py:210
 msgctxt "cli"
 msgid "Up and runnig!"
 msgstr ""
@@ -1040,5 +1040,20 @@ msgstr ""
 #: tour_guide_bot/helpers/telegram.py:396
 msgctxt "bot-generic"
 msgid "Tour #{0} doesn't have a translation for the default language ({1})."
+msgstr ""
+
+#: tour_guide_bot/web/main.py:38
+msgctxt "web-auth"
+msgid "Invalid hash"
+msgstr ""
+
+#: tour_guide_bot/web/main.py:43
+msgctxt "web-auth"
+msgid "Data is too old"
+msgstr ""
+
+#: tour_guide_bot/web/templates/index.html:2
+msgctxt "web-auth"
+msgid "Please log in"
 msgstr ""
 
