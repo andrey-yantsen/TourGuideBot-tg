@@ -54,7 +54,7 @@ class Currency:
         price = price.replace(cfg["decimal_sep"], ".")
         price = float(price)
 
-        return int(price * pow(10, cfg["exp"]))
+        return round(price * pow(10, cfg["exp"]))
 
     @classmethod
     async def is_valid(cls, currency: str, price: int) -> bool:

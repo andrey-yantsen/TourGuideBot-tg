@@ -43,7 +43,7 @@ class SelectTourHandler(BaseHandlerCallback, ABC):
     async def send_tour_selector(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
-        tours: Sequence[Tour] = self.get_acceptable_tours()
+        tours: Sequence[Tour] = await self.get_acceptable_tours()
 
         if len(tours) == 1 and self.SKIP_TOUR_SELECTION_IF_SINGLE:
             if update.callback_query:

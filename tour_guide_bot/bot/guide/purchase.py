@@ -15,7 +15,7 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
-from tour_guide_bot.helpers.telegram import BaseHandlerCallback, get_tour_title
+from tour_guide_bot.helpers.telegram import BaseHandlerCallback
 from tour_guide_bot.models.guide import (
     Invoice,
     Product,
@@ -156,26 +156,10 @@ class PurchaseCommandHandler(BaseHandlerCallback):
             await update.callback_query.answer()
             await update.callback_query.message.delete()
 
-        title = t(language).pgettext("guest-tour-purchase", "Tour access")
-
-        description = (
-            t(language)
-            .npgettext(
-                "guest-tour-purchase",
-                "Access to {} for {} day",
-                "Access to {} for {} days",
-                product.duration_days,
-            )
-            .format(
-                get_tour_title(product.tour, language, context),
-                product.duration_days,
-            )
-        )
-
         await context.bot.send_invoice(
             update.effective_chat.id,
-            title=title,
-            description=description,
+            title=product.title,
+            description=product.description,
             payload="i:" + str(invoice.id),
             currency=invoice.currency,
             start_parameter="p" + str(invoice.product_id),

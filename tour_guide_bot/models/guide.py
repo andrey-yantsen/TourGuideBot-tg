@@ -67,6 +67,7 @@ class TourTranslation(Base):
     language: Mapped[str] = Column(String, nullable=False)
     tour_id: Mapped[int] = Column(Integer, ForeignKey("tour.id"), nullable=False)
     title: Mapped[str] = Column(String, nullable=False)
+    description: Mapped[Optional[str]] = Column(String(4096), nullable=True)
     tour: Mapped[Optional["Tour"]] = relationship("Tour", back_populates="translations")
     sections: Mapped[list["TourSection"]] = relationship(
         "TourSection", cascade="all, delete-orphan", order_by="TourSection.position"
@@ -171,9 +172,20 @@ class Product(Base):
     price: Mapped[int] = Column(Integer, nullable=False)
     duration_days: Mapped[int] = Column(Integer, nullable=False)
     available: Mapped[bool] = Column(Boolean, nullable=False, default=True)
+    language: Mapped[str] = Column(String, nullable=False)
+    title: Mapped[str] = Column(String(32), nullable=False)
+    description: Mapped[str] = Column(String(255), nullable=False)
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
         DateTime, nullable=False, default=func.now(), onupdate=func.now()
+    )
+
+    __table_args__ = (
+        Index(
+            "ix_product_language_tour",
+            "language",
+            "tour_id",
+        ),
     )
 
 

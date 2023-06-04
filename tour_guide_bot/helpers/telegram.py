@@ -147,7 +147,7 @@ class BaseHandlerCallback:
                     locale.get_language_name(locale_name),
                 )
             else:
-                locale_text = locale.get_language_name(locale_name)
+                locale_text = locale.get_language_name(current_language)
 
             ret.append((locale_name, locale_text))
 

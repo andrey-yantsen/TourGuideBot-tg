@@ -202,6 +202,6 @@ class StartCommandHandler(BaseHandlerCallback):
                 user.guest = guest
                 self.db_session.add_all([guest, user])
 
-            await self.db_sesson.commit()
+            await self.db_session.commit()
             await self.process_guest(user, update, context)
             return ConversationHandler.END
