@@ -27,13 +27,13 @@ def upgrade() -> None:
                 "delay_between_messages",
                 "support_message",
                 "terms_message",
-                name="key",
+                name="settingskey",
             ),
             existing_type=sa.Enum(
                 "guide_welcome_message",
                 "audio_to_voice",
                 "delay_between_messages",
-                name="key",
+                name="settingskey",
             ),
         )
 
@@ -48,7 +48,7 @@ def downgrade() -> None:
                 "guide_welcome_message",
                 "audio_to_voice",
                 "delay_between_messages",
-                name="key",
+                name="settingskey",
             ),
             existing_type=sa.Enum(
                 "guide_welcome_message",
@@ -56,6 +56,6 @@ def downgrade() -> None:
                 "delay_between_messages",
                 "support_message",
                 "terms_message",
-                name="key",
+                name="settingskey",
             ),
         )

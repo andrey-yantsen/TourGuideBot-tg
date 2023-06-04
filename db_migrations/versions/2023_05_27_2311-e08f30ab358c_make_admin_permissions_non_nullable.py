@@ -18,12 +18,14 @@ depends_on = None
 def upgrade() -> None:
     with op.batch_alter_table("admin") as batch_op:
         batch_op.alter_column(
-            "permissions", existing_type=sa.VARCHAR(length=4), nullable=False
+            "permissions",
+            existing_type=sa.Enum("full", name="adminpermissions"),
+            nullable=False,
         )
 
 
 def downgrade() -> None:
     with op.batch_alter_table("admin") as batch_op:
         batch_op.alter_column(
-            "permissions", existing_type=sa.VARCHAR(length=4), nullable=True
+            "permissions", sa.Enum("full", name="adminpermissions"), nullable=True
         )
