@@ -132,7 +132,7 @@ def default_tour() -> dict:
                 "currency": "USD",
                 "payment_provider_id": 1,
                 "price": 100,
-                "duration_days": 1,
+                "duration_days": 2,
             },
         ],
         "translations": {
@@ -241,13 +241,20 @@ async def tours(
                         )
                         session.add(content)
 
-            skip_payment_token_stub = request.node.get_closest_marker(
-                "skip_payment_token_stub"
-            )
-            if skip_payment_token_stub is None:
-                for product_config in tour.get("products", []):
-                    product = Product(tour=tour_model, **product_config)
-                    session.add(product)
+                skip_payment_token_stub = request.node.get_closest_marker(
+                    "skip_payment_token_stub"
+                )
+
+                if skip_payment_token_stub is None:
+                    for product_config in tour.get("products", []):
+                        product = Product(
+                            tour=tour_model,
+                            language=lang,
+                            title=data["title"],
+                            description=f"Buy {product_config['duration_days']} days acess to {data['title']}",
+                            **product_config,
+                        )
+                        session.add(product)
 
             ret.append(tour_model)
 
