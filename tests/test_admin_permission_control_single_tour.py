@@ -53,7 +53,7 @@ async def test_approve_known_user(
     await admin_conversation.send_message("/tours")
 
     response: Message = await admin_conversation.get_response()
-    assert "One tour available for you: Test tour" in response.message
+    assert "Only one tour is available for you: Test tour" in response.message
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         stmt = select(Subscription).where(Subscription.guest == guest)

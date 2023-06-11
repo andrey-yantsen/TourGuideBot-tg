@@ -22,7 +22,8 @@ from telegram.ext import (
 
 from tour_guide_bot import t
 from tour_guide_bot.bot.guide import log
-from tour_guide_bot.helpers.telegram import BaseHandlerCallback, get_tour_title
+from tour_guide_bot.helpers import SelectTourHandler
+from tour_guide_bot.helpers.telegram import get_tour_title
 from tour_guide_bot.models.guide import (
     MessageType,
     Subscription,
@@ -33,9 +34,10 @@ from tour_guide_bot.models.guide import (
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 
-class ToursCommandHandler(BaseHandlerCallback):
-    STATE_SELECT_TOUR = 1
-    STATE_TOUR_IN_PROGRESS = 2
+class ToursCommandHandler(SelectTourHandler):
+    SKIP_TOUR_SELECTION_IF_SINGLE = True
+
+    STATE_TOUR_IN_PROGRESS = 1
 
     @classmethod
     def get_handlers(cls):
@@ -43,11 +45,7 @@ class ToursCommandHandler(BaseHandlerCallback):
             ConversationHandler(
                 entry_points=[CommandHandler("tours", cls.partial(cls.start))],
                 states={
-                    cls.STATE_SELECT_TOUR: [
-                        CallbackQueryHandler(
-                            cls.partial(cls.start_tour), r"^start_tour:(\d+):(\w+)$"
-                        ),
-                    ],
+                    cls.STATE_SELECT_TOUR: cls.get_select_tour_handlers(),
                     cls.STATE_TOUR_IN_PROGRESS: [
                         CallbackQueryHandler(
                             cls.partial(cls.tour_change_section),
@@ -295,6 +293,16 @@ class ToursCommandHandler(BaseHandlerCallback):
     async def display_first_section(
         self, tour: Tour, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
+        tour: Tour = await self.db_session.scalar(
+            select(Tour)
+            .options(
+                selectinload(Tour.translations)
+                .selectinload(TourTranslation.sections)
+                .selectinload(TourSection.content)
+            )
+            .where(Tour.id == tour.id)
+        )
+
         translations = {
             translation.language: translation for translation in tour.translations
         }
@@ -332,26 +340,6 @@ class ToursCommandHandler(BaseHandlerCallback):
             translation = translations[user.language]
 
         return await self.display_section(translation, 0, update, context)
-
-    async def start_tour(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        user = await self.get_user(update, context)
-
-        bought_tour = await self.get_tour(
-            user.guest_id, int(context.matches[0].group(1))
-        )
-        if not bought_tour:
-            await self.edit_or_reply_text(
-                update,
-                context,
-                t(user.language).pgettext(
-                    "guide-tour",
-                    "Unfortunately, you don't have access to the requested tour.",
-                ),
-            )
-
-            return ConversationHandler.END
-
-        return await self.display_first_section(bought_tour.tour, update, context)
 
     async def tour_change_section(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
@@ -392,88 +380,101 @@ class ToursCommandHandler(BaseHandlerCallback):
             translation, int(context.matches[0].group(2)), update, context
         )
 
+    async def after_tour_selected(
+        self,
+        tour: Tour,
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE,
+        is_single_tour: bool,
+    ):
+        language = await self.get_language(update, context)
+        msg = ""
+        if is_single_tour:
+            msg = (
+                t(language)
+                .pgettext(
+                    "guest-tour",
+                    "Only one tour is available for you: {}.",
+                )
+                .format(get_tour_title(tour, language, context))
+                + "\n"
+            )
+        else:
+            msg = (
+                t(language)
+                .pgettext(
+                    "guest-tour",
+                    "You have selected the tour {}.",
+                )
+                .format(get_tour_title(tour, language, context))
+                + "\n"
+            )
+
+        msg += t(language).pgettext(
+            "guest-tour",
+            "Now the bot will send you several messages, please start the"
+            " tour with the following one 👇",
+        )
+
+        # The original message from the callback will be deleted later, down the trace.
+        await self.reply_text(update, context, msg)
+        return await self.display_first_section(tour, update, context)
+
+    def get_tour_selection_message(self, language: str) -> str:
+        return t(language).pgettext(
+            "guide-tour", "Please select a tour you want to start."
+        )
+
+    async def handle_no_tours_found(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        language = await self.get_language(update, context)
+        await update.message.reply_text(
+            t(language).pgettext(
+                "guest-tour",
+                "Unfortunately, no tours are available for"
+                " you at the moment. Approving somebody for a tour takes"
+                " a while, but if you feel like a mistake was made, don't"
+                " hesitate to contact me! The bot's profile should provide"
+                " all the required info.",
+            )
+        )
+        return ConversationHandler.END
+
+    async def get_acceptable_tours(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> Sequence[Tour]:
+        user = await self.get_user(update, context)
+        subscriptions = await self.db_session.scalars(
+            select(Subscription)
+            .options(
+                selectinload(Subscription.tour).selectinload(Tour.translations),
+            )
+            .where(
+                (Subscription.guest == user.guest)
+                & (Subscription.expire_ts >= datetime.now())
+            )
+        )
+
+        return [subscription.tour for subscription in subscriptions]
+
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
-        language = user.language
 
-        # TODO: rewrite this
-        # Currently done in the stupidest way possible for self.display_first_section()
-        bought_tours: Sequence[Subscription] = (
+        bought_tours_without_notifications: Sequence[Subscription] = (
             await self.db_session.scalars(
-                select(Subscription)
-                .options(
-                    selectinload(Subscription.tour)
-                    .selectinload(Tour.translations)
-                    .selectinload(TourTranslation.sections)
-                    .selectinload(TourSection.content)
-                )
-                .where(
+                select(Subscription).where(
                     (Subscription.guest == user.guest)
-                    & (Subscription.expire_ts >= datetime.now())
+                    & (Subscription.is_user_notified == False)
                 )
             )
         ).all()
 
-        keyboard = []
+        for bought_tour in bought_tours_without_notifications:
+            bought_tour.is_user_notified = True
+            self.db_session.add(bought_tour)
 
-        last_tour = None
-        for bought_tour in bought_tours:
-            title = get_tour_title(bought_tour.tour, language, context)
-            keyboard.append(
-                [
-                    InlineKeyboardButton(
-                        title,
-                        callback_data="start_tour:%s:%s"
-                        % (bought_tour.tour_id, language),
-                    )
-                ]
-            )
-            last_tour = bought_tour.tour
+        if len(bought_tours_without_notifications):
+            await self.db_session.commit()
 
-            if not bought_tour.is_user_notified:
-                bought_tour.is_user_notified = True
-                self.db_session.add(bought_tour)
-
-        await self.db_session.commit()
-
-        if len(keyboard) == 0:
-            await update.message.reply_text(
-                t(language).pgettext(
-                    "guest-tour",
-                    "Unfortunately, no tours are available for"
-                    " you at the moment. Approving somebody for a tour takes"
-                    " a while, but if you feel like a mistake was made, don't"
-                    " hesitate to contact me! The bot's profile should provide"
-                    " all the required info.",
-                )
-            )
-
-            return ConversationHandler.END
-        elif len(keyboard) == 1:
-            await update.message.reply_text(
-                t(language).pgettext(
-                    "guest-tour",
-                    "The tour available for you is: %s.\nNow the bot will send you several messages, please start the"
-                    " tour with the following one 👇",
-                )
-                % get_tour_title(last_tour, language, context)
-            )
-
-            return await self.display_first_section(last_tour, update, context)
-
-        keyboard.append(
-            [
-                InlineKeyboardButton(
-                    t(language).pgettext("bot-generic", "Abort"), callback_data="cancel"
-                )
-            ]
-        )
-
-        await update.message.reply_text(
-            t(language).pgettext(
-                "guide-tour", "Please select a tour you want to start."
-            ),
-            reply_markup=InlineKeyboardMarkup(keyboard),
-        )
-
-        return self.STATE_SELECT_TOUR
+        return await self.send_tour_selector(update, context)

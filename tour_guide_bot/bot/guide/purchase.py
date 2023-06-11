@@ -30,7 +30,10 @@ class PurchaseCommandHandler(BaseHandlerCallback):
     def get_handlers(cls):
         return [
             CommandHandler("purchase", cls.partial(cls.start)),
-            CallbackQueryHandler(cls.partial(cls.purchase), r"^purchase:(\d+)$"),
+            CallbackQueryHandler(
+                cls.partial(cls.purchase),
+                cls.get_callback_data_pattern("purchase", r"(\d+)"),
+            ),
             PreCheckoutQueryHandler(cls.partial(cls.pre_checkout)),
             MessageHandler(
                 filters.SUCCESSFUL_PAYMENT, cls.partial(cls.successful_payment)
@@ -83,16 +86,21 @@ class PurchaseCommandHandler(BaseHandlerCallback):
         )
 
     async def pre_checkout(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        language = await self.get_language(update, context)
         query = update.pre_checkout_query
         if not query.invoice_payload[0:2] == "i:":
+            await query.answer(
+                ok=False,
+                error_message=t(language).pgettext(
+                    "bot-generic", "Something went wrong; please try again."
+                ),
+            )
             return
 
         invoice_id = int(query.invoice_payload[2:])
         invoice: Invoice | None = await self.db_session.scalar(
             select(Invoice).where(Invoice.id == invoice_id)
         )
-
-        language = await self.get_language(update, context)
 
         if not invoice or invoice.paid:
             await query.answer(
@@ -217,9 +225,7 @@ class PurchaseCommandHandler(BaseHandlerCallback):
                 select(Tour)
                 .options(
                     selectinload(Tour.products),
-                    selectinload(Tour.translations).selectinload(
-                        TourTranslation.sections
-                    ),
+                    selectinload(Tour.translations),
                 )
                 .where(Tour.products.any(available=True))
             )

@@ -17,8 +17,8 @@ from telegram.ext import (
 from tour_guide_bot import t
 from tour_guide_bot.bot.admin.tour.helpers import (
     SelectLanguageHandler,
-    SelectTourHandler,
 )
+from tour_guide_bot.helpers import SelectTourHandler
 from tour_guide_bot.helpers.currency import Currency
 from tour_guide_bot.helpers.telegram import SubcommandHandler, get_tour_title
 from tour_guide_bot.models.guide import Product, Tour
@@ -26,7 +26,6 @@ from tour_guide_bot.models.settings import PaymentProvider
 
 
 class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler):
-    SKIP_TOUR_SELECTION_IF_SINGLE = False
     SKIP_LANGUAGE_SELECTION_IF_SINGLE = False
 
     STATE_WAITING_FOR_TITLE: ClassVar[int] = 1
@@ -45,6 +44,7 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
                     ),
                 ],
                 states={
+                    cls.STATE_SELECT_TOUR: cls.get_select_tour_handlers(),
                     cls.STATE_WAITING_FOR_TITLE: [
                         MessageHandler(
                             filters.TEXT & ~filters.COMMAND,
@@ -75,7 +75,6 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
                             cls.partial(cls.save_duration),
                         ),
                     ],
-                    **cls.get_select_tour_handlers(),
                     **cls.get_select_language_handlers(),
                 },
                 fallbacks=[

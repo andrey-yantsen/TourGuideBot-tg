@@ -54,6 +54,7 @@ async def test_success_payment(
     telegram_client: TelegramClient,
     db_engine: AsyncEngine,
     guest: Guest,
+    tours_as_dicts: list[dict],
 ):
     await conversation.send_message("/purchase")
     # Skip message about having only one tour
@@ -89,4 +90,6 @@ async def test_success_payment(
         stmt = select(Subscription).where(Subscription.guest == guest)
         s: Subscription | None = await session.scalar(stmt)
 
-        assert (s.expire_ts - now).days == 1, "Unexpected subscription duration"
+        assert (s.expire_ts - now).days == tours_as_dicts[0]["products"][0][
+            "duration_days"
+        ], "Unexpected subscription duration"

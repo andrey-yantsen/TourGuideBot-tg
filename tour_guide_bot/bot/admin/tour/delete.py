@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -12,15 +14,14 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
-from tour_guide_bot.bot.admin.tour.helpers import SelectTourHandler
+from tour_guide_bot.helpers import SelectTourHandler
 from tour_guide_bot.helpers.telegram import SubcommandHandler, get_tour_title
 from tour_guide_bot.models.guide import Tour
 
 
 class DeleteHandler(SubcommandHandler, SelectTourHandler):
-    STATE_AWAITING_CONFIRMATION = 1
-
-    SKIP_TOUR_SELECTION_IF_SINGLE = False
+    STATE_SELECT_TOUR: ClassVar[int] = 1
+    STATE_AWAITING_CONFIRMATION: ClassVar[int] = 2
 
     @classmethod
     def get_handlers(cls):
@@ -32,6 +33,7 @@ class DeleteHandler(SubcommandHandler, SelectTourHandler):
                     ),
                 ],
                 states={
+                    cls.STATE_SELECT_TOUR: cls.get_select_tour_handlers(),
                     cls.STATE_AWAITING_CONFIRMATION: [
                         CallbackQueryHandler(
                             cls.partial(cls.delete_tour),
@@ -42,7 +44,6 @@ class DeleteHandler(SubcommandHandler, SelectTourHandler):
                             cls.get_callback_data_pattern(r"cancel"),
                         ),
                     ],
-                    **cls.get_select_tour_handlers(),
                 },
                 fallbacks=[
                     CommandHandler("cancel", cls.partial(cls.cancel)),
