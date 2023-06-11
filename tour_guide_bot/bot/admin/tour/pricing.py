@@ -15,11 +15,11 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
-from tour_guide_bot.bot.admin.tour.helpers import (
-    SelectLanguageHandler,
+from tour_guide_bot.helpers import (
+    SelectTourHandler,
 )
-from tour_guide_bot.helpers import SelectTourHandler
 from tour_guide_bot.helpers.currency import Currency
+from tour_guide_bot.helpers.language_selector import SelectLanguageHandler
 from tour_guide_bot.helpers.telegram import SubcommandHandler, get_tour_title
 from tour_guide_bot.models.guide import Product, Tour
 from tour_guide_bot.models.settings import PaymentProvider
@@ -75,7 +75,7 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
                             cls.partial(cls.save_duration),
                         ),
                     ],
-                    **cls.get_select_language_handlers(),
+                    cls.STATE_LANGUAGE_SELECTION: cls.get_select_language_handlers(),
                 },
                 fallbacks=[
                     CommandHandler("cancel", cls.partial(cls.cancel)),

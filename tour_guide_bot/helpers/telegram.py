@@ -3,7 +3,6 @@ from binascii import crc32
 from functools import partial
 from inspect import isawaitable
 
-from babel import Locale
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -130,62 +129,6 @@ class BaseHandlerCallback:
         self.user = user
 
         return self.user
-
-    async def get_languages(
-        self,
-        current_language: str,
-        context: ContextTypes.DEFAULT_TYPE,
-        language_friendly: bool = True,
-    ):
-        ret = []
-        for locale_name in context.application.enabled_languages:
-            locale = Locale.parse(locale_name)
-
-            if locale_name != current_language and language_friendly:
-                locale_text = "%s (%s)" % (
-                    locale.get_language_name(current_language),
-                    locale.get_language_name(locale_name),
-                )
-            else:
-                locale_text = locale.get_language_name(current_language)
-
-            ret.append((locale_name, locale_text))
-
-        return ret
-
-    async def get_language_select_inline_keyboard(
-        self,
-        current_language: str,
-        context: ContextTypes.DEFAULT_TYPE,
-        callback_data_prefix: str = "language:",
-        with_abort: bool = False,
-        language_friendly: bool = True,
-    ) -> InlineKeyboardMarkup:
-        keyboard = []
-
-        for locale_name, locale_text in await self.get_languages(
-            current_language, context, language_friendly
-        ):
-            keyboard.append(
-                [
-                    InlineKeyboardButton(
-                        locale_text.title(),
-                        callback_data="%s%s" % (callback_data_prefix, locale_name),
-                    )
-                ]
-            )
-
-        if with_abort:
-            keyboard.append(
-                [
-                    InlineKeyboardButton(
-                        t(current_language).pgettext("bot-generic", "Abort"),
-                        callback_data="cancel",
-                    )
-                ]
-            )
-
-        return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
     @classmethod
     def get_callback_data(cls, *args) -> str:

@@ -128,7 +128,7 @@ async def test_change_welcome_message_multiple_language(
     event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
     msg: Message = event.message
 
-    response = await msg.click(text="Russian (Русский)")
+    response = await msg.click(text="Russian")
     assert isinstance(
         response, BotCallbackAnswer
     ), "BotCallbackAnswer didn't arrive after the inline button click"

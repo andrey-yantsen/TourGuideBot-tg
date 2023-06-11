@@ -20,7 +20,6 @@ from tour_guide_bot.models.guide import Tour
 
 
 class DeleteHandler(SubcommandHandler, SelectTourHandler):
-    STATE_SELECT_TOUR: ClassVar[int] = 1
     STATE_AWAITING_CONFIRMATION: ClassVar[int] = 2
 
     @classmethod

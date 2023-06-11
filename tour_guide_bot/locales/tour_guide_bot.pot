@@ -124,9 +124,10 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour/add_content.py:438
 #: tour_guide_bot/bot/admin/tour/add_content.py:479
 #: tour_guide_bot/bot/admin/tour/add_content.py:517
-#: tour_guide_bot/bot/admin/tour/delete.py:84
-#: tour_guide_bot/bot/guide/tours.py:282 tour_guide_bot/helpers/telegram.py:182
-#: tour_guide_bot/helpers/telegram.py:332
+#: tour_guide_bot/bot/admin/tour/delete.py:83
+#: tour_guide_bot/bot/guide/tours.py:282
+#: tour_guide_bot/helpers/language_selector.py:81
+#: tour_guide_bot/helpers/telegram.py:275
 #: tour_guide_bot/helpers/tours_selector.py:90
 msgctxt "bot-generic"
 msgid "Abort"
@@ -190,8 +191,7 @@ msgid ""
 "* /guest — return to the guest mode"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:113
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:174
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:140
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:95
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:117
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:142
@@ -201,14 +201,14 @@ msgstr ""
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:75
 #: tour_guide_bot/bot/admin/revoke.py:79 tour_guide_bot/bot/admin/revoke.py:94
 #: tour_guide_bot/bot/admin/revoke.py:119
-#: tour_guide_bot/bot/admin/tour/delete.py:111
-#: tour_guide_bot/bot/admin/tour/helpers.py:71
+#: tour_guide_bot/bot/admin/tour/delete.py:110
 #: tour_guide_bot/bot/admin/tour/pricing.py:371
 #: tour_guide_bot/bot/guide/purchase.py:94
 #: tour_guide_bot/bot/guide/purchase.py:108
 #: tour_guide_bot/bot/guide/purchase.py:143
 #: tour_guide_bot/bot/guide/tours.py:100 tour_guide_bot/bot/guide/tours.py:332
 #: tour_guide_bot/bot/guide/tours.py:360
+#: tour_guide_bot/helpers/language_selector.py:130
 #: tour_guide_bot/helpers/tours_selector.py:124
 msgctxt "bot-generic"
 msgid "Something went wrong; please try again."
@@ -241,7 +241,7 @@ msgstr ""
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:92
 #: tour_guide_bot/bot/admin/revoke.py:215
 #: tour_guide_bot/bot/admin/tour/add_content.py:675
-#: tour_guide_bot/bot/admin/tour/delete.py:80
+#: tour_guide_bot/bot/admin/tour/delete.py:79
 msgctxt "bot-generic"
 msgid "Yes"
 msgstr ""
@@ -356,30 +356,30 @@ msgctxt "admin-configure"
 msgid "The delay was updated!"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:86
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:70
 msgctxt "admin-configure"
 msgid "Please select the language for the {} you want to edit."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:132
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:98
 msgctxt "admin-configure"
 msgid ""
 "The bot currently has the following {}. Please send me a new one if you "
 "want to change it, or send /cancel to abort the modification."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:148
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:114
 msgctxt "admin-configure"
 msgid "The bot currently doesn't have a {}. Please send me one."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:160
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:126
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:74
 msgctxt "admin-configure"
 msgid "Please send me a regular text message."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/configure/messages/__init__.py:195
+#: tour_guide_bot/bot/admin/configure/messages/__init__.py:161
 msgctxt "admin-configure"
 msgid "Bot's {} has been changed."
 msgstr ""
@@ -543,7 +543,7 @@ msgid "Please select the language for the new tour."
 msgstr ""
 
 #: tour_guide_bot/bot/admin/tour/add_content.py:138
-#: tour_guide_bot/helpers/telegram.py:49
+#: tour_guide_bot/helpers/telegram.py:48
 msgctxt "bot-generic"
 msgid "Cancelled."
 msgstr ""
@@ -714,22 +714,22 @@ msgid ""
 "video note."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/delete.py:61
+#: tour_guide_bot/bot/admin/tour/delete.py:60
 msgctxt "admin-tour"
 msgid "Delete a tour"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/delete.py:74
+#: tour_guide_bot/bot/admin/tour/delete.py:73
 msgctxt "admin-tours"
 msgid "Do you really want to delete the tour \"{0}\"?"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/delete.py:125
+#: tour_guide_bot/bot/admin/tour/delete.py:124
 msgctxt "admin-tours"
 msgid "The tour \"{0}\" was removed."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/delete.py:131
+#: tour_guide_bot/bot/admin/tour/delete.py:130
 msgctxt "admin-tour"
 msgid "Please select the tour you want to delete."
 msgstr ""
@@ -1016,41 +1016,36 @@ msgid "Please select a tour you want to start."
 msgstr ""
 
 #: tour_guide_bot/helpers/language.py:34
-msgctxt "any-bot"
+msgctxt "bot-generic"
 msgid "The language has been changed to {0}."
 msgstr ""
 
-#: tour_guide_bot/helpers/language.py:41
-msgctxt "any-bot"
-msgid "Something went wrong, please try again."
-msgstr ""
-
-#: tour_guide_bot/helpers/language.py:51
-msgctxt "any-bot"
-msgid "Unfortunately, you can`t change the language — this bot supports only one."
-msgstr ""
-
-#: tour_guide_bot/helpers/language.py:58
-msgctxt "any-bot"
+#: tour_guide_bot/helpers/language.py:39
+msgctxt "bot-generic"
 msgid "Please select the language you prefer"
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:81
+#: tour_guide_bot/helpers/language.py:48
+msgctxt "bot-generic"
+msgid "Unfortunately, you can`t change the language — this bot supports only one."
+msgstr ""
+
+#: tour_guide_bot/helpers/telegram.py:80
 msgctxt "bot-generic"
 msgid "Unknown command."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:223
+#: tour_guide_bot/helpers/telegram.py:166
 msgctxt "admin-bot"
 msgid "Access denied."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:381
+#: tour_guide_bot/helpers/telegram.py:324
 msgctxt "bot-generic"
 msgid "Tour #{0} doesn't have any translations."
 msgstr ""
 
-#: tour_guide_bot/helpers/telegram.py:396
+#: tour_guide_bot/helpers/telegram.py:339
 msgctxt "bot-generic"
 msgid "Tour #{0} doesn't have a translation for the default language ({1})."
 msgstr ""

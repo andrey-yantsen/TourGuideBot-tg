@@ -13,13 +13,13 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
+from tour_guide_bot.helpers.language_selector import SelectLanguageHandler
 from tour_guide_bot.helpers.telegram import SubcommandHandler
 from tour_guide_bot.models.settings import Settings, SettingsKey
 
 
-class MessagesBase(SubcommandHandler):
-    STATE_MESSAGE_LANGUAGE = 1
-    STATE_CHANGE_MESSAGE = 2
+class MessagesBase(SubcommandHandler, SelectLanguageHandler):
+    STATE_CHANGE_MESSAGE = 1
 
     @staticmethod
     @abc.abstractmethod
@@ -37,17 +37,12 @@ class MessagesBase(SubcommandHandler):
             ConversationHandler(
                 entry_points=[
                     CallbackQueryHandler(
-                        cls.partial(cls.change_message_init),
+                        cls.partial(cls.send_language_selector),
                         cls.get_callback_data_pattern(),
                     )
                 ],
                 states={
-                    cls.STATE_MESSAGE_LANGUAGE: [
-                        CallbackQueryHandler(
-                            cls.partial(cls.change_message),
-                            "^language:(.*)$",
-                        ),
-                    ],
+                    cls.STATE_LANGUAGE_SELECTION: cls.get_select_language_handlers(),
                     cls.STATE_CHANGE_MESSAGE: [
                         MessageHandler(
                             filters.TEXT & ~filters.COMMAND,
@@ -68,57 +63,28 @@ class MessagesBase(SubcommandHandler):
             )
         ]
 
-    async def change_message_init(
-        self, update: Update, context: ContextTypes.DEFAULT_TYPE
-    ):
-        if len(context.application.enabled_languages) == 1:
-            return await self.change_message(
-                update, context, context.application.default_language
-            )
-
-        user = await self.get_user(update, context)
-
-        await update.callback_query.answer()
-        await update.callback_query.edit_message_text(
-            t(user.language).pgettext(
-                "admin-configure",
-                "Please select the language for the {} you want to edit.".format(
-                    self.get_message_name(user.language)
-                ),
-            ),
-            reply_markup=await self.get_language_select_inline_keyboard(
-                user.language, context, "language:", True
+    def get_language_selection_message(self, user_language: str) -> str:
+        return t(user_language).pgettext(
+            "admin-configure",
+            "Please select the language for the {} you want to edit.".format(
+                self.get_message_name(user_language)
             ),
         )
 
-        return self.STATE_MESSAGE_LANGUAGE
-
-    async def change_message(
+    async def after_language_selected(
         self,
+        language: str,
         update: Update,
         context: ContextTypes.DEFAULT_TYPE,
-        force_language: str | None = None,
+        is_single_language: bool,
     ):
-        target_language = (
-            force_language if force_language else context.matches[0].group(1)
-        )
-        context.user_data["message_target_language"] = target_language
+        context.user_data["message_target_language"] = language
 
         user = await self.get_user(update, context)
-
-        if target_language not in context.application.enabled_languages:
-            del context.user_data["message_target_language"]
-            await update.callback_query.answer()
-            await update.callback_query.edit_message_text(
-                t(user.language).pgettext(
-                    "bot-generic", "Something went wrong; please try again."
-                )
-            )
-            return ConversationHandler.END
 
         stmt = select(Settings).where(
             (Settings.key == self.get_message_settings_key())
-            & (Settings.language == target_language)
+            & (Settings.language == language)
         )
         message: Settings | None = await self.db_session.scalar(stmt)
 

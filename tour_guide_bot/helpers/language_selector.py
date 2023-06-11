@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import ClassVar
 
-from telegram import Update
+from babel import Locale
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
     CallbackQueryHandler,
     ContextTypes,
@@ -14,7 +15,8 @@ from tour_guide_bot.helpers.telegram import BaseHandlerCallback
 
 class SelectLanguageHandler(BaseHandlerCallback, ABC):
     STATE_LANGUAGE_SELECTION: ClassVar[int] = -11
-    SKIP_LANGUAGE_SELECTION_IF_SINGLE: ClassVar[int] = True
+    SKIP_LANGUAGE_SELECTION_IF_SINGLE: ClassVar[bool] = True
+    LANGUAGE_SELECTION_LANGUAGE_FRIENDLY: ClassVar[bool] = False
 
     @abstractmethod
     async def after_language_selected(
@@ -29,6 +31,62 @@ class SelectLanguageHandler(BaseHandlerCallback, ABC):
     @abstractmethod
     def get_language_selection_message(self, user_language: str) -> str:
         pass
+
+    async def get_languages(
+        self,
+        current_language: str,
+        context: ContextTypes.DEFAULT_TYPE,
+    ) -> list[tuple[str, str]]:
+        ret = []
+        for locale_name in context.application.enabled_languages:
+            locale = Locale.parse(locale_name)
+
+            if (
+                locale_name != current_language
+                and self.LANGUAGE_SELECTION_LANGUAGE_FRIENDLY
+            ):
+                locale_text = "%s (%s)" % (
+                    locale.get_language_name(current_language),
+                    locale.get_language_name(locale_name),
+                )
+            else:
+                locale_text = locale.get_language_name(current_language)
+
+            ret.append((locale_name, locale_text))
+
+        return ret
+
+    async def get_language_select_inline_keyboard(
+        self,
+        current_language: str,
+        context: ContextTypes.DEFAULT_TYPE,
+    ) -> InlineKeyboardMarkup:
+        keyboard = []
+
+        for locale_name, locale_text in await self.get_languages(
+            current_language, context
+        ):
+            keyboard.append(
+                [
+                    InlineKeyboardButton(
+                        locale_text.title(),
+                        callback_data=self.get_callback_data("language", locale_name),
+                    )
+                ]
+            )
+
+        keyboard.append(
+            [
+                InlineKeyboardButton(
+                    t(current_language).pgettext("bot-generic", "Abort"),
+                    callback_data="cancel",
+                )
+            ]
+        )
+
+        print(keyboard)
+
+        return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
     async def send_language_selector(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
@@ -51,7 +109,8 @@ class SelectLanguageHandler(BaseHandlerCallback, ABC):
             context,
             self.get_language_selection_message(user_language),
             reply_markup=await self.get_language_select_inline_keyboard(
-                user_language, context, with_abort=True, language_friendly=False
+                user_language,
+                context,
             ),
         )
         return self.STATE_LANGUAGE_SELECTION
@@ -80,11 +139,10 @@ class SelectLanguageHandler(BaseHandlerCallback, ABC):
         )
 
     @classmethod
-    def get_select_language_handlers(cls) -> dict[int, list]:
-        return {
-            cls.STATE_LANGUAGE_SELECTION: [
-                CallbackQueryHandler(
-                    cls.partial(cls.handle_language_selected), r"^language:(\w+)$"
-                ),
-            ],
-        }
+    def get_select_language_handlers(cls) -> list:
+        return [
+            CallbackQueryHandler(
+                cls.partial(cls.handle_language_selected),
+                cls.get_callback_data_pattern("language", r"(\w+)"),
+            ),
+        ]
