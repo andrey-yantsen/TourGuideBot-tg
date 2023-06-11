@@ -1,4 +1,3 @@
-from sqlalchemy import select
 from telegram import Update
 from telegram.ext import (
     CallbackQueryHandler,
@@ -13,13 +12,14 @@ from tour_guide_bot import t
 from tour_guide_bot.bot.admin.tour.add_content import AddContentCommandHandler
 from tour_guide_bot.bot.admin.tour.helpers import SelectLanguageHandler
 from tour_guide_bot.helpers.telegram import SubcommandHandler
-from tour_guide_bot.models.guide import TourSection, Tour, TourTranslation
+from tour_guide_bot.models.guide import Tour, TourSection, TourTranslation
 
 
 class AddHandler(SubcommandHandler, SelectLanguageHandler, AddContentCommandHandler):
     STATE_TOUR_SAVE_TITLE = 1
-    STATE_TOUR_ADD_SECTION = 2
-    STATE_TOUR_ADD_CONTENT = 3
+    STATE_TOUR_SAVE_DESCRIPTION = 2
+    STATE_TOUR_ADD_SECTION = 3
+    STATE_TOUR_ADD_CONTENT = 4
 
     @classmethod
     def get_handlers(cls):
@@ -32,6 +32,12 @@ class AddHandler(SubcommandHandler, SelectLanguageHandler, AddContentCommandHand
                 ],
                 states={
                     cls.STATE_TOUR_SAVE_TITLE: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            cls.partial(cls.save_tour_title),
+                        ),
+                    ],
+                    cls.STATE_TOUR_SAVE_DESCRIPTION: [
                         MessageHandler(
                             filters.TEXT & ~filters.COMMAND,
                             cls.partial(cls.save_tour_translation),
@@ -81,30 +87,41 @@ class AddHandler(SubcommandHandler, SelectLanguageHandler, AddContentCommandHand
             context,
             t(user.language).pgettext(
                 "admin-tour",
-                "Please send me the title for the tour, or send /cancel to abort.",
+                "Please send me the title for the tour, or send /cancel to abort. Do not use any formatting here.",
             ),
         )
 
         return self.STATE_TOUR_SAVE_TITLE
+
+    async def save_tour_title(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        user = await self.get_user(update, context)
+
+        context.user_data["tour_title"] = update.message.text
+
+        await update.message.reply_text(
+            t(user.language).pgettext(
+                "admin-tour",
+                "Great! Now send me the description for the tour (or send /cancel to abort). "
+                "It will be visible when a user will try to purchase the tour. "
+                "You can use formatting here.",
+            )
+        )
+        return self.STATE_TOUR_SAVE_DESCRIPTION
 
     async def save_tour_translation(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         user = await self.get_user(update, context)
 
-        if "tour_id" in context.user_data:
-            tour: Tour | None = await self.db_session.scalar(
-                select(Tour).where(Tour.id == context.user_data["tour_id"])
-            )
-        else:
-            tour = Tour()
-            self.db_session.add(tour)
+        tour = Tour()
+        self.db_session.add(tour)
 
         tour_translation = TourTranslation(
             language=context.user_data["tour_language"], tour=tour
         )
 
-        tour_translation.title = update.message.text
+        tour_translation.title = context.user_data["tour_title"]
+        tour_translation.description = update.message.text_markdown_v2_urled
         self.db_session.add(tour_translation)
 
         await self.db_session.commit()

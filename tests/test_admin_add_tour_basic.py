@@ -17,8 +17,12 @@ async def add_tour(conversation: Conversation, prefix: str = ""):
     event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
     response: Message = event.message
     assert "send me the title" in response.message
-
     await conversation.send_message(f"{prefix}Test tour")
+
+    response: Message = await conversation.get_response()
+    assert "send me the description" in response.message
+    await conversation.send_message(f"{prefix}Test tour description")
+
     response: Message = await conversation.get_response()
     assert "title for the new section" in response.message
 
@@ -70,6 +74,10 @@ def check_tour(
     assert len(tour.translations) > translation_id
     assert tour.translations[translation_id].language == language
     assert tour.translations[translation_id].title == f"{prefix}Test tour"
+    assert (
+        tour.translations[translation_id].description
+        == f"{markdown_prefix}Test tour description"
+    )
     assert tour.translations[translation_id].sections[0].title == f"{prefix}Section 1"
     assert tour.translations[translation_id].sections[0].position == 0
     assert tour.translations[translation_id].sections[0].content[0].content == {

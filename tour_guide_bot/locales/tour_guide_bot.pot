@@ -491,43 +491,53 @@ msgctxt "admin-tour"
 msgid "Please select an action."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/add.py:82
+#: tour_guide_bot/bot/admin/tour/add.py:88
 msgctxt "admin-tour"
-msgid "Please send me the title for the tour, or send /cancel to abort."
+msgid ""
+"Please send me the title for the tour, or send /cancel to abort. Do not "
+"use any formatting here."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/add.py:116
+#: tour_guide_bot/bot/admin/tour/add.py:102
+msgctxt "admin-tour"
+msgid ""
+"Great! Now send me the description for the tour (or send /cancel to "
+"abort). It will be visible when a user will try to purchase the tour. You"
+" can use formatting here."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/add.py:133
 msgctxt "admin-tour"
 msgid ""
 "Terrific! Let's add some content now! Send me the title for the new "
 "section."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/add.py:127
+#: tour_guide_bot/bot/admin/tour/add.py:144
 msgctxt "admin-tours"
 msgid "Done!"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/add.py:146
+#: tour_guide_bot/bot/admin/tour/add.py:163
 msgctxt "admin-tour"
 msgid ""
 "Now send me location, text, photo, audio, video, animation, voice or "
 "video note messages, and send /done when finished with the section."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/add.py:167
+#: tour_guide_bot/bot/admin/tour/add.py:184
 msgctxt "admin-tours"
 msgid ""
 "Done! Send me the title of the next tour section, or send /done if you're"
 " finished."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/add.py:177
+#: tour_guide_bot/bot/admin/tour/add.py:194
 msgctxt "admin-tour"
 msgid "Add a tour"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/add.py:180
+#: tour_guide_bot/bot/admin/tour/add.py:197
 msgctxt "admin-tour"
 msgid "Please select the language for the new tour."
 msgstr ""

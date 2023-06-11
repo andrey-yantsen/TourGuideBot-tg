@@ -138,6 +138,7 @@ def default_tour() -> dict:
         "translations": {
             "en": {
                 "title": "Test tour",
+                "description": "Test tour description",
                 "sections": [
                     {
                         "title": "Test section 1",
