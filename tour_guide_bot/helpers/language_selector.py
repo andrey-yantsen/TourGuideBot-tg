@@ -79,7 +79,7 @@ class SelectLanguageHandler(BaseHandlerCallback, ABC):
             [
                 InlineKeyboardButton(
                     t(current_language).pgettext("bot-generic", "Abort"),
-                    callback_data="cancel",
+                    callback_data=self.get_callback_data("cancel_language_selection"),
                 )
             ]
         )
@@ -144,5 +144,9 @@ class SelectLanguageHandler(BaseHandlerCallback, ABC):
             CallbackQueryHandler(
                 cls.partial(cls.handle_language_selected),
                 cls.get_callback_data_pattern("language", r"(\w+)"),
+            ),
+            CallbackQueryHandler(
+                cls.partial(cls.cancel),
+                cls.get_callback_data_pattern("cancel_language_selection"),
             ),
         ]
