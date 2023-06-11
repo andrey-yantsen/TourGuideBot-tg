@@ -29,6 +29,7 @@ async def test_single_tour(
         "translations": {
             "en": {
                 "title": "Test tour 1",
+                "description": "Test tour 1 description.",
                 "sections": [
                     {
                         "title": "Test section 1.1",
@@ -56,6 +57,7 @@ async def test_single_tour(
         "translations": {
             "en": {
                 "title": "Test tour 2",
+                "description": "Test tour 2 description.",
                 "sections": [
                     {
                         "title": "Test section 2.1",
@@ -112,6 +114,7 @@ async def test_multiple_tours(
         "translations": {
             "en": {
                 "title": "Test tour 1",
+                "description": "Test tour 1 description.",
                 "sections": [
                     {
                         "title": "Test section 1.1",
@@ -139,6 +142,7 @@ async def test_multiple_tours(
         "translations": {
             "en": {
                 "title": "Test tour 2",
+                "description": "Test tour 2 description.",
                 "sections": [
                     {
                         "title": "Test section 2.1",

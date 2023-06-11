@@ -63,6 +63,7 @@ async def test_single_tour(conversation: Conversation, tours_as_dicts: list[dict
         "translations": {
             "en": {
                 "title": "Test tour 1",
+                "description": "Test tour 1 description.",
                 "sections": [
                     {
                         "title": "Test section 1.1",
@@ -90,6 +91,7 @@ async def test_single_tour(conversation: Conversation, tours_as_dicts: list[dict
         "translations": {
             "en": {
                 "title": "Test tour 2",
+                "description": "Test tour 2 description.",
                 "sections": [
                     {
                         "title": "Test section 2.1",
@@ -161,6 +163,7 @@ async def test_multiple_tours(conversation: Conversation, tours_as_dicts: list[d
         "translations": {
             "en": {
                 "title": "Test tour 1",
+                "description": "Test tour 1 description.",
                 "sections": [
                     {
                         "title": "Test section 1.1",
@@ -188,6 +191,7 @@ async def test_multiple_tours(conversation: Conversation, tours_as_dicts: list[d
         "translations": {
             "en": {
                 "title": "Test tour 2",
+                "description": "Test tour 2 description.",
                 "sections": [
                     {
                         "title": "Test section 2.1",

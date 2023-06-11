@@ -6,6 +6,7 @@ import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 from telethon import TelegramClient
+from telethon.events import MessageEdited
 from telethon.tl import types
 from telethon.tl.custom import Message
 from telethon.tl.custom.conversation import Conversation
@@ -57,8 +58,21 @@ async def test_success_payment(
     tours_as_dicts: list[dict],
 ):
     await conversation.send_message("/purchase")
-    # Skip message about having only one tour
-    await conversation.get_response()
+
+    response: Message = await conversation.get_response()
+    assert (
+        await response.click(text=tours_as_dicts[0]["translations"]["en"]["title"])
+        is not None
+    )
+
+    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
+    msg: Message = event.message
+
+    assert msg.message.startswith(
+        tours_as_dicts[0]["translations"]["en"]["description"]
+    )
+
+    assert (await msg.click(0)) is not None
 
     # Invoice
     response: Message = await conversation.get_response()

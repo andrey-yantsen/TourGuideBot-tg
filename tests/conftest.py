@@ -138,7 +138,7 @@ def default_tour() -> dict:
         "translations": {
             "en": {
                 "title": "Test tour",
-                "description": "Test tour description",
+                "description": "Test tour description.",
                 "sections": [
                     {
                         "title": "Test section 1",
@@ -210,7 +210,10 @@ async def tours(
 
             for lang, data in tour.get("translations", {}).items():
                 tour_translation = TourTranslation(
-                    language=lang, tour=tour_model, title=data["title"]
+                    language=lang,
+                    tour=tour_model,
+                    title=data["title"],
+                    description=data["description"],
                 )
                 session.add(tour_translation)
 

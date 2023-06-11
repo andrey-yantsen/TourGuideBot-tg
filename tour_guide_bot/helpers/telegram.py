@@ -16,7 +16,7 @@ from telegram.ext import (
 
 from tour_guide_bot import t
 from tour_guide_bot.models import log
-from tour_guide_bot.models.guide import Tour
+from tour_guide_bot.models.guide import Tour, TourTranslation
 from tour_guide_bot.models.telegram import TelegramUser
 
 
@@ -312,17 +312,19 @@ class MenuCommandHandler(AdminProtectedBaseHandlerCallback):
         return await self.handle_menu_unavailable(update, context)
 
 
-def get_tour_title(
+def get_tour_translation(
     tour: Tour, current_language: str, context: ContextTypes.DEFAULT_TYPE
-) -> str:
+) -> TourTranslation:
     default_language = context.application.default_language
 
     if len(tour.translations) == 0:
-        title = "Unnamed tour #%d" % tour.id
         log.warning(
             t()
             .pgettext("bot-generic", "Tour #{0} doesn't have any translations.")
             .format(tour.id)
+        )
+        return TourTranslation(
+            title="Unnamed tour #%d" % tour.id, description="Unnamed tour #%d" % tour.id
         )
     else:
         translations = {
@@ -330,9 +332,9 @@ def get_tour_title(
         }
 
         if current_language in translations:
-            title = translations[current_language].title
+            return translations[current_language]
         elif default_language in translations:
-            title = translations[default_language].title
+            return translations[default_language]
         else:
             log.warning(
                 t()
@@ -342,6 +344,16 @@ def get_tour_title(
                 )
                 .format(tour.id, default_language)
             )
-            title = translations[0].title
+            return translations[0]
 
-    return title
+
+def get_tour_title(
+    tour: Tour, current_language: str, context: ContextTypes.DEFAULT_TYPE
+) -> str:
+    return get_tour_translation(tour, current_language, context).title
+
+
+def get_tour_description(
+    tour: Tour, current_language: str, context: ContextTypes.DEFAULT_TYPE
+) -> str:
+    return get_tour_translation(tour, current_language, context).description

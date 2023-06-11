@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
+from itertools import groupby
 from typing import Sequence
 
 from babel.dates import format_datetime
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from telegram import Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
     CallbackQueryHandler,
     CommandHandler,
@@ -15,7 +16,9 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
-from tour_guide_bot.helpers.telegram import BaseHandlerCallback
+from tour_guide_bot.helpers.currency import Currency
+from tour_guide_bot.helpers.telegram import get_tour_description
+from tour_guide_bot.helpers.tours_selector import SelectTourHandler
 from tour_guide_bot.models.guide import (
     Invoice,
     Product,
@@ -25,19 +28,24 @@ from tour_guide_bot.models.guide import (
 )
 
 
-class PurchaseCommandHandler(BaseHandlerCallback):
+class PurchaseCommandHandler(SelectTourHandler):
     @classmethod
     def get_handlers(cls):
         return [
-            CommandHandler("purchase", cls.partial(cls.start)),
+            CommandHandler("purchase", cls.partial(cls.send_tour_selector)),
             CallbackQueryHandler(
                 cls.partial(cls.purchase),
                 cls.get_callback_data_pattern("purchase", r"(\d+)"),
+            ),
+            CallbackQueryHandler(
+                cls.partial(cls.cancel),
+                cls.get_callback_data_pattern("cancel_product_selection"),
             ),
             PreCheckoutQueryHandler(cls.partial(cls.pre_checkout)),
             MessageHandler(
                 filters.SUCCESSFUL_PAYMENT, cls.partial(cls.successful_payment)
             ),
+            *cls.get_select_tour_handlers(),
         ]
 
     async def successful_payment(
@@ -188,56 +196,115 @@ class PurchaseCommandHandler(BaseHandlerCallback):
             protect_content=True,
         )
 
-    async def single_tour_purchase(
+    async def after_tour_selected(
         self,
         tour: Tour,
         update: Update,
         context: ContextTypes.DEFAULT_TYPE,
-        is_short_path: bool = False,
+        is_single_tour: bool,
     ):
         language = await self.get_language(update, context)
 
-        available_products = [product for product in tour.products if product.available]
+        all_products = (
+            await self.db_session.scalars(
+                select(Product)
+                .where((Product.tour_id == tour.id) & (Product.available == True))
+                .order_by(Product.price)
+            )
+        ).all()
 
-        if len(available_products) == 0:
-            raise NotImplementedError()
+        products_per_language = {
+            k: list(v) for k, v in groupby(all_products, lambda p: p.language)
+        }
 
-        if len(available_products) == 1:
-            if is_short_path:
-                await self.edit_or_reply_text(
-                    update,
-                    context,
-                    t(language).pgettext(
-                        "guest-tour-purchase",
-                        "Only one tour available for purchasing online at the moment.",
-                    ),
-                )
-
-            await self.purchase(update, context, available_products[0].id)
-
+        if language in products_per_language:
+            products = products_per_language[language]
+        elif context.application.default_language in products_per_language:
+            products = products_per_language[context.application.default_language]
+        else:
+            await self.edit_or_reply_text(
+                update,
+                context,
+                t(language).pgettext(
+                    "bot-generic", "Something went wrong; please try again."
+                ),
+            )
             return
 
-        raise NotImplementedError()
+        keyboard = []
 
-    async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        tours_with_products: Sequence[Tour] = (
+        for product in products:
+            keyboard.append(
+                [
+                    InlineKeyboardButton(
+                        text=t(language)
+                        .npgettext(
+                            "guest-tour-purchase",
+                            "{n}-day access for {price}",
+                            "{n}-days access for {price}",
+                            n=product.duration_days,
+                        )
+                        .format(
+                            n=product.duration_days,
+                            price=await Currency.price_from_telegram(
+                                product.currency, product.price
+                            ),
+                        ),
+                        callback_data=self.get_callback_data("purchase", product.id),
+                    )
+                ]
+            )
+
+        keyboard.append(
+            [
+                InlineKeyboardButton(
+                    t(language).pgettext("bot-generic", "Abort"),
+                    callback_data=self.get_callback_data("cancel_product_selection"),
+                )
+            ]
+        )
+
+        msg = get_tour_description(tour, language, context)
+
+        msg += "\n\n" + t(language).pgettext(
+            "guest-tour-purchase",
+            "Please select the access duration you want to purchase.",
+        )
+
+        await self.edit_or_reply_text(
+            update, context, msg, reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+
+    def get_tour_selection_message(self, language: str) -> str:
+        return t(language).pgettext(
+            "guest-tour-purchase",
+            "Please select the tour you want to purchase. You'll "
+            "see the description of the tour after you select it.",
+        )
+
+    async def get_acceptable_tours(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> Sequence[Tour]:
+        return (
             await self.db_session.scalars(
                 select(Tour)
                 .options(
-                    selectinload(Tour.products),
                     selectinload(Tour.translations),
                 )
                 .where(Tour.products.any(available=True))
             )
         ).all()
 
-        if len(tours_with_products) == 0:
-            raise NotImplementedError()
-
-        if len(tours_with_products) == 1:
-            await self.single_tour_purchase(
-                tours_with_products[0], update, context, True
-            )
-            return
-
-        raise NotImplementedError()
+    async def handle_no_tours_found(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        language = await self.get_language(update, context)
+        await self.edit_or_reply_text(
+            update,
+            context,
+            t(language).pgettext(
+                "guest-tour-purchase",
+                "Unfortunately, there are no tours available for "
+                "purchase online at the moment.",
+            ),
+        )
