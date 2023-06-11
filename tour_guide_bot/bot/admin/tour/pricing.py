@@ -15,12 +15,10 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
-from tour_guide_bot.helpers import (
-    SelectTourHandler,
-)
 from tour_guide_bot.helpers.currency import Currency
 from tour_guide_bot.helpers.language_selector import SelectLanguageHandler
 from tour_guide_bot.helpers.telegram import SubcommandHandler, get_tour_title
+from tour_guide_bot.helpers.tours_selector import SelectTourHandler
 from tour_guide_bot.models.guide import Product, Tour
 from tour_guide_bot.models.settings import PaymentProvider
 
