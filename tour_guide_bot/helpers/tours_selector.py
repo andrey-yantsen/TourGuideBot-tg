@@ -88,7 +88,7 @@ class SelectTourHandler(BaseHandlerCallback, ABC):
             [
                 InlineKeyboardButton(
                     t(language).pgettext("bot-generic", "Abort"),
-                    callback_data="cancel",
+                    callback_data=self.get_callback_data("cancel_tour_selection"),
                 )
             ]
         )
@@ -136,5 +136,9 @@ class SelectTourHandler(BaseHandlerCallback, ABC):
             CallbackQueryHandler(
                 cls.partial(cls.handle_selected_tour),
                 cls.get_callback_data_pattern("select_tour", r"(\d+)"),
+            ),
+            CallbackQueryHandler(
+                cls.partial(cls.cancel),
+                cls.get_callback_data_pattern("cancel_tour_selection"),
             ),
         ]
