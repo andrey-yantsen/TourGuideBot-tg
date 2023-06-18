@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block title %}{{ pgettext("web-menu", "Configuration") }}{% endblock %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <form method="POST" action="/admin/configuration">
+        <div class="accordion" id="accordionPanelsConfiguration">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-basicSettings" aria-expanded="true" aria-controls="panelsStayOpen-basicSettings">
+                    {{ pgettext("web-generic", "Basic settings") }}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-basicSettings" data-bs-parent="#accordionPanelsConfiguration" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="audio-to-voice" value="1" id="flexCheckDefault"{% if settings['audio_to_voice'] == 'yes' %} checked{% endif %}>
+                        <label class="form-check-label" for="flexCheckDefault">
+                            {{ pgettext("web-generic", "Suggest audio to voice conversion") }}
+                        </label>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text" id="dbm-addon">Delay between messages</span>
+                        <input type="number" min="0" max="5" step="0.5" class="form-control" id="delay-between-messages" aria-describedby="dbm-addon" value="{{settings['delay_between_messages']}}">
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-messages" aria-expanded="false" aria-controls="panelsStayOpen-messages">
+                    {{ pgettext("web-generic", "Messages") }}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-messages" data-bs-parent="#accordionPanelsConfiguration" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <div class="accordion" id="accordionPanelsMessages">
+                        {% for message_type, name in message_types.items() %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-messages-{{message_type}}" aria-expanded="false" aria-controls="panelsStayOpen-messages-{{message_type}}">
+                                {{ name | escape }}
+                            </button>
+                            </h2>
+                            <div id="panelsStayOpen-messages-{{message_type}}" data-bs-parent="#accordionPanelsMessages" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    <div id="{{message_type}}-editor" style="width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            new EditorJS({
+                                holderId: '{{message_type}}-editor',
+                                placeholder: "Add your text here..."
+                            });
+                        </script>
+{% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-paymentSettings" aria-expanded="false" aria-controls="panelsStayOpen-paymentSettings">
+                    {{ pgettext("web-generic", "Payment settings") }}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-paymentSettings" data-bs-parent="#accordionPanelsConfiguration" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

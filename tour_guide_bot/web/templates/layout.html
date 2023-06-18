@@ -10,6 +10,31 @@
     {% block head %}{% endblock %}
   </head>
   <body>
+    {% if user_info %}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary mb-3">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">@{{ bot_info.username }}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ pgettext('web-generic', 'Toggle navigation') }}">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link{% if current_page == '/admin' %} active" aria-current="page{% endif %}" href="/admin">{{ pgettext("web-menu", "Home") }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if current_page.startswith('/admin/tours') %} active" aria-current="page{% endif %}" href="/admin/tours">{{ pgettext("web-menu", "Tours") }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if current_page.startswith('/admin/access') %} active" aria-current="page{% endif %}" href="/admin/access">{{ pgettext("web-menu", "Guests access") }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if current_page.startswith('/admin/configuration') %} active" aria-current="page{% endif %}" href="/admin/configuration">{{ pgettext("web-menu", "Configuration") }}</a>
+            </li>
+        </div>
+      </div>
+    </nav>
+    {% endif %}
     {% block body %}{% endblock %}
   </body>
 </html>

@@ -1,5 +1,5 @@
 import enum
-from typing import Optional, Sequence
+from typing import ClassVar, Optional, Sequence
 
 from sqlalchemy import (
     JSON,
@@ -35,7 +35,10 @@ class Settings(Base):
     __bool_settings = [SettingsKey.audio_to_voice]
 
     # Global default is None
-    __settings_default = {SettingsKey.delay_between_messages: "4"}
+    DEFAULT_VALUES: ClassVar[dict[SettingsKey, str]] = {
+        SettingsKey.delay_between_messages: "4",
+        SettingsKey.audio_to_voice: "yes",
+    }
 
     id: Mapped[int] = Column(Integer, primary_key=True)
     key: Mapped[str] = Column(Enum(SettingsKey), nullable=False)
@@ -86,7 +89,7 @@ class Settings(Base):
         setting: Settings | None = await db_session.scalar(stmt)
         if not setting and create:
             setting = Settings(
-                key=key, language=language, value=Settings.__settings_default.get(key)
+                key=key, language=language, value=Settings.DEFAULT_VALUES.get(key)
             )
 
         return setting

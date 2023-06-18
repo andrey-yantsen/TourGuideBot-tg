@@ -28,4 +28,6 @@ class Base(ABC):
             )
 
         if not user or not user.admin:
-            raise HTTPForbidden(text="Please tell /admin to the bot and try again.")
+            raise HTTPForbidden(
+                text="Please tell /admin to the bot and refresh the page."
+            )

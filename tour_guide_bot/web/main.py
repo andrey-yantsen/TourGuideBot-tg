@@ -11,8 +11,11 @@ from tour_guide_bot import t
 
 @aiohttp_jinja2.template("index.html")
 async def index(request: Request):
+    session = await aiohttp_session.get_session(request)
+    if "user_info" in session:
+        raise HTTPTemporaryRedirect(location="/admin")
+
     return {
-        "bot_info": request.app.bot_user_info,
         "hostname": request.host,
         "scheme": request.headers.get("X-Forwarded-Proto", request.scheme),
     }

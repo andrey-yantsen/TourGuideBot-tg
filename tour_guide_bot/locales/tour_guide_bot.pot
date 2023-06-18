@@ -67,7 +67,7 @@ msgctxt "cli"
 msgid "the default language must be in the list of enabled languages"
 msgstr ""
 
-#: tour_guide_bot/cli.py:210
+#: tour_guide_bot/cli.py:222
 msgctxt "cli"
 msgid "Up and runnig!"
 msgstr ""
@@ -387,6 +387,7 @@ msgid "Bot's {} has been changed."
 msgstr ""
 
 #: tour_guide_bot/bot/admin/configure/messages/support.py:9
+#: tour_guide_bot/web/admin/configuration.py:42
 msgctxt "admin-configure"
 msgid "Support message"
 msgstr ""
@@ -397,6 +398,7 @@ msgid "support message"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/configure/messages/terms.py:9
+#: tour_guide_bot/web/admin/configuration.py:45
 msgctxt "admin-configure"
 msgid "Terms & Conditions"
 msgstr ""
@@ -407,6 +409,7 @@ msgid "terms & conditions"
 msgstr ""
 
 #: tour_guide_bot/bot/admin/configure/messages/welcome.py:9
+#: tour_guide_bot/web/admin/configuration.py:39
 msgctxt "admin-configure"
 msgid "Guide welcome message"
 msgstr ""
@@ -1078,12 +1081,12 @@ msgctxt "bot-generic"
 msgid "No tours found."
 msgstr ""
 
-#: tour_guide_bot/web/main.py:38
+#: tour_guide_bot/web/main.py:41
 msgctxt "web-auth"
 msgid "Invalid hash"
 msgstr ""
 
-#: tour_guide_bot/web/main.py:43
+#: tour_guide_bot/web/main.py:46
 msgctxt "web-auth"
 msgid "Data is too old"
 msgstr ""
@@ -1091,5 +1094,52 @@ msgstr ""
 #: tour_guide_bot/web/templates/index.html:2
 msgctxt "web-auth"
 msgid "Please log in"
+msgstr ""
+
+#: tour_guide_bot/web/templates/layout.html:17
+msgctxt "web-generic"
+msgid "Toggle navigation"
+msgstr ""
+
+#: tour_guide_bot/web/templates/admin/index.html:2
+#: tour_guide_bot/web/templates/layout.html:23
+msgctxt "web-menu"
+msgid "Home"
+msgstr ""
+
+#: tour_guide_bot/web/templates/layout.html:26
+msgctxt "web-menu"
+msgid "Tours"
+msgstr ""
+
+#: tour_guide_bot/web/templates/layout.html:29
+msgctxt "web-menu"
+msgid "Guests access"
+msgstr ""
+
+#: tour_guide_bot/web/templates/admin/configuration.html:2
+#: tour_guide_bot/web/templates/layout.html:32
+msgctxt "web-menu"
+msgid "Configuration"
+msgstr ""
+
+#: tour_guide_bot/web/templates/admin/configuration.html:13
+msgctxt "web-generic"
+msgid "Basic settings"
+msgstr ""
+
+#: tour_guide_bot/web/templates/admin/configuration.html:21
+msgctxt "web-generic"
+msgid "Suggest audio to voice conversion"
+msgstr ""
+
+#: tour_guide_bot/web/templates/admin/configuration.html:34
+msgctxt "web-generic"
+msgid "Messages"
+msgstr ""
+
+#: tour_guide_bot/web/templates/admin/configuration.html:67
+msgctxt "web-generic"
+msgid "Payment settings"
 msgstr ""
 
