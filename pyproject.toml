@@ -39,7 +39,7 @@ pytest-asyncio = "^0.21.0"
 pytest-cov = "^4.0.0"
 ruff = "^0.0.272"
 telethon = "^1.28.5"
-pytest-mock = "^3.10.0"
+pytest-mock = "^3.11.1"
 
 [tool.poetry.scripts]
 bot = 'tour_guide_bot.cli:run'
