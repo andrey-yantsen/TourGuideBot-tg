@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2023-07-08 16:53\n"
+"PO-Revision-Date: 2023-07-09 11:27\n"
 
 #: tour_guide_bot/cli.py:55
 msgctxt "cli"
@@ -45,27 +45,27 @@ msgstr "параметры доступа к БД в формате SQLAlchemy e
 #: tour_guide_bot/cli.py:94
 msgctxt "cli"
 msgid "Enable HTTP server."
-msgstr ""
+msgstr "Активировать HTTP-сервер."
 
 #: tour_guide_bot/cli.py:99
 msgctxt "cli"
 msgid "HTTP-server host."
-msgstr ""
+msgstr "Адрес HTTP-сервера."
 
 #: tour_guide_bot/cli.py:105
 msgctxt "cli"
 msgid "HTTP-server port."
-msgstr ""
+msgstr "Порт HTTP-сервера."
 
 #: tour_guide_bot/cli.py:111
 msgctxt "cli"
 msgid "Cookie encryption key."
-msgstr ""
+msgstr "Ключ шифрования cookie."
 
 #: tour_guide_bot/cli.py:121
 msgctxt "cli"
 msgid "You need to provide a cookie encryption key for the HTTP server to work. Please re-run the server providing argument --http-cookie-key='{}'"
-msgstr ""
+msgstr "Вам необходимо предоставить ключ шифрования cookie для работы HTTP-сервера. Пожалуйста, перезапустите сервер, предоставив аргумент --http-cookie-key='{}'"
 
 #: tour_guide_bot/cli.py:132
 msgctxt "cli"
@@ -90,7 +90,7 @@ msgstr "Эй! Вам доступна новая экскурсия — «{0}».
 #: tour_guide_bot/bot/admin/approve.py:79
 msgctxt "admin-approve"
 msgid "I've failed to parse your input; please enter a valid positive number."
-msgstr ""
+msgstr "Не удалось обработать введенные данные. Пожалуйста, отправьте положительное число."
 
 #: tour_guide_bot/bot/admin/approve.py:119
 msgctxt "admin-approve"
@@ -106,7 +106,7 @@ msgstr "У отправленного Вами контакта нет теле�
 #: tour_guide_bot/bot/admin/approve.py:152
 msgctxt "admin-approve"
 msgid "How long the user should have access? Please enter a duration in days."
-msgstr ""
+msgstr "Как долго пользователь должен иметь доступ? Пожалуйста, введите длительность в днях."
 
 #: tour_guide_bot/bot/admin/approve.py:164
 msgctxt "admin-approve"
@@ -194,7 +194,13 @@ msgid "You can use the following commands:\n"
 "* /revoke — to revoke somebody's access to a tour\n"
 "* /language — to change the interface language\n"
 "* /guest — return to the guest mode"
-msgstr ""
+msgstr "Вы можете использовать следующие команды:\n"
+"* /configure — для изменения настроек бота\n"
+"* /tours — для управления экскурсиями\n"
+"* /approve — разрешить доступ к экскурсиям\n"
+"* /revoke — отозвать доступ к экскурсиям\n"
+"* /language — для изменения языка интерфейса\n"
+"* /guest — вернуться к гостевому режиму"
 
 #: tour_guide_bot/bot/admin/configure/messages/__init__.py:140
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:95
@@ -303,7 +309,7 @@ msgstr "Пожалуйста, выберите параметр, который 
 #: tour_guide_bot/bot/admin/configure/audio_to_voice.py:22
 msgctxt "admin-configure"
 msgid "Audio-to-voice suggestions"
-msgstr ""
+msgstr "Конвертация аудио в голосовые сообщения"
 
 #: tour_guide_bot/bot/admin/configure/audio_to_voice.py:61
 msgctxt "admin-configure"
@@ -328,7 +334,7 @@ msgstr "Конвертация аудиозаписей в голосовые с
 #: tour_guide_bot/bot/admin/configure/delay_between_messages.py:21
 msgctxt "admin-configure"
 msgid "Delay between messages"
-msgstr ""
+msgstr "Задержка между сообщениями"
 
 #: tour_guide_bot/bot/admin/configure/delay_between_messages.py:59
 #, python-format
@@ -350,146 +356,146 @@ msgstr "Задержка была обновлена!"
 #: tour_guide_bot/bot/admin/configure/messages/__init__.py:70
 msgctxt "admin-configure"
 msgid "Please select the language for the {} you want to edit."
-msgstr ""
+msgstr "Выберите язык {}, который вы хотите отредактировать."
 
 #: tour_guide_bot/bot/admin/configure/messages/__init__.py:98
 msgctxt "admin-configure"
 msgid "The bot currently has the following {}. Please send me a new one if you want to change it, or send /cancel to abort the modification."
-msgstr ""
+msgstr "Бот в данный момент имеет следующее {}. Пожалуйста, пришлите мне новый текст, если вы хотите изменить его, или отправьте /cancel для отмены изменений."
 
 #: tour_guide_bot/bot/admin/configure/messages/__init__.py:114
 msgctxt "admin-configure"
 msgid "The bot currently doesn't have a {}. Please send me one."
-msgstr ""
+msgstr "В настоящее время у бота нет {}. Пожалуйста, пришлите мне нужный текст."
 
 #: tour_guide_bot/bot/admin/configure/messages/__init__.py:126
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:74
 msgctxt "admin-configure"
 msgid "Please send me a regular text message."
-msgstr ""
+msgstr "Пожалуйста, пришлите мне обычное текстовое сообщение."
 
 #: tour_guide_bot/bot/admin/configure/messages/__init__.py:161
 msgctxt "admin-configure"
 msgid "Bot's {} has been changed."
-msgstr ""
+msgstr "{} бота было изменено."
 
 #: tour_guide_bot/bot/admin/configure/messages/support.py:9
 #: tour_guide_bot/web/admin/configuration.py:42
 msgctxt "admin-configure"
 msgid "Support message"
-msgstr ""
+msgstr "Сообщение с информацией о поддержке"
 
 #: tour_guide_bot/bot/admin/configure/messages/support.py:13
 msgctxt "admin-configure"
 msgid "support message"
-msgstr ""
+msgstr "сообщение с информацией о поддержке"
 
 #: tour_guide_bot/bot/admin/configure/messages/terms.py:9
 #: tour_guide_bot/web/admin/configuration.py:45
 msgctxt "admin-configure"
 msgid "Terms & Conditions"
-msgstr ""
+msgstr "Условия использования"
 
 #: tour_guide_bot/bot/admin/configure/messages/terms.py:13
 msgctxt "admin-configure"
 msgid "terms & conditions"
-msgstr ""
+msgstr "условия использования"
 
 #: tour_guide_bot/bot/admin/configure/messages/welcome.py:9
 #: tour_guide_bot/web/admin/configuration.py:39
 msgctxt "admin-configure"
 msgid "Guide welcome message"
-msgstr ""
+msgstr "Приветственное сообщение"
 
 #: tour_guide_bot/bot/admin/configure/messages/welcome.py:13
 msgctxt "admin-configure"
 msgid "welcome message"
-msgstr ""
+msgstr "приветственное сообщение"
 
 #: tour_guide_bot/bot/admin/configure/payments/__init__.py:30
 msgctxt "admin-configure"
 msgid "Payments"
-msgstr ""
+msgstr "Оплата"
 
 #: tour_guide_bot/bot/admin/configure/payments/__init__.py:53
 msgctxt "bot-generic"
 msgid "« Back"
-msgstr ""
+msgstr "« Назад"
 
 #: tour_guide_bot/bot/admin/configure/payments/__init__.py:70
 msgctxt "admin-configure"
 msgid "Please select the payment-related parameter you want to change."
-msgstr ""
+msgstr "Пожалуйста, выберите настройки оплаты, который вы хотите изменить."
 
 #: tour_guide_bot/bot/admin/configure/payments/__init__.py:76
 msgctxt "admin-configure"
 msgid "You need to set up Terms & Conditions and support messages first."
-msgstr ""
+msgstr "Сначала необходимо настроить условия использования и сообщение с информацией о поддержке."
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:26
 msgctxt "admin-configure"
 msgid "Add payment token"
-msgstr ""
+msgstr "Добавить платёжный токен"
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:103
 msgctxt "admin-configure"
 msgid "Please send me the name of the payment provider you want to set up (this value will be used later for your convenience)."
-msgstr ""
+msgstr "Пожалуйста, пришлите мне название платежного провайдера, который вы хотите настроить (это значение будет использовано позже для вашего удобства)."
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:126
 msgctxt "admin-configure"
 msgid "Great! Now send me the payment token."
-msgstr ""
+msgstr "Отлично! Теперь пришлите мне платёжный токен."
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/add.py:158
 msgctxt "admin-configure"
 msgid "Payment provider has been added."
-msgstr ""
+msgstr "Платёжный провайдер добавлен."
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/change.py:19
 msgctxt "admin-configure"
 msgid "Change payment token"
-msgstr ""
+msgstr "Изменить платёжный токен"
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/change.py:43
 msgctxt "admin-configure"
 msgid "Please send me the new payment token."
-msgstr ""
+msgstr "Пожалуйста, пришлите мне новый платёжный токен."
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/change.py:69
 msgctxt "admin-configure"
 msgid "Payment token has been updated."
-msgstr ""
+msgstr "Платёжный токен обновлён."
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:19
 msgctxt "admin-configure"
 msgid "Delete payment token"
-msgstr ""
+msgstr "Удалить платёжный токен"
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:63
 msgctxt "admin-configure"
 msgid "The payment token has been deleted."
-msgstr ""
+msgstr "Платёжный токен удалён."
 
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:81
 msgctxt "admin-configure"
 msgid "Are you sure you want to delete the payment token?"
-msgstr ""
+msgstr "Вы действительно хотите удалить платёжный токен?"
 
 #: tour_guide_bot/bot/admin/tour/__init__.py:24
 msgctxt "admin-tour"
 msgid "Please select an action."
-msgstr ""
+msgstr "Пожалуйста выберите действие."
 
 #: tour_guide_bot/bot/admin/tour/add.py:88
 msgctxt "admin-tour"
 msgid "Please send me the title for the tour, or send /cancel to abort. Do not use any formatting here."
-msgstr ""
+msgstr "Пожалуйста, пришлите мне название экскурсии, или отправьте /cancel для отмены. Не используйте форматирование здесь."
 
 #: tour_guide_bot/bot/admin/tour/add.py:102
 msgctxt "admin-tour"
 msgid "Great! Now send me the description for the tour (or send /cancel to abort). It will be visible when a user will try to purchase the tour. You can use formatting here."
-msgstr ""
+msgstr "Отлично! Теперь пришлите мне описание экскурсии (или пошлите /cancel для отмены). Это описание будет видно, когда пользователь попытается купить тур. Можно использовать форматирование."
 
 #: tour_guide_bot/bot/admin/tour/add.py:133
 msgctxt "admin-tour"
@@ -514,7 +520,7 @@ msgstr "Готово! Пришлите мне название следующе�
 #: tour_guide_bot/bot/admin/tour/add.py:194
 msgctxt "admin-tour"
 msgid "Add a tour"
-msgstr ""
+msgstr "Добавить экскурсию"
 
 #: tour_guide_bot/bot/admin/tour/add.py:197
 msgctxt "admin-tour"
@@ -677,7 +683,7 @@ msgstr "Неподдерживаемое сообщение! Только сле
 #: tour_guide_bot/bot/admin/tour/delete.py:60
 msgctxt "admin-tour"
 msgid "Delete a tour"
-msgstr ""
+msgstr "Удалить экскурсию"
 
 #: tour_guide_bot/bot/admin/tour/delete.py:73
 msgctxt "admin-tours"
@@ -692,31 +698,31 @@ msgstr "Экскурсия \"{0}\" удалена."
 #: tour_guide_bot/bot/admin/tour/delete.py:130
 msgctxt "admin-tour"
 msgid "Please select the tour you want to delete."
-msgstr ""
+msgstr "Пожалуйста, выберите экскурсию, которую вы хотите удалить."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:96
 msgctxt "admin-tours"
 msgid "Please select the tour for updating the price."
-msgstr ""
+msgstr "Пожалуйста, выберите экскурсию для обновления цены."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:101
 msgctxt "admin-tours"
 msgid "Please select the language you want to update. Keep in mind that you have to set the price for each language the tour has in order to everything work properly."
-msgstr ""
+msgstr "Пожалуйста, выберите язык, который вы хотите обновить. Имейте в виду, что вы должны установить цену для каждого языка, на котором доступна экскурсия, чтобы все работало должным образом."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:110
 msgctxt "admin-tour"
 msgid "Set/change a tour's price"
-msgstr ""
+msgstr "Установить/изменить цену экскурсии"
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:162
 msgctxt "admin-tours"
 msgid "Current price is {} for {} day."
 msgid_plural "Current price is {} for {} days."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Текущая стоимость {} за {} день."
+msgstr[1] "Текущая стоимость {} за {} дня."
+msgstr[2] "Текущая стоимость {} за {} дней."
+msgstr[3] "Текущая стоимость {} за {} дня."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:174
 msgctxt "admin-tours"
@@ -724,67 +730,70 @@ msgid "Current title:\n"
 "<code>{0}</code>\n\n"
 "Current description:\n"
 "<code>{1}</code>"
-msgstr ""
+msgstr "Текущий заголовок:\n"
+"<code>{0}</code>\n\n"
+"Текущее описание:\n"
+"<code>{1}</code>"
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:181
 msgctxt "admin-tours"
 msgid "Please send me the title to display with the purchase (max 32 chars; no formatting), or /cancel to abort."
-msgstr ""
+msgstr "Пожалуйста, пришлите мне заголовок для отображения в счёте на оплату (не более 32 символов; без форматирования) или /cancel на отмену."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:203
 msgctxt "admin-tours"
 msgid "Title is too long. You sent {len} characters, but it should be 32 max. Please try again."
-msgstr ""
+msgstr "Заголовок слишком длинный. Вы отправили {len} символов, но он должно быть не более 32 символов. Пожалуйста, попробуйте еще раз."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:215
 msgctxt "admin-tours"
 msgid "Please send me the description of the tour to be displayed in an invoice (255 chars max; no formatting)."
-msgstr ""
+msgstr "Пожалуйста, пришлите мне описание экскурсии, которое будет отображаться в счете на оплату (максимум 255 символов; без форматирования)."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:233
 msgctxt "admin-tours"
 msgid "Description is too long. You sent {len} characters, but it should be 255 max. Please try again."
-msgstr ""
+msgstr "Описание слишком длинное. Вы отправили {len} символов, но оно должно быть не более 255 символов. Пожалуйста, попробуйте еще раз."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:244
 msgctxt "admin-tours"
 msgid "Please send me the currency in which you want to charge your users, or /cancel to abort."
-msgstr ""
+msgstr "Пожалуйста, пришлите мне валюту, в которой вы хотите взимать плату с пользователей, или /cancel для отмены."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:249
 msgctxt "admin-tours"
 msgid "You can find more details about available currencies <a href='https://core.telegram.org/bots/payments#supported-currencies'>here</a>."
-msgstr ""
+msgstr "Вы можете найти всю необходимую информацию про доступные валюты <a href='https://core.telegram.org/bots/payments#supported-currencies'>тут</a>."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:268
 msgctxt "admin-tours"
 msgid "Unknown currency provided. Please try again."
-msgstr ""
+msgstr "Указана неизвестная валюта. Пожалуйста, попробуйте еще раз."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:279
 msgctxt "admin-tours"
 msgid "Please send me the price of the tour in {}."
-msgstr ""
+msgstr "Пожалуйста, пришлите мне цену экскурсии в {}."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:301
 #: tour_guide_bot/bot/admin/tour/pricing.py:332
 msgctxt "admin-tours"
 msgid "Invalid value provided, please try again."
-msgstr ""
+msgstr "Введено неверное значение, попробуйте еще раз."
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:312
 msgctxt "admin-tours"
 msgid "How long (in days) {} should buy?"
-msgstr ""
+msgstr "Сколько времени (в днях) {} должно предоставлять?"
 
 #: tour_guide_bot/bot/admin/tour/pricing.py:392
 msgctxt "admin-tours"
 msgid "From now on users can buy {}-day access to {} for {}."
 msgid_plural "From now on users can buy {}-days access to {} for {}."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Теперь пользователи могут купить {}-дневный доступ к экскурсии {} за {}."
+msgstr[1] "Теперь пользователи могут купить {}-дневный доступ к экскурсии {} за {}."
+msgstr[2] "Теперь пользователи могут купить {}-дневный доступ к экскурсии {} за {}."
+msgstr[3] "Теперь пользователи могут купить {}-дневный доступ к экскурсии {} за {}."
 
 #: tour_guide_bot/bot/guide/bot_commands.py:22
 msgctxt "guest-bot-command"
@@ -850,19 +859,19 @@ msgstr ""
 msgctxt "guest-tour-purchase"
 msgid "{} day access"
 msgid_plural "{} days access"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Доступ на {} день"
+msgstr[1] "Доступ на {} дня"
+msgstr[2] "Доступ на {} дней"
+msgstr[3] "Доступ на {} дня"
 
 #: tour_guide_bot/bot/guide/purchase.py:241
 msgctxt "guest-tour-purchase"
 msgid "{n}-day access for {price}"
 msgid_plural "{n}-days access for {price}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{n}-дневный доступ за {price}"
+msgstr[1] "{n}-дневный доступ за {price}"
+msgstr[2] "{n}-дневный доступ за {price}"
+msgstr[3] "{n}-дневный доступ за {price}"
 
 #: tour_guide_bot/bot/guide/purchase.py:269
 msgctxt "guest-tour-purchase"
@@ -903,10 +912,10 @@ msgstr "Мне нужен ваш номер телефона, а не кого-�
 msgctxt "guest-bot-start"
 msgid "I see you have a tour available; thank you for the support! Send /tours to start exploring!"
 msgid_plural "I see you have {0} tours available; thank you for the support! Send /tours to start exploring!"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Вам доступна экскурсия; спасибо за поддержку! Отправьте /tours чтобы начать изучение."
+msgstr[1] "Вам доступны {0} экскурсии; спасибо за поддержку! Отправьте /tours чтобы начать изучение."
+msgstr[2] "Вам доступны {0} экскурсий; спасибо за поддержку! Отправьте /tours чтобы начать изучение."
+msgstr[3] "Вам доступны {0} экскурсии; спасибо за поддержку! Отправьте /tours чтобы начать изучение."
 
 #: tour_guide_bot/bot/guide/start.py:146 tour_guide_bot/bot/guide/tours.py:433
 msgctxt "guest-tour"
@@ -981,7 +990,7 @@ msgstr ""
 #: tour_guide_bot/helpers/language.py:48
 msgctxt "bot-generic"
 msgid "Unfortunately, you can`t change the language — this bot supports only one."
-msgstr ""
+msgstr "К сожалению, вы не можете изменить язык — этот бот поддерживает только один."
 
 #: tour_guide_bot/helpers/telegram.py:80
 msgctxt "bot-generic"
@@ -1006,67 +1015,67 @@ msgstr "Тур #{0} не имеет перевода для языка по ум
 #: tour_guide_bot/helpers/tours_selector.py:51
 msgctxt "bot-generic"
 msgid "No tours found."
-msgstr ""
+msgstr "Экскурсии не найдены."
 
 #: tour_guide_bot/web/main.py:41
 msgctxt "web-auth"
 msgid "Invalid hash"
-msgstr ""
+msgstr "Некорректная подпись"
 
 #: tour_guide_bot/web/main.py:46
 msgctxt "web-auth"
 msgid "Data is too old"
-msgstr ""
+msgstr "Слишком старые данные"
 
 #: tour_guide_bot/web/templates/index.html:2
 msgctxt "web-auth"
 msgid "Please log in"
-msgstr ""
+msgstr "Пожалуйста, войдите в систему"
 
 #: tour_guide_bot/web/templates/layout.html:17
 msgctxt "web-generic"
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Переключить навигацию"
 
 #: tour_guide_bot/web/templates/admin/index.html:2
 #: tour_guide_bot/web/templates/layout.html:23
 msgctxt "web-menu"
 msgid "Home"
-msgstr ""
+msgstr "Главная"
 
 #: tour_guide_bot/web/templates/layout.html:26
 msgctxt "web-menu"
 msgid "Tours"
-msgstr ""
+msgstr "Экскурсии"
 
 #: tour_guide_bot/web/templates/layout.html:29
 msgctxt "web-menu"
 msgid "Guests access"
-msgstr ""
+msgstr "Доступ к экскурсиям"
 
 #: tour_guide_bot/web/templates/admin/configuration.html:2
 #: tour_guide_bot/web/templates/layout.html:32
 msgctxt "web-menu"
 msgid "Configuration"
-msgstr ""
+msgstr "Конфигурирование"
 
 #: tour_guide_bot/web/templates/admin/configuration.html:13
 msgctxt "web-generic"
 msgid "Basic settings"
-msgstr ""
+msgstr "Базовые настройки"
 
 #: tour_guide_bot/web/templates/admin/configuration.html:21
 msgctxt "web-generic"
 msgid "Suggest audio to voice conversion"
-msgstr ""
+msgstr "Предлагать конвертировать аудио в голосовые сообщения"
 
 #: tour_guide_bot/web/templates/admin/configuration.html:34
 msgctxt "web-generic"
 msgid "Messages"
-msgstr ""
+msgstr "Сообщения"
 
 #: tour_guide_bot/web/templates/admin/configuration.html:67
 msgctxt "web-generic"
 msgid "Payment settings"
-msgstr ""
+msgstr "Настройки оплаты"
 
