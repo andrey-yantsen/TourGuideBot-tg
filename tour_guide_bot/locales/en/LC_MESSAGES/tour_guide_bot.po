@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: English\n"
 "Language: en_US\n"
-"PO-Revision-Date: 2023-07-09 11:28\n"
+"PO-Revision-Date: 2023-07-09 11:35\n"
 
 #: tour_guide_bot/cli.py:55
 msgctxt "cli"
@@ -809,7 +809,7 @@ msgstr "Show available tours"
 #: tour_guide_bot/bot/guide/bot_commands.py:48
 msgctxt "guest-bot-command"
 msgid "Purchase (or extend) access to a tour"
-msgstr ""
+msgstr "Purchase (or extend) access to a tour"
 
 #: tour_guide_bot/bot/guide/bot_commands.py:57
 msgctxt "guest-bot-command"
@@ -819,12 +819,12 @@ msgstr "Change the language"
 #: tour_guide_bot/bot/guide/bot_commands.py:65
 msgctxt "guest-bot-command"
 msgid "Display terms & conditions"
-msgstr ""
+msgstr "Display terms & conditions"
 
 #: tour_guide_bot/bot/guide/bot_commands.py:75
 msgctxt "guest-bot-command"
 msgid "Display how to contact the support"
-msgstr ""
+msgstr "Display how to contact the support"
 
 #: tour_guide_bot/bot/guide/help.py:22
 msgctxt "guest-help"
@@ -834,22 +834,27 @@ msgid "You can use the following commands:\n"
 "* /terms — display terms & conditions\n"
 "* /support — to see how to contact the support\n"
 "* /language — to change the interface language"
-msgstr ""
+msgstr "You can use the following commands:\n"
+"* /start — to see the welcome message again\n"
+"* /tours — to list all the available for you tours\n"
+"* /terms — display terms & conditions\n"
+"* /support — to see how to contact the support\n"
+"* /language — to change the interface language"
 
 #: tour_guide_bot/bot/guide/help.py:41
 msgctxt "guest-help"
 msgid "There are no terms & conditions yet. Please, try again later."
-msgstr ""
+msgstr "There are no terms & conditions yet. Please, try again later."
 
 #: tour_guide_bot/bot/guide/help.py:59
 msgctxt "guest-help"
 msgid "There are no support details yet. Please, try again later."
-msgstr ""
+msgstr "There are no support details yet. Please, try again later."
 
 #: tour_guide_bot/bot/guide/purchase.py:87
 msgctxt "guest-tour-purchase"
 msgid "Thank you for the purchase! You can now access the tour by sending /tours and following the instructions. Access to the tour will expire at {} UTC."
-msgstr ""
+msgstr "Thank you for the purchase! You can now access the tour by sending /tours and following the instructions. Access to the tour will expire at {} UTC."
 
 #: tour_guide_bot/bot/guide/purchase.py:186
 msgctxt "guest-tour-purchase"
@@ -868,17 +873,17 @@ msgstr[1] "{n}-days access for {price}"
 #: tour_guide_bot/bot/guide/purchase.py:269
 msgctxt "guest-tour-purchase"
 msgid "Please select the access duration you want to purchase."
-msgstr ""
+msgstr "Please select the access duration you want to purchase."
 
 #: tour_guide_bot/bot/guide/purchase.py:279
 msgctxt "guest-tour-purchase"
 msgid "Please select the tour you want to purchase. You'll see the description of the tour after you select it."
-msgstr ""
+msgstr "Please select the tour you want to purchase. You'll see the description of the tour after you select it."
 
 #: tour_guide_bot/bot/guide/purchase.py:305
 msgctxt "guest-tour-purchase"
 msgid "Unfortunately, there are no tours available for purchase online at the moment."
-msgstr ""
+msgstr "Unfortunately, there are no tours available for purchase online at the moment."
 
 #: tour_guide_bot/bot/guide/start.py:57
 msgctxt "guest-bot-start"
@@ -950,17 +955,17 @@ msgstr "Unfortunately, you don't have access to the requested tour."
 #: tour_guide_bot/bot/guide/tours.py:395
 msgctxt "guest-tour"
 msgid "Only one tour is available for you: {}."
-msgstr ""
+msgstr "Only one tour is available for you: {}."
 
 #: tour_guide_bot/bot/guide/tours.py:405
 msgctxt "guest-tour"
 msgid "You have selected the tour {}."
-msgstr ""
+msgstr "You have selected the tour {}."
 
 #: tour_guide_bot/bot/guide/tours.py:413
 msgctxt "guest-tour"
 msgid "Now the bot will send you several messages, please start the tour with the following one 👇"
-msgstr ""
+msgstr "Now the bot will send you several messages, please start the tour with the following one 👇"
 
 #: tour_guide_bot/bot/guide/tours.py:424
 msgctxt "guide-tour"
@@ -970,12 +975,12 @@ msgstr "Please select a tour you want to start."
 #: tour_guide_bot/helpers/language.py:34
 msgctxt "bot-generic"
 msgid "The language has been changed to {0}."
-msgstr ""
+msgstr "The language has been changed to {0}."
 
 #: tour_guide_bot/helpers/language.py:39
 msgctxt "bot-generic"
 msgid "Please select the language you prefer"
-msgstr ""
+msgstr "Please select the language you prefer"
 
 #: tour_guide_bot/helpers/language.py:48
 msgctxt "bot-generic"
