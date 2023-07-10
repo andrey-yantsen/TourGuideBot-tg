@@ -256,46 +256,46 @@ msgid ""
 " wish to cancel."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/start.py:80
+#: tour_guide_bot/bot/admin/start.py:83
 msgctxt "admin-bot-start"
 msgid "Share phone number"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/start.py:93
+#: tour_guide_bot/bot/admin/start.py:96
 msgctxt "admin-bot-start"
 msgid "Please send me your contact number and not somebody else's."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/start.py:114 tour_guide_bot/bot/admin/start.py:148
+#: tour_guide_bot/bot/admin/start.py:117 tour_guide_bot/bot/admin/start.py:151
 msgctxt "admin-bot-start"
 msgid "Admin permissions confirmed! Use /help command if you need further help."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/start.py:130 tour_guide_bot/bot/admin/start.py:236
+#: tour_guide_bot/bot/admin/start.py:133 tour_guide_bot/bot/admin/start.py:239
 msgctxt "admin-bot-start"
 msgid ""
 "I don't think you're in the right place. Please send me the token to "
 "confirm ownership."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/start.py:163
+#: tour_guide_bot/bot/admin/start.py:166
 msgctxt "admin-bot-start"
 msgid ""
 "I still don't recognize you, sorry. Try saying /admin again when you're "
 "ready."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/start.py:174
+#: tour_guide_bot/bot/admin/start.py:177
 msgctxt "admin-bot-start"
 msgid "You're in guest mode now, bye!"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/start.py:192 tour_guide_bot/bot/admin/start.py:222
+#: tour_guide_bot/bot/admin/start.py:195 tour_guide_bot/bot/admin/start.py:225
 msgctxt "admin-bot-start"
 msgid "Welcome to the admin mode!"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/start.py:206
+#: tour_guide_bot/bot/admin/start.py:209
 msgctxt "admin-bot-start"
 msgid "I don't recognize you! Please send me your phone number."
 msgstr ""
