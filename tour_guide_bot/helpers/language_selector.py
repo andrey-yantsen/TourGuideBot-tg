@@ -84,8 +84,6 @@ class SelectLanguageHandler(BaseHandlerCallback, ABC):
             ]
         )
 
-        print(keyboard)
-
         return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
     async def send_language_selector(

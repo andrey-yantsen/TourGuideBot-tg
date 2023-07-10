@@ -210,7 +210,7 @@ msgstr ""
 #: tour_guide_bot/bot/guide/purchase.py:228
 #: tour_guide_bot/bot/guide/tours.py:100 tour_guide_bot/bot/guide/tours.py:332
 #: tour_guide_bot/bot/guide/tours.py:360
-#: tour_guide_bot/helpers/language_selector.py:130
+#: tour_guide_bot/helpers/language_selector.py:128
 #: tour_guide_bot/helpers/tours_selector.py:124
 msgctxt "bot-generic"
 msgid "Something went wrong; please try again."

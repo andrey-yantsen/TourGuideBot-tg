@@ -36,7 +36,6 @@ async def test_delete_tour(admin_conversation: Conversation, db_engine: AsyncEng
     assert await response.click(text="Yes") is not None
     event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
     response: Message = event.message
-    print(response)
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         stmt = (
@@ -75,7 +74,6 @@ async def test_not_deleted_if_said_no(
     assert await response.click(text="Abort") is not None
     event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
     response: Message = event.message
-    print(response)
 
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         stmt = (

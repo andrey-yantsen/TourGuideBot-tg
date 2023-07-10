@@ -65,7 +65,7 @@ async def test_has_terms_message_multilang(
     await conversation.send_message("/terms")
     response: Message = await conversation.get_response()
     assert (
-        "There are no terms & conditions yet" in response.message
+        "Условия использования пока не опубликованы" in response.message
     ), "Unexpected response from a configured bot"
 
     await conversation.send_message("/language")
@@ -106,7 +106,7 @@ async def test_has_support_message_multilang(
     await conversation.send_message("/support")
     response: Message = await conversation.get_response()
     assert (
-        "There are no support details yet" in response.message
+        "Сведения о поддержке пока отсутствуют" in response.message
     ), "Unexpected response from a configured bot"
 
     await conversation.send_message("/language")
