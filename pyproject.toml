@@ -37,7 +37,7 @@ black = { extras = ["d"], version = "^23.3.0" }
 isort = "^5.12.0"
 pytest-asyncio = "^0.21.0"
 pytest-cov = "^4.0.0"
-ruff = "^0.0.277"
+ruff = "^0.0.278"
 telethon = "^1.28.5"
 pytest-mock = "^3.11.1"
 
