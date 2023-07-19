@@ -18,6 +18,8 @@ from telegram.ext import (
     CommandHandler,
     ContextTypes,
     ConversationHandler,
+    MessageHandler,
+    filters,
 )
 
 from tour_guide_bot import t
@@ -56,6 +58,7 @@ class ToursCommandHandler(SelectTourHandler):
                 fallbacks=[
                     CommandHandler("cancel", cls.partial(cls.cancel)),
                     CallbackQueryHandler(cls.partial(cls.cancel), "cancel"),
+                    MessageHandler(filters.ALL, cls.partial(cls.nop_handler)),
                 ],
                 name="guest-tour",
                 persistent=True,

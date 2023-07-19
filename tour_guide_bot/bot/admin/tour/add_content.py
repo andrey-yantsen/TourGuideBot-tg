@@ -95,6 +95,8 @@ class AddContentCommandHandler(AdminProtectedBaseHandlerCallback, ABC):
                         cls.partial(cls.cancel_audio_conversion), "cancel"
                     ),
                     CommandHandler("cancel", cls.partial(cls.cancel_audio_conversion)),
+                    MessageHandler(filters.COMMAND, cls.partial(cls.unknown_command)),
+                    MessageHandler(filters.ALL, cls.partial(cls.unexpected_message)),
                 ],
                 name="admin-tour-audio-convert",
                 persistent=True,

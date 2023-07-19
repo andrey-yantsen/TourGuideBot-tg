@@ -54,6 +54,8 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
                 fallbacks=[
                     CommandHandler("cancel", cls.partial(cls.cancel)),
                     CallbackQueryHandler(cls.partial(cls.cancel), "cancel"),
+                    MessageHandler(filters.COMMAND, cls.partial(cls.unknown_command)),
+                    MessageHandler(filters.ALL, cls.partial(cls.unexpected_message)),
                 ],
                 name="admin-revoke",
                 persistent=True,

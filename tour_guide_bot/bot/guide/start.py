@@ -41,7 +41,8 @@ class StartCommandHandler(BaseHandlerCallback):
                 ]
                 + LanguageHandler.get_handlers()
                 + [
-                    MessageHandler(filters.COMMAND, cls.partial(cls.unexpected_command))
+                    MessageHandler(filters.COMMAND, cls.partial(cls.unknown_command)),
+                    MessageHandler(filters.ALL, cls.partial(cls.unexpected_message)),
                 ],
                 name="guest-init",
                 persistent=True,

@@ -68,6 +68,7 @@ class StartCommandHandler(BaseHandlerCallback):
                 fallbacks=[
                     CommandHandler("guest", cls.partial(cls.exit_admin_mode)),
                     MessageHandler(filters.COMMAND, cls.partial(cls.unknown_command)),
+                    MessageHandler(filters.ALL, cls.partial(cls.unexpected_message)),
                 ],
                 name="admin-init",
                 persistent=True,

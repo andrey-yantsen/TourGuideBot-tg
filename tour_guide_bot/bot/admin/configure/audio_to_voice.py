@@ -5,6 +5,8 @@ from telegram.ext import (
     CommandHandler,
     ContextTypes,
     ConversationHandler,
+    MessageHandler,
+    filters,
 )
 
 from tour_guide_bot import t
@@ -42,6 +44,8 @@ class AudioToVoice(SubcommandHandler):
                 fallbacks=[
                     CommandHandler("cancel", cls.partial(cls.cancel)),
                     CallbackQueryHandler(cls.partial(cls.cancel), "cancel"),
+                    MessageHandler(filters.COMMAND, cls.partial(cls.unknown_command)),
+                    MessageHandler(filters.ALL, cls.partial(cls.unexpected_message)),
                 ],
                 name="admin-configure-audio-to-voice",
                 persistent=True,

@@ -74,10 +74,27 @@ class BaseHandlerCallback:
 
         return await reply(text, **kwargs)
 
+    async def nop_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        pass
+
     async def unknown_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         language = await self.get_language(update, context)
         await update.message.reply_text(
-            t(language).pgettext("bot-generic", "Unknown command.")
+            t(language).pgettext(
+                "bot-generic",
+                "Unknown command. Please send /help if you're not sure what to do next.",
+            )
+        )
+
+    async def unexpected_message(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        language = await self.get_language(update, context)
+        await update.message.reply_text(
+            t(language).pgettext(
+                "bot-generic",
+                "Unexpected message. Please send /help if you're not sure what to do next.",
+            )
         )
 
     @classmethod

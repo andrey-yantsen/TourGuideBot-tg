@@ -79,6 +79,7 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
                     CommandHandler("cancel", cls.partial(cls.cancel)),
                     CallbackQueryHandler(cls.partial(cls.cancel), "cancel"),
                     MessageHandler(filters.COMMAND, cls.partial(cls.unknown_command)),
+                    MessageHandler(filters.ALL, cls.partial(cls.unexpected_message)),
                     # add editted message fallback
                 ],
                 name="admin-pricing-tour",
