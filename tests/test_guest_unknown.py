@@ -59,5 +59,5 @@ async def test_incorrect_commands_during_auth(conversation: Conversation):
     await conversation.send_message("/test")
     response: Message = await conversation.get_response()
     assert (
-        "Unexpected command received" in response.message
+        "Unknown command" in response.message
     ), "Unexpected response to an unexpected command during auth"
