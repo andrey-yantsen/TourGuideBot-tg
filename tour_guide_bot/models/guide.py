@@ -175,6 +175,7 @@ class Product(Base):
     language: Mapped[str] = Column(String, nullable=False)
     title: Mapped[str] = Column(String(32), nullable=False)
     description: Mapped[str] = Column(String(255), nullable=False)
+    guests: Mapped[int] = Column(Integer, nullable=False, default=1)
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
         DateTime, nullable=False, default=func.now(), onupdate=func.now()
@@ -207,11 +208,11 @@ class Invoice(Base):
     currency: Mapped[str] = Column(String, nullable=False)
     price: Mapped[int] = Column(Integer, nullable=False)
     duration_days: Mapped[int] = Column(Integer, nullable=False)
+    guests: Mapped[int] = Column(Integer, nullable=False, default=1)
     paid: Mapped[bool] = Column(Boolean, nullable=False, default=False)
-    subscription_id: Mapped[Optional[int]] = Column(
-        Integer, ForeignKey("subscription.id"), nullable=True
+    subscription: Mapped[Optional["Subscription"]] = relationship(
+        "Subscription", back_populates="invoice"
     )
-    subscription: Mapped[Optional["Subscription"]] = relationship("Subscription")
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
         DateTime, nullable=False, default=func.now(), onupdate=func.now()
@@ -232,6 +233,10 @@ class Subscription(Base):
     is_user_notified: Mapped[bool] = Column(
         Boolean, nullable=False, default=False, index=True
     )
+    invoice_id: Mapped[Optional[int]] = Column(
+        Integer, ForeignKey("invoice.id"), nullable=True
+    )
+    invoice: Mapped[Optional["Invoice"]] = relationship("Invoice")
     created_ts = Column(DateTime, nullable=False, server_default=func.now())
     updated_ts = Column(
         DateTime, nullable=False, default=func.now(), onupdate=func.now()

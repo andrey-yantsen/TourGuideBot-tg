@@ -26,11 +26,12 @@ from tour_guide_bot.models.settings import PaymentProvider
 class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler):
     SKIP_LANGUAGE_SELECTION_IF_SINGLE = False
 
-    STATE_WAITING_FOR_TITLE: ClassVar[int] = 1
-    STATE_WAITING_FOR_DESCRIPTION: ClassVar[int] = 2
-    STATE_WAITING_FOR_CURRENCY: ClassVar[int] = 3
-    STATE_WAITING_FOR_PRICE: ClassVar[int] = 4
-    STATE_WAITING_FOR_DURATION: ClassVar[int] = 5
+    STATE_WAITING_FOR_GUESTS_COUNT: ClassVar[int] = 1
+    STATE_WAITING_FOR_CURRENCY: ClassVar[int] = 2
+    STATE_WAITING_FOR_PRICE: ClassVar[int] = 3
+    STATE_WAITING_FOR_DURATION: ClassVar[int] = 4
+    STATE_WAITING_FOR_TITLE: ClassVar[int] = 5
+    STATE_WAITING_FOR_DESCRIPTION: ClassVar[int] = 6
 
     @classmethod
     def get_handlers(cls):
@@ -43,16 +44,11 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
                 ],
                 states={
                     cls.STATE_SELECT_TOUR: cls.get_select_tour_handlers(),
-                    cls.STATE_WAITING_FOR_TITLE: [
+                    cls.STATE_LANGUAGE_SELECTION: cls.get_select_language_handlers(),
+                    cls.STATE_WAITING_FOR_GUESTS_COUNT: [
                         MessageHandler(
                             filters.TEXT & ~filters.COMMAND,
-                            cls.partial(cls.save_title),
-                        ),
-                    ],
-                    cls.STATE_WAITING_FOR_DESCRIPTION: [
-                        MessageHandler(
-                            filters.TEXT & ~filters.COMMAND,
-                            cls.partial(cls.save_description),
+                            cls.partial(cls.save_guests_count),
                         ),
                     ],
                     cls.STATE_WAITING_FOR_CURRENCY: [
@@ -73,7 +69,18 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
                             cls.partial(cls.save_duration),
                         ),
                     ],
-                    cls.STATE_LANGUAGE_SELECTION: cls.get_select_language_handlers(),
+                    cls.STATE_WAITING_FOR_TITLE: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            cls.partial(cls.save_title),
+                        ),
+                    ],
+                    cls.STATE_WAITING_FOR_DESCRIPTION: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            cls.partial(cls.save_description),
+                        ),
+                    ],
                 },
                 fallbacks=[
                     CommandHandler("cancel", cls.partial(cls.cancel)),
@@ -162,13 +169,21 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
                 t(language)
                 .npgettext(
                     "admin-tours",
-                    "Current price is {} for {} day.",
-                    "Current price is {} for {} days.",
+                    "Current price is {} for {} day ({}).",
+                    "Current price is {} for {} days ({}).",
                     product.duration_days,
                 )
                 .format(
                     await Currency.price_from_telegram(product.currency, product.price),
                     product.duration_days,
+                    t(language)
+                    .npgettext(
+                        "admin-tours",
+                        "for {} guest",
+                        "for {} guests",
+                        product.guests,
+                    )
+                    .format(product.guests),
                 )
             )
 
@@ -181,8 +196,7 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
 
         msg += t(language).pgettext(
             "admin-tours",
-            "Please send me the title to display with the purchase "
-            "(max 32 chars; no formatting), or /cancel to abort.",
+            "Please send me the number of guests " "(>= 1), or /cancel to abort.",
         )
 
         await self.edit_or_reply_text(
@@ -192,55 +206,24 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
             parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
         )
-        return self.STATE_WAITING_FOR_TITLE
+        return self.STATE_WAITING_FOR_GUESTS_COUNT
 
-    async def save_title(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        language = await self.get_language(update, context)
-        title = update.message.text.strip()
-
-        if len(title) > 32:
-            await update.message.reply_text(
-                t(language)
-                .pgettext(
-                    "admin-tours",
-                    "Title is too long. You sent {len} characters, "
-                    "but it should be 32 max. Please try again.",
-                )
-                .format(len=len(title))
-            )
-            return None
-
-        context.user_data["title"] = title
-
-        await update.message.reply_text(
-            t(language).pgettext(
-                "admin-tours",
-                "Please send me the description of the tour to be "
-                "displayed in an invoice (255 chars max; no formatting).",
-            )
-        )
-
-        return self.STATE_WAITING_FOR_DESCRIPTION
-
-    async def save_description(
+    async def save_guests_count(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         language = await self.get_language(update, context)
-        description = update.message.text.strip()
+        guests_count = update.message.text.strip()
 
-        if len(description) > 255:
+        if not guests_count.isdigit() or int(guests_count) < 1:
             await update.message.reply_text(
-                t(language)
-                .pgettext(
+                t(language).pgettext(
                     "admin-tours",
-                    "Description is too long. You sent {len} characters, "
-                    "but it should be 255 max. Please try again.",
+                    "Please enter a number greater than 0.",
                 )
-                .format(len=len(description))
             )
             return None
 
-        context.user_data["description"] = description
+        context.user_data["guests_count"] = int(guests_count)
 
         msg = t(language).pgettext(
             "admin-tours",
@@ -338,8 +321,67 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
             self.cleanup_context(context)
             return None
 
+        context.user_data["duration"] = duration
+
+        await update.message.reply_text(
+            t(language).pgettext(
+                "admin-tours",
+                "Please send me the title to display with the purchase "
+                "(max 32 chars; no formatting), or /cancel to abort.",
+            )
+        )
+        return self.STATE_WAITING_FOR_TITLE
+
+    async def save_title(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        language = await self.get_language(update, context)
+        title = update.message.text.strip()
+
+        if len(title) > 32:
+            await update.message.reply_text(
+                t(language)
+                .pgettext(
+                    "admin-tours",
+                    "Title is too long. You sent {len} characters, "
+                    "but it should be 32 max. Please try again.",
+                )
+                .format(len=len(title))
+            )
+            return None
+
+        context.user_data["title"] = title
+
+        await update.message.reply_text(
+            t(language).pgettext(
+                "admin-tours",
+                "Please send me the description of the tour to be "
+                "displayed in an invoice (255 chars max; no formatting).",
+            )
+        )
+
+        return self.STATE_WAITING_FOR_DESCRIPTION
+
+    async def save_description(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        language = await self.get_language(update, context)
+        description = update.message.text.strip()
+
+        if len(description) > 255:
+            await update.message.reply_text(
+                t(language)
+                .pgettext(
+                    "admin-tours",
+                    "Description is too long. You sent {len} characters, "
+                    "but it should be 255 max. Please try again.",
+                )
+                .format(len=len(description))
+            )
+            return None
+
         currency = context.user_data["currency"]
         price = context.user_data["price"]
+        duration = context.user_data["duration"]
+        guests_count = context.user_data["guests_count"]
 
         tour: Tour | None = await self.db_session.scalar(
             select(Tour)
@@ -382,7 +424,8 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
             payment_provider=payment_provider,
             language=context.user_data["language"],
             title=context.user_data["title"],
-            description=context.user_data["description"],
+            description=description,
+            guests=guests_count,
         )
 
         self.db_session.add(product)
@@ -392,14 +435,22 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
             t(language)
             .npgettext(
                 "admin-tours",
-                "From now on users can buy {}-day access to {} for {}.",
-                "From now on users can buy {}-days access to {} for {}.",
+                "From now on users can buy {}-day access to {} for {} ({}).",
+                "From now on users can buy {}-days access to {} for {} ({}).",
                 product.duration_days,
             )
             .format(
                 product.duration_days,
                 get_tour_title(tour, language, context),
                 await Currency.price_from_telegram(currency, price),
+                t(language)
+                .npgettext(
+                    "admin-tours",
+                    "for {} guest",
+                    "for {} guests",
+                    product.guests,
+                )
+                .format(product.guests),
             )
         )
 
