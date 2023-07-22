@@ -33,6 +33,12 @@ class BaseHandlerCallback:
         pass
 
     async def cancel(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        await self.cancel_without_conversation(update, context)
+        return ConversationHandler.END
+
+    async def cancel_without_conversation(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
         user = await self.get_user(update, context)
 
         if hasattr(self, "cleanup_context"):
@@ -47,7 +53,6 @@ class BaseHandlerCallback:
         await self.edit_or_reply_text(
             update, context, t(user.language).pgettext("bot-generic", "Cancelled.")
         )
-        return ConversationHandler.END
 
     @staticmethod
     async def edit_or_reply_text(
@@ -273,13 +278,6 @@ class MenuCommandHandler(AdminProtectedBaseHandlerCallback):
         )
 
         return ret
-
-    async def cancel_without_conversation(
-        self, update: Update, context: ContextTypes.DEFAULT_TYPE
-    ):
-        # Skipping returning ConversationHandler.END to prevent finishing the current
-        # conversation
-        await super().cancel(update, context)
 
     async def get_extra_buttons(
         self,

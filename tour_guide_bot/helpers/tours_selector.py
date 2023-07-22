@@ -131,7 +131,7 @@ class SelectTourHandler(BaseHandlerCallback, ABC):
         return await self.after_tour_selected(tour, update, context, False)
 
     @classmethod
-    def get_select_tour_handlers(cls) -> dict[int, list]:
+    def get_select_tour_handlers(cls) -> list:
         return [
             CallbackQueryHandler(
                 cls.partial(cls.handle_selected_tour),

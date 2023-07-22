@@ -1,5 +1,3 @@
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 from telegram import Update
 from telegram.ext import (
     CallbackQueryHandler,
@@ -11,13 +9,11 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
-from tour_guide_bot.bot.admin.configure.payments.payment_provider import (
-    PaymentProviderBase,
-)
+from tour_guide_bot.helpers.telegram import SubcommandHandler
 from tour_guide_bot.models.settings import PaymentProvider
 
 
-class AddPaymentProvider(PaymentProviderBase):
+class AddPaymentProvider(SubcommandHandler):
     STATE_WAITING_FOR_NAME = 1
     STATE_WAITING_FOR_TOKEN = 2
 
@@ -79,12 +75,6 @@ class AddPaymentProvider(PaymentProviderBase):
         )
 
         return None
-
-    @classmethod
-    async def is_available(cls, db_session: AsyncSession) -> bool:
-        stmt = select(PaymentProvider).where(PaymentProvider.enabled == True)
-        provider: PaymentProvider | None = await db_session.scalar(stmt)
-        return provider is None
 
     async def payment_token_init(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE

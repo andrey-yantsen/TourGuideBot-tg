@@ -17,13 +17,16 @@ from telegram.ext import (
 from tour_guide_bot import t
 from tour_guide_bot.helpers.currency import Currency
 from tour_guide_bot.helpers.language_selector import SelectLanguageHandler
+from tour_guide_bot.helpers.payment_provider_selector import PaymentProviderSelector
 from tour_guide_bot.helpers.telegram import SubcommandHandler, get_tour_title
 from tour_guide_bot.helpers.tours_selector import SelectTourHandler
 from tour_guide_bot.models.guide import Product, Tour
 from tour_guide_bot.models.settings import PaymentProvider
 
 
-class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler):
+class PricingHandler(
+    SubcommandHandler, SelectTourHandler, SelectLanguageHandler, PaymentProviderSelector
+):
     SKIP_LANGUAGE_SELECTION_IF_SINGLE = False
 
     STATE_WAITING_FOR_GUESTS_COUNT: ClassVar[int] = 1
@@ -45,6 +48,7 @@ class PricingHandler(SubcommandHandler, SelectTourHandler, SelectLanguageHandler
                 states={
                     cls.STATE_SELECT_TOUR: cls.get_select_tour_handlers(),
                     cls.STATE_LANGUAGE_SELECTION: cls.get_select_language_handlers(),
+                    cls.STATE_SELECT_PAYMENT_PROVIDER: cls.get_select_payment_provider_handlers(),  # noqa
                     cls.STATE_WAITING_FOR_GUESTS_COUNT: [
                         MessageHandler(
                             filters.TEXT & ~filters.COMMAND,
