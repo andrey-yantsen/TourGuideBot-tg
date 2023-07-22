@@ -67,6 +67,7 @@ class PurchaseCommandHandler(SelectTourHandler):
 
         if subscription:
             subscription.is_user_notified = True
+            subscription.invoice_id = invoice_id
             subscription.expire_ts += timedelta(days=invoice.duration_days)
         else:
             subscription = Subscription(
@@ -74,6 +75,7 @@ class PurchaseCommandHandler(SelectTourHandler):
                 tour_id=invoice.tour_id,
                 is_user_notified=True,
                 expire_ts=datetime.now() + timedelta(days=invoice.duration_days),
+                invoice_id=invoice_id,
             )
 
         invoice.subscription = subscription

@@ -125,7 +125,7 @@ msgstr ""
 #: tour_guide_bot/bot/admin/tour/add_content.py:481
 #: tour_guide_bot/bot/admin/tour/add_content.py:519
 #: tour_guide_bot/bot/admin/tour/delete.py:83
-#: tour_guide_bot/bot/guide/purchase.py:261
+#: tour_guide_bot/bot/guide/purchase.py:263
 #: tour_guide_bot/bot/guide/tours.py:285
 #: tour_guide_bot/helpers/language_selector.py:81
 #: tour_guide_bot/helpers/payment_provider_selector.py:95
@@ -204,10 +204,10 @@ msgstr ""
 #: tour_guide_bot/bot/admin/revoke.py:81 tour_guide_bot/bot/admin/revoke.py:96
 #: tour_guide_bot/bot/admin/revoke.py:121
 #: tour_guide_bot/bot/admin/tour/delete.py:110
-#: tour_guide_bot/bot/guide/purchase.py:102
-#: tour_guide_bot/bot/guide/purchase.py:116
-#: tour_guide_bot/bot/guide/purchase.py:151
-#: tour_guide_bot/bot/guide/purchase.py:228
+#: tour_guide_bot/bot/guide/purchase.py:104
+#: tour_guide_bot/bot/guide/purchase.py:118
+#: tour_guide_bot/bot/guide/purchase.py:153
+#: tour_guide_bot/bot/guide/purchase.py:230
 #: tour_guide_bot/bot/guide/tours.py:103 tour_guide_bot/bot/guide/tours.py:335
 #: tour_guide_bot/bot/guide/tours.py:363
 #: tour_guide_bot/helpers/language_selector.py:128
@@ -936,7 +936,7 @@ msgctxt "guest-help"
 msgid "There are no support details yet. Please, try again later."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/purchase.py:87
+#: tour_guide_bot/bot/guide/purchase.py:89
 msgctxt "guest-tour-purchase"
 msgid ""
 "Thank you for the purchase! You can now access the tour by sending /tours"
@@ -944,33 +944,33 @@ msgid ""
 "UTC."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/purchase.py:186
+#: tour_guide_bot/bot/guide/purchase.py:188
 msgctxt "guest-tour-purchase"
 msgid "{} day access"
 msgid_plural "{} days access"
 msgstr[0] ""
 msgstr[1] ""
 
-#: tour_guide_bot/bot/guide/purchase.py:241
+#: tour_guide_bot/bot/guide/purchase.py:243
 msgctxt "guest-tour-purchase"
 msgid "{n}-day access for {price}"
 msgid_plural "{n}-days access for {price}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: tour_guide_bot/bot/guide/purchase.py:269
+#: tour_guide_bot/bot/guide/purchase.py:271
 msgctxt "guest-tour-purchase"
 msgid "Please select the access duration you want to purchase."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/purchase.py:279
+#: tour_guide_bot/bot/guide/purchase.py:281
 msgctxt "guest-tour-purchase"
 msgid ""
 "Please select the tour you want to purchase. You'll see the description "
 "of the tour after you select it."
 msgstr ""
 
-#: tour_guide_bot/bot/guide/purchase.py:305
+#: tour_guide_bot/bot/guide/purchase.py:307
 msgctxt "guest-tour-purchase"
 msgid ""
 "Unfortunately, there are no tours available for purchase online at the "
