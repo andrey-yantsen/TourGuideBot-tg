@@ -117,20 +117,6 @@ class PricingHandler(
             "language the tour has in order to everything work properly.",
         )
 
-    @staticmethod
-    def get_name(language: str) -> str:
-        return t(language).pgettext("admin-tour", "Set/change a tour's price")
-
-    @classmethod
-    async def is_available(cls, db_session: AsyncSession) -> bool:
-        tours_count: int = await db_session.scalar(select(func.count(Tour.id)))
-        payment_provider: int = await db_session.scalar(
-            select(func.count(PaymentProvider.id)).where(
-                PaymentProvider.enabled == True  # noqa
-            )
-        )
-        return tours_count > 0 and payment_provider > 0
-
     async def after_tour_selected(
         self,
         tour: Tour,
@@ -150,6 +136,16 @@ class PricingHandler(
         is_single_language: bool,
     ):
         context.user_data["language"] = language
+        return await self.send_payment_provider_selector(update, context)
+
+    async def after_payment_provider_selected(
+        self,
+        provider: PaymentProvider,
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE,
+        is_single_provider: bool,
+    ):
+        context.user_data["provider_id"] = provider.id
 
         language = await self.get_language(update, context)
 
@@ -162,7 +158,9 @@ class PricingHandler(
         available_products = [
             product
             for product in tour.products
-            if product.available and product.language == context.user_data["language"]
+            if product.available
+            and product.language == context.user_data["language"]
+            and product.payment_provider_id == provider.id
         ]
 
         await update.callback_query.answer()
@@ -210,7 +208,27 @@ class PricingHandler(
             parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
         )
+
         return self.STATE_WAITING_FOR_GUESTS_COUNT
+
+    def get_payment_provider_selection_message(self, language: str) -> str:
+        return t(language).pgettext(
+            "admin-tours", "Please select the payment provider you want to use."
+        )
+
+    @staticmethod
+    def get_name(language: str) -> str:
+        return t(language).pgettext("admin-tour", "Set/change a tour's price")
+
+    @classmethod
+    async def is_available(cls, db_session: AsyncSession) -> bool:
+        tours_count: int = await db_session.scalar(select(func.count(Tour.id)))
+        payment_provider: int = await db_session.scalar(
+            select(func.count(PaymentProvider.id)).where(
+                PaymentProvider.enabled == True  # noqa
+            )
+        )
+        return tours_count > 0 and payment_provider > 0
 
     async def save_guests_count(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
@@ -386,6 +404,7 @@ class PricingHandler(
         price = context.user_data["price"]
         duration = context.user_data["duration"]
         guests_count = context.user_data["guests_count"]
+        provider_id = context.user_data["provider_id"]
 
         tour: Tour | None = await self.db_session.scalar(
             select(Tour)
@@ -398,6 +417,7 @@ class PricingHandler(
                 (Product.tour == tour)
                 & (Product.available == True)
                 & (Product.language == context.user_data["language"])
+                & (Product.payment_provider_id == provider_id)
             )
         )
 
@@ -405,27 +425,12 @@ class PricingHandler(
             product.available = False
             self.db_session.add(product)
 
-        payment_provider: PaymentProvider | None = await self.db_session.scalar(
-            select(PaymentProvider).where(PaymentProvider.enabled == True)
-        )
-
-        if not payment_provider:
-            await self.edit_or_reply_text(
-                update,
-                context,
-                t(language).pgettext(
-                    "bot-generic", "Something went wrong; please try again."
-                ),
-            )
-            self.cleanup_context(context)
-            return ConversationHandler.END
-
         product = Product(
             tour=tour,
             currency=currency,
             price=price,
             duration_days=duration,
-            payment_provider=payment_provider,
+            payment_provider_id=provider_id,
             language=context.user_data["language"],
             title=context.user_data["title"],
             description=description,

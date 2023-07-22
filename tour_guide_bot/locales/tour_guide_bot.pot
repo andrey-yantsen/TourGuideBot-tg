@@ -204,7 +204,6 @@ msgstr ""
 #: tour_guide_bot/bot/admin/revoke.py:81 tour_guide_bot/bot/admin/revoke.py:96
 #: tour_guide_bot/bot/admin/revoke.py:121
 #: tour_guide_bot/bot/admin/tour/delete.py:110
-#: tour_guide_bot/bot/admin/tour/pricing.py:416
 #: tour_guide_bot/bot/guide/purchase.py:102
 #: tour_guide_bot/bot/guide/purchase.py:116
 #: tour_guide_bot/bot/guide/purchase.py:151
@@ -765,27 +764,22 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:122
-msgctxt "admin-tour"
-msgid "Set/change a tour's price"
-msgstr ""
-
-#: tour_guide_bot/bot/admin/tour/pricing.py:174
+#: tour_guide_bot/bot/admin/tour/pricing.py:172
 msgctxt "admin-tours"
 msgid "Current price is {} for {} day ({})."
 msgid_plural "Current price is {} for {} days ({})."
 msgstr[0] ""
 msgstr[1] ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:184
-#: tour_guide_bot/bot/admin/tour/pricing.py:451
+#: tour_guide_bot/bot/admin/tour/pricing.py:182
+#: tour_guide_bot/bot/admin/tour/pricing.py:456
 msgctxt "admin-tours"
 msgid "for {} guest"
 msgid_plural "for {} guests"
 msgstr[0] ""
 msgstr[1] ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:194
+#: tour_guide_bot/bot/admin/tour/pricing.py:192
 msgctxt "admin-tours"
 msgid ""
 "Current title:\n"
@@ -795,24 +789,34 @@ msgid ""
 "<code>{1}</code>"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:201
+#: tour_guide_bot/bot/admin/tour/pricing.py:199
 msgctxt "admin-tours"
 msgid "Please send me the number of guests (>= 1), or /cancel to abort."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:223
+#: tour_guide_bot/bot/admin/tour/pricing.py:215
+msgctxt "admin-tours"
+msgid "Please select the payment provider you want to use."
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/pricing.py:221
+msgctxt "admin-tour"
+msgid "Set/change a tour's price"
+msgstr ""
+
+#: tour_guide_bot/bot/admin/tour/pricing.py:241
 msgctxt "admin-tours"
 msgid "Please enter a number greater than 0."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:232
+#: tour_guide_bot/bot/admin/tour/pricing.py:250
 msgctxt "admin-tours"
 msgid ""
 "Please send me the currency in which you want to charge your users, or "
 "/cancel to abort."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:237
+#: tour_guide_bot/bot/admin/tour/pricing.py:255
 msgctxt "admin-tours"
 msgid ""
 "You can find more details about available currencies <a "
@@ -820,56 +824,56 @@ msgid ""
 "currencies'>here</a>."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:256
+#: tour_guide_bot/bot/admin/tour/pricing.py:274
 msgctxt "admin-tours"
 msgid "Unknown currency provided. Please try again."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:267
+#: tour_guide_bot/bot/admin/tour/pricing.py:285
 msgctxt "admin-tours"
 msgid "Please send me the price of the tour in {}."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:289
-#: tour_guide_bot/bot/admin/tour/pricing.py:320
+#: tour_guide_bot/bot/admin/tour/pricing.py:307
+#: tour_guide_bot/bot/admin/tour/pricing.py:338
 msgctxt "admin-tours"
 msgid "Invalid value provided, please try again."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:300
+#: tour_guide_bot/bot/admin/tour/pricing.py:318
 msgctxt "admin-tours"
 msgid "How long (in days) {} should buy?"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:331
+#: tour_guide_bot/bot/admin/tour/pricing.py:349
 msgctxt "admin-tours"
 msgid ""
 "Please send me the title to display with the purchase (max 32 chars; no "
 "formatting), or /cancel to abort."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:346
+#: tour_guide_bot/bot/admin/tour/pricing.py:364
 msgctxt "admin-tours"
 msgid ""
 "Title is too long. You sent {len} characters, but it should be 32 max. "
 "Please try again."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:358
+#: tour_guide_bot/bot/admin/tour/pricing.py:376
 msgctxt "admin-tours"
 msgid ""
 "Please send me the description of the tour to be displayed in an invoice "
 "(255 chars max; no formatting)."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:376
+#: tour_guide_bot/bot/admin/tour/pricing.py:394
 msgctxt "admin-tours"
 msgid ""
 "Description is too long. You sent {len} characters, but it should be 255 "
 "max. Please try again."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/tour/pricing.py:440
+#: tour_guide_bot/bot/admin/tour/pricing.py:445
 msgctxt "admin-tours"
 msgid "From now on users can buy {}-day access to {} for {} ({})."
 msgid_plural "From now on users can buy {}-days access to {} for {} ({})."
