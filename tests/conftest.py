@@ -362,10 +362,21 @@ async def app(
             "skip_payment_token_stub"
         )
         if skip_payment_token_stub is None:
-            provider = PaymentProvider(
-                name="test provider", config={"token": "fake_token"}, enabled=True
+            payment_tokens_count = request.node.get_closest_marker(
+                "payment_tokens_count"
             )
-            session.add(provider)
+            assert payment_tokens_count is None or len(payment_tokens_count.args) == 1
+            cnt = (
+                1 if payment_tokens_count is None else int(payment_tokens_count.args[0])
+            )
+
+            for i in range(int(cnt)):
+                provider = PaymentProvider(
+                    name="test provider {}".format(i + 1),
+                    config={"token": "fake_token {}".format(i + 1)},
+                    enabled=True,
+                )
+                session.add(provider)
 
         await session.commit()
 

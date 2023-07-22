@@ -60,6 +60,7 @@ markers = [
     "approved_tour_ids",
     "tours",
     "skip_payment_token_stub",
+    "payment_tokens_count",
 ]
 asyncio_mode = "auto"
 
