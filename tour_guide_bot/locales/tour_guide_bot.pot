@@ -79,28 +79,28 @@ msgid ""
 "journey!"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:81
+#: tour_guide_bot/bot/admin/approve.py:84
 msgctxt "admin-approve"
 msgid "I've failed to parse your input; please enter a valid positive number."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:121
+#: tour_guide_bot/bot/admin/approve.py:124
 msgctxt "admin-approve"
 msgid "Phone number +{0} was approved for the tour '{1}' until {2}."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:141
-#: tour_guide_bot/bot/admin/revoke.py:151
+#: tour_guide_bot/bot/admin/approve.py:144
+#: tour_guide_bot/bot/admin/revoke.py:155
 msgctxt "admin-generic"
 msgid "The contact you sent me doesn't have a phone number; please try again."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:154
+#: tour_guide_bot/bot/admin/approve.py:157
 msgctxt "admin-approve"
 msgid "How long the user should have access? Please enter a duration in days."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:166
+#: tour_guide_bot/bot/admin/approve.py:169
 msgctxt "admin-approve"
 msgid ""
 "Enter the phone number that should be able to access the tour (with "
@@ -108,18 +108,18 @@ msgid ""
 " to abort."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:199
-#: tour_guide_bot/bot/admin/revoke.py:268
+#: tour_guide_bot/bot/admin/approve.py:203
+#: tour_guide_bot/bot/admin/revoke.py:275
 msgctxt "admin-generic"
 msgid "Unfortunately, you don't have any tours available for the guests."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:209
+#: tour_guide_bot/bot/admin/approve.py:213
 #: tour_guide_bot/bot/admin/configure/audio_to_voice.py:80
 #: tour_guide_bot/bot/admin/configure/audio_to_voice.py:104
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:121
-#: tour_guide_bot/bot/admin/revoke.py:221
-#: tour_guide_bot/bot/admin/revoke.py:278
+#: tour_guide_bot/bot/admin/revoke.py:227
+#: tour_guide_bot/bot/admin/revoke.py:285
 #: tour_guide_bot/bot/admin/tour/add_content.py:383
 #: tour_guide_bot/bot/admin/tour/add_content.py:440
 #: tour_guide_bot/bot/admin/tour/add_content.py:481
@@ -136,8 +136,8 @@ msgctxt "bot-generic"
 msgid "Abort"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/approve.py:216
-#: tour_guide_bot/bot/admin/revoke.py:285
+#: tour_guide_bot/bot/admin/approve.py:220
+#: tour_guide_bot/bot/admin/revoke.py:292
 msgctxt "admin-generic"
 msgid "Please select the tour."
 msgstr ""
@@ -202,8 +202,8 @@ msgstr ""
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/change.py:120
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/change.py:133
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:63
-#: tour_guide_bot/bot/admin/revoke.py:81 tour_guide_bot/bot/admin/revoke.py:96
-#: tour_guide_bot/bot/admin/revoke.py:121
+#: tour_guide_bot/bot/admin/revoke.py:85 tour_guide_bot/bot/admin/revoke.py:100
+#: tour_guide_bot/bot/admin/revoke.py:125
 #: tour_guide_bot/bot/admin/tour/delete.py:111
 #: tour_guide_bot/bot/admin/tour/pricing/delete.py:118
 #: tour_guide_bot/bot/admin/tour/pricing/delete.py:167
@@ -219,24 +219,24 @@ msgctxt "bot-generic"
 msgid "Something went wrong; please try again."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/revoke.py:137
+#: tour_guide_bot/bot/admin/revoke.py:141
 msgctxt "admin-revoke"
 msgid "Access to \"{0}\" was revoked from +{1}."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/revoke.py:169
+#: tour_guide_bot/bot/admin/revoke.py:173
 msgctxt "admin-revoke"
 msgid ""
 "I don't see anybody with that phone number in the database; please send "
 "another one."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/revoke.py:192
+#: tour_guide_bot/bot/admin/revoke.py:196
 msgctxt "admin-revoke"
 msgid "This phone number doesn't have access to that tour; aborting."
 msgstr ""
 
-#: tour_guide_bot/bot/admin/revoke.py:208
+#: tour_guide_bot/bot/admin/revoke.py:212
 msgctxt "admin-revoke"
 msgid "Are you sure you want to revoke the access to \"{0}\" from +{1}?"
 msgstr ""
@@ -244,7 +244,7 @@ msgstr ""
 #: tour_guide_bot/bot/admin/configure/audio_to_voice.py:74
 #: tour_guide_bot/bot/admin/configure/audio_to_voice.py:98
 #: tour_guide_bot/bot/admin/configure/payments/payment_provider/delete.py:117
-#: tour_guide_bot/bot/admin/revoke.py:217
+#: tour_guide_bot/bot/admin/revoke.py:221
 #: tour_guide_bot/bot/admin/tour/add_content.py:677
 #: tour_guide_bot/bot/admin/tour/delete.py:80
 #: tour_guide_bot/bot/admin/tour/pricing/delete.py:138
@@ -252,7 +252,7 @@ msgctxt "bot-generic"
 msgid "Yes"
 msgstr ""
 
-#: tour_guide_bot/bot/admin/revoke.py:235
+#: tour_guide_bot/bot/admin/revoke.py:241
 msgctxt "admin-revoke"
 msgid ""
 "Enter the phone number from which you want to revoke access to the tour "

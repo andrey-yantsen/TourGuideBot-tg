@@ -35,7 +35,8 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
                 states={
                     cls.STATE_TOUR: [
                         CallbackQueryHandler(
-                            cls.partial(cls.tour), r"^revoke_tour:(\d+)$"
+                            cls.partial(cls.tour),
+                            cls.get_callback_data_pattern("revoke_tour", r"(\d+)"),
                         ),
                     ],
                     cls.STATE_PHONE_NUMBER: [
@@ -47,13 +48,16 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
                     ],
                     cls.STATE_REVOKE: [
                         CallbackQueryHandler(
-                            cls.partial(cls.revoke), r"^revoke_confirm:(\d+)$"
+                            cls.partial(cls.revoke),
+                            cls.get_callback_data_pattern("revoke_confirm", r"(\d+)"),
                         ),
                     ],
                 },
                 fallbacks=[
                     CommandHandler("cancel", cls.partial(cls.cancel)),
-                    CallbackQueryHandler(cls.partial(cls.cancel), "cancel"),
+                    CallbackQueryHandler(
+                        cls.partial(cls.cancel), cls.get_callback_data_pattern("cancel")
+                    ),
                     MessageHandler(filters.COMMAND, cls.partial(cls.unknown_command)),
                     MessageHandler(filters.ALL, cls.partial(cls.unexpected_message)),
                 ],
@@ -215,11 +219,13 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
                     [
                         InlineKeyboardButton(
                             t(user.language).pgettext("bot-generic", "Yes"),
-                            callback_data="revoke_confirm:%d" % (tour.id,),
+                            callback_data=self.get_callback_data(
+                                "revoke_confirm", tour.id
+                            ),
                         ),
                         InlineKeyboardButton(
                             t(user.language).pgettext("bot-generic", "Abort"),
-                            callback_data="cancel",
+                            callback_data=self.get_callback_data("cancel"),
                         ),
                     ],
                 ]
@@ -258,7 +264,8 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
             keyboard.append(
                 [
                     InlineKeyboardButton(
-                        title, callback_data="revoke_tour:%s" % (tour.id,)
+                        title,
+                        callback_data=self.get_callback_data("revoke_tour", tour.id),
                     )
                 ]
             )
@@ -276,7 +283,7 @@ class RevokeCommandHandler(AdminProtectedBaseHandlerCallback):
             [
                 InlineKeyboardButton(
                     t(current_language).pgettext("bot-generic", "Abort"),
-                    callback_data="cancel",
+                    callback_data=self.get_callback_data("cancel"),
                 )
             ]
         )

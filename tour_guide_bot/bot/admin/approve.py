@@ -36,7 +36,8 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
                 states={
                     cls.STATE_TOUR: [
                         CallbackQueryHandler(
-                            cls.partial(cls.tour), r"^approve_tour:(\d+)$"
+                            cls.partial(cls.tour),
+                            cls.get_callback_data_pattern("approve_tour", r"(\d+)"),
                         ),
                     ],
                     cls.STATE_PHONE_NUMBER: [
@@ -54,7 +55,9 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
                 },
                 fallbacks=[
                     CommandHandler("cancel", cls.partial(cls.cancel)),
-                    CallbackQueryHandler(cls.partial(cls.cancel), "cancel"),
+                    CallbackQueryHandler(
+                        cls.partial(cls.cancel), cls.get_callback_data_pattern("cancel")
+                    ),
                     MessageHandler(filters.COMMAND, cls.partial(cls.unknown_command)),
                     MessageHandler(filters.ALL, cls.partial(cls.unexpected_message)),
                 ],
@@ -189,7 +192,8 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             keyboard.append(
                 [
                     InlineKeyboardButton(
-                        title, callback_data="approve_tour:%s" % (tour.id,)
+                        title,
+                        callback_data=self.get_callback_data("approve_tour", tour.id),
                     )
                 ]
             )
@@ -207,7 +211,7 @@ class ApproveCommandHandler(AdminProtectedBaseHandlerCallback):
             [
                 InlineKeyboardButton(
                     t(current_language).pgettext("bot-generic", "Abort"),
-                    callback_data="cancel",
+                    callback_data=self.get_callback_data("cancel"),
                 )
             ]
         )
