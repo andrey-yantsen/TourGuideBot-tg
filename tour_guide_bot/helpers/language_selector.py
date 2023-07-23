@@ -144,7 +144,11 @@ class SelectLanguageHandler(BaseHandlerCallback, ABC):
                 cls.get_callback_data_pattern("language", r"(\w+)"),
             ),
             CallbackQueryHandler(
-                cls.partial(cls.cancel),
+                cls.partial(
+                    cls.cancel
+                    if cls.STATE_LANGUAGE_SELECTION
+                    else cls.cancel_without_conversation
+                ),
                 cls.get_callback_data_pattern("cancel_language_selection"),
             ),
         ]

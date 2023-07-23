@@ -61,6 +61,8 @@ markers = [
     "tours",
     "skip_payment_token_stub",
     "payment_tokens_count",
+    "skip_adding_products",
+    "products_count_in_default_tour",
 ]
 asyncio_mode = "auto"
 

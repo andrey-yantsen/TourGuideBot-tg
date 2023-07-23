@@ -27,7 +27,8 @@ class AddHandler(SubcommandHandler, SelectLanguageHandler, AddContentCommandHand
             ConversationHandler(
                 entry_points=[
                     CallbackQueryHandler(
-                        cls.partial(cls.send_language_selector), cls.get_callback_data()
+                        cls.partial(cls.send_language_selector),
+                        cls.get_callback_data_pattern(),
                     ),
                 ],
                 states={

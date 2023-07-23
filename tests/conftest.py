@@ -125,27 +125,40 @@ def enabled_languages(request: pytest.FixtureRequest) -> list[str]:
 
 
 @pytest.fixture
-def default_tour() -> dict:
+def products_count_in_default_tour(request: pytest.FixtureRequest) -> int:
+    marker = request.node.get_closest_marker("products_count_in_default_tour")
+    if marker is None:
+        return 1
+
+    return marker.args[0]
+
+
+@pytest.fixture
+def default_tour(
+    products_count_in_default_tour: int, enabled_languages: list[str]
+) -> dict:
     return {
         "products": [
             {
                 "currency": "USD",
                 "payment_provider_id": 1,
-                "price": 100,
-                "duration_days": 2,
-            },
+                "price": int(100 * (1 + 0.2 * i)),
+                "duration_days": i + 1,
+                "guests": 1,
+            }
+            for i in range(products_count_in_default_tour)
         ],
         "translations": {
-            "en": {
-                "title": "Test tour",
-                "description": "Test tour description.",
+            lang: {
+                "title": "Test tour {}".format(lang),
+                "description": "Test tour description {}.".format(lang),
                 "sections": [
                     {
-                        "title": "Test section 1",
+                        "title": "Test section 1 {}".format(lang),
                         "content": [
                             {
                                 "type": MessageType.text,
-                                "content": {"text": "Test text 1"},
+                                "content": {"text": "Test text 1 {}".format(lang)},
                             },
                             {
                                 "type": MessageType.location,
@@ -156,25 +169,26 @@ def default_tour() -> dict:
                             },
                             {
                                 "type": MessageType.text,
-                                "content": {"text": "Test text 2"},
+                                "content": {"text": "Test text 2 {}".format(lang)},
                             },
                         ],
                     },
                     {
-                        "title": "Test section 2",
+                        "title": "Test section 2 {}".format(lang),
                         "content": [
                             {
                                 "type": MessageType.text,
-                                "content": {"text": "Test text 3"},
+                                "content": {"text": "Test text 3 {}".format(lang)},
                             },
                             {
                                 "type": MessageType.text,
-                                "content": {"text": "Test text 4"},
+                                "content": {"text": "Test text 4 {}".format(lang)},
                             },
                         ],
                     },
                 ],
             }
+            for lang in enabled_languages
         },
     }
 
@@ -249,13 +263,17 @@ async def tours(
                     "skip_payment_token_stub"
                 )
 
-                if skip_payment_token_stub is None:
+                skip_adding_products = request.node.get_closest_marker(
+                    "skip_adding_products"
+                )
+
+                if skip_payment_token_stub is None and skip_adding_products is None:
                     for product_config in tour.get("products", []):
                         product = Product(
                             tour=tour_model,
                             language=lang,
                             title=data["title"],
-                            description=f"Buy {product_config['duration_days']} days acess to {data['title']}",
+                            description=f"Buy {product_config['duration_days']} day(s) acess to {data['title']} for {product_config['guests']} guest(s)",
                             **product_config,
                         )
                         session.add(product)

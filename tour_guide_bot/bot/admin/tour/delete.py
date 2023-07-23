@@ -28,7 +28,8 @@ class DeleteHandler(SubcommandHandler, SelectTourHandler):
             ConversationHandler(
                 entry_points=[
                     CallbackQueryHandler(
-                        cls.partial(cls.send_tour_selector), cls.get_callback_data()
+                        cls.partial(cls.send_tour_selector),
+                        cls.get_callback_data_pattern(),
                     ),
                 ],
                 states={

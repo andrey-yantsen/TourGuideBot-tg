@@ -107,3 +107,178 @@ async def test_success_payment(
         assert (s.expire_ts - now).days == tours_as_dicts[0]["products"][0][
             "duration_days"
         ], "Unexpected subscription duration"
+
+
+@pytest.mark.products_count_in_default_tour(3)
+@pytest.mark.usefixtures("app", "tours", "payment_provider")
+async def test_success_payment_multiple_products(
+    conversation: Conversation,
+    telegram_client: TelegramClient,
+    db_engine: AsyncEngine,
+    guest: Guest,
+    tours_as_dicts: list[dict],
+):
+    await conversation.send_message("/purchase")
+
+    response: Message = await conversation.get_response()
+    assert (
+        await response.click(text=tours_as_dicts[0]["translations"]["en"]["title"])
+        is not None
+    )
+
+    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
+    msg: Message = event.message
+
+    assert msg.message.startswith(
+        tours_as_dicts[0]["translations"]["en"]["description"]
+    )
+
+    assert len(msg.reply_markup.rows) == 4
+
+    assert (await msg.click(2)) is not None
+
+    # Invoice
+    response: Message = await conversation.get_response()
+    assert isinstance(response.media, types.MessageMediaInvoice)
+
+    invoice = types.InputInvoiceMessage(response.input_chat, response.id)
+    form: types.payments.PaymentForm = await telegram_client(
+        GetPaymentFormRequest(invoice)
+    )
+
+    token = await get_payment_token(form)
+
+    now = datetime.now()
+    _purchase: types.payments.PaymentForm = await telegram_client(
+        SendPaymentFormRequest(
+            form.form_id,
+            invoice,
+            types.InputPaymentCredentials(types.DataJSON(json.dumps(token))),
+        )
+    )
+
+    response: Message = await conversation.get_response()
+
+    assert (
+        "You can now access the tour" in response.message
+    ), "Unexpected response to a successful payment"
+
+    async with AsyncSession(db_engine, expire_on_commit=False) as session:
+        stmt = select(Subscription).where(Subscription.guest == guest)
+        s: Subscription | None = await session.scalar(stmt)
+
+        assert (s.expire_ts - now).days == tours_as_dicts[0]["products"][2][
+            "duration_days"
+        ], "Unexpected subscription duration"
+
+
+@pytest.mark.usefixtures("app", "tours", "payment_provider")
+async def test_success_payment_multiple_languages(
+    conversation: Conversation,
+    telegram_client: TelegramClient,
+    db_engine: AsyncEngine,
+    guest: Guest,
+    tours_as_dicts: list[dict],
+):
+    await conversation.send_message("/purchase")
+
+    response: Message = await conversation.get_response()
+    assert (
+        await response.click(text=tours_as_dicts[0]["translations"]["en"]["title"])
+        is not None
+    )
+
+    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
+    msg: Message = event.message
+
+    assert msg.message.startswith(
+        tours_as_dicts[0]["translations"]["en"]["description"]
+    )
+
+    assert len(msg.reply_markup.rows) == 2
+
+    assert (await msg.click(0)) is not None
+
+    # Invoice
+    response: Message = await conversation.get_response()
+    assert isinstance(response.media, types.MessageMediaInvoice)
+
+    invoice = types.InputInvoiceMessage(response.input_chat, response.id)
+    form: types.payments.PaymentForm = await telegram_client(
+        GetPaymentFormRequest(invoice)
+    )
+
+    token = await get_payment_token(form)
+
+    now = datetime.now()
+    _purchase: types.payments.PaymentForm = await telegram_client(
+        SendPaymentFormRequest(
+            form.form_id,
+            invoice,
+            types.InputPaymentCredentials(types.DataJSON(json.dumps(token))),
+        )
+    )
+
+    response: Message = await conversation.get_response()
+
+    assert (
+        "You can now access the tour" in response.message
+    ), "Unexpected response to a successful payment"
+
+    await conversation.send_message("/language")
+    response: Message = await conversation.get_response()
+    assert await response.click(text="Russian (Русский)") is not None
+
+    await conversation.send_message("/purchase")
+
+    response: Message = await conversation.get_response()
+    assert (
+        await response.click(text=tours_as_dicts[0]["translations"]["ru"]["title"])
+        is not None
+    )
+
+    event: MessageEdited.Event = await conversation.wait_event(MessageEdited())
+    msg: Message = event.message
+
+    assert msg.message.startswith(
+        tours_as_dicts[0]["translations"]["ru"]["description"]
+    )
+
+    assert len(msg.reply_markup.rows) == 2
+
+    assert (await msg.click(0)) is not None
+
+    # Invoice
+    response: Message = await conversation.get_response()
+    assert isinstance(response.media, types.MessageMediaInvoice)
+
+    invoice = types.InputInvoiceMessage(response.input_chat, response.id)
+    form: types.payments.PaymentForm = await telegram_client(
+        GetPaymentFormRequest(invoice)
+    )
+
+    token = await get_payment_token(form)
+
+    _purchase: types.payments.PaymentForm = await telegram_client(
+        SendPaymentFormRequest(
+            form.form_id,
+            invoice,
+            types.InputPaymentCredentials(types.DataJSON(json.dumps(token))),
+        )
+    )
+
+    response: Message = await conversation.get_response()
+
+    assert (
+        "Теперь вы можете получить доступ к экскурсии" in response.message
+    ), "Unexpected response to a successful payment"
+
+    async with AsyncSession(db_engine, expire_on_commit=False) as session:
+        stmt = select(Subscription).where(Subscription.guest == guest)
+        s: Subscription | None = await session.scalar(stmt)
+
+        double_duration = tours_as_dicts[0]["products"][0]["duration_days"] * 2
+
+        assert (
+            s.expire_ts - now
+        ).days == double_duration, "Unexpected subscription duration"

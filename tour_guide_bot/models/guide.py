@@ -17,6 +17,8 @@ from sqlalchemy import (
 from sqlalchemy.ext.mutable import MutableDict
 from sqlalchemy.orm import Mapped, object_session, relationship
 
+from tour_guide_bot import t
+from tour_guide_bot.helpers.currency import Currency
 from tour_guide_bot.models import Base
 from tour_guide_bot.models.settings import PaymentProvider
 
@@ -188,6 +190,29 @@ class Product(Base):
             "tour_id",
         ),
     )
+
+    async def formatted_name(self, language: str) -> str:
+        return (
+            t(language)
+            .npgettext(
+                "tours",
+                "{price} for {duration} day ({formatted_guests_count})",
+                "{price} for {duration} days ({formatted_guests_count})",
+                self.duration_days,
+            )
+            .format(
+                price=await Currency.price_from_telegram(self.currency, self.price),
+                duration=self.duration_days,
+                formatted_guests_count=t(language)
+                .npgettext(
+                    "tours",
+                    "for {guests_count} guest",
+                    "for {guests_count} guests",
+                    self.guests,
+                )
+                .format(guests_count=self.guests),
+            )
+        )
 
 
 class Invoice(Base):

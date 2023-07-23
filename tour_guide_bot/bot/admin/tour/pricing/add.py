@@ -24,11 +24,9 @@ from tour_guide_bot.models.guide import Product, Tour
 from tour_guide_bot.models.settings import PaymentProvider
 
 
-class PricingHandler(
+class AddPricingHandler(
     SubcommandHandler, SelectTourHandler, SelectLanguageHandler, PaymentProviderSelector
 ):
-    SKIP_LANGUAGE_SELECTION_IF_SINGLE = False
-
     STATE_WAITING_FOR_GUESTS_COUNT: ClassVar[int] = 1
     STATE_WAITING_FOR_CURRENCY: ClassVar[int] = 2
     STATE_WAITING_FOR_PRICE: ClassVar[int] = 3
@@ -42,13 +40,14 @@ class PricingHandler(
             ConversationHandler(
                 entry_points=[
                     CallbackQueryHandler(
-                        cls.partial(cls.send_tour_selector), cls.get_callback_data()
+                        cls.partial(cls.send_tour_selector),
+                        cls.get_callback_data_pattern(),
                     ),
                 ],
                 states={
                     cls.STATE_SELECT_TOUR: cls.get_select_tour_handlers(),
                     cls.STATE_LANGUAGE_SELECTION: cls.get_select_language_handlers(),
-                    cls.STATE_SELECT_PAYMENT_PROVIDER: cls.get_select_payment_provider_handlers(),  # noqa
+                    cls.STATE_SELECT_PAYMENT_PROVIDER: cls.get_select_payment_provider_handlers(),
                     cls.STATE_WAITING_FOR_GUESTS_COUNT: [
                         MessageHandler(
                             filters.TEXT & ~filters.COMMAND,
@@ -93,7 +92,7 @@ class PricingHandler(
                     MessageHandler(filters.ALL, cls.partial(cls.unexpected_message)),
                     # add editted message fallback
                 ],
-                name="admin-pricing-tour",
+                name="admin-pricing-add",
                 persistent=True,
             )
         ]
@@ -106,7 +105,7 @@ class PricingHandler(
 
     def get_tour_selection_message(self, language: str) -> str:
         return t(language).pgettext(
-            "admin-tours", "Please select the tour for updating the price."
+            "admin-tours", "Please select the tour for adding a new price."
         )
 
     def get_language_selection_message(self, user_language: str) -> str:
@@ -149,62 +148,15 @@ class PricingHandler(
 
         language = await self.get_language(update, context)
 
-        tour: Tour | None = await self.db_session.scalar(
-            select(Tour)
-            .where(Tour.id == context.user_data["tour_id"])
-            .options(selectinload(Tour.translations), selectinload(Tour.products))
-        )
-
-        available_products = [
-            product
-            for product in tour.products
-            if product.available
-            and product.language == context.user_data["language"]
-            and product.payment_provider_id == provider.id
-        ]
-
         await update.callback_query.answer()
-        msg = ""
-        if available_products:
-            product = available_products[0]
-            msg = (
-                t(language)
-                .npgettext(
-                    "admin-tours",
-                    "Current price is {} for {} day ({}).",
-                    "Current price is {} for {} days ({}).",
-                    product.duration_days,
-                )
-                .format(
-                    await Currency.price_from_telegram(product.currency, product.price),
-                    product.duration_days,
-                    t(language)
-                    .npgettext(
-                        "admin-tours",
-                        "for {} guest",
-                        "for {} guests",
-                        product.guests,
-                    )
-                    .format(product.guests),
-                )
-            )
-
-            msg += "\n\n" + t(language).pgettext(
-                "admin-tours",
-                "Current title:\n<code>{0}</code>\n\nCurrent description:\n<code>{1}</code>",
-            ).format(product.title, product.description)
-
-            msg += "\n\n"
-
-        msg += t(language).pgettext(
-            "admin-tours",
-            "Please send me the number of guests " "(>= 1), or /cancel to abort.",
-        )
 
         await self.edit_or_reply_text(
             update,
             context,
-            msg,
+            t(language).pgettext(
+                "admin-tours",
+                "Please send me the number of guests (>= 1), or /cancel to abort.",
+            ),
             parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
         )
@@ -218,7 +170,7 @@ class PricingHandler(
 
     @staticmethod
     def get_name(language: str) -> str:
-        return t(language).pgettext("admin-tour", "Set/change a tour's price")
+        return t(language).pgettext("admin-tour", "Add a new product")
 
     @classmethod
     async def is_available(cls, db_session: AsyncSession) -> bool:
@@ -382,6 +334,32 @@ class PricingHandler(
 
         return self.STATE_WAITING_FOR_DESCRIPTION
 
+    async def save_product(
+        self, tour: Tour, context: ContextTypes.DEFAULT_TYPE
+    ) -> Product:
+        currency = context.user_data["currency"]
+        price = context.user_data["price"]
+        duration = context.user_data["duration"]
+        guests_count = context.user_data["guests_count"]
+        provider_id = context.user_data["provider_id"]
+        description = context.user_data["description"]
+
+        product = Product(
+            tour=tour,
+            currency=currency,
+            price=price,
+            duration_days=duration,
+            payment_provider_id=provider_id,
+            language=context.user_data["language"],
+            title=context.user_data["title"],
+            description=description,
+            guests=guests_count,
+        )
+
+        self.db_session.add(product)
+
+        return product
+
     async def save_description(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
@@ -400,11 +378,10 @@ class PricingHandler(
             )
             return None
 
+        context.user_data["description"] = description
+
         currency = context.user_data["currency"]
         price = context.user_data["price"]
-        duration = context.user_data["duration"]
-        guests_count = context.user_data["guests_count"]
-        provider_id = context.user_data["provider_id"]
 
         tour: Tour | None = await self.db_session.scalar(
             select(Tour)
@@ -412,32 +389,7 @@ class PricingHandler(
             .options(selectinload(Tour.translations))
         )
 
-        product: Product | None = await self.db_session.scalar(
-            select(Product).where(
-                (Product.tour == tour)
-                & (Product.available == True)
-                & (Product.language == context.user_data["language"])
-                & (Product.payment_provider_id == provider_id)
-            )
-        )
-
-        if product:
-            product.available = False
-            self.db_session.add(product)
-
-        product = Product(
-            tour=tour,
-            currency=currency,
-            price=price,
-            duration_days=duration,
-            payment_provider_id=provider_id,
-            language=context.user_data["language"],
-            title=context.user_data["title"],
-            description=description,
-            guests=guests_count,
-        )
-
-        self.db_session.add(product)
+        product = await self.save_product(tour, context)
         await self.db_session.commit()
 
         await update.message.reply_text(

@@ -1,13 +1,11 @@
 from datetime import datetime, timedelta
-from itertools import groupby
 from typing import Sequence
 
 from babel.dates import format_datetime
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import Update
 from telegram.ext import (
-    CallbackQueryHandler,
     CommandHandler,
     ContextTypes,
     MessageHandler,
@@ -16,7 +14,7 @@ from telegram.ext import (
 )
 
 from tour_guide_bot import t
-from tour_guide_bot.helpers.currency import Currency
+from tour_guide_bot.helpers.product_selector import SelectProductHandler
 from tour_guide_bot.helpers.telegram import get_tour_description
 from tour_guide_bot.helpers.tours_selector import SelectTourHandler
 from tour_guide_bot.models.guide import (
@@ -28,24 +26,17 @@ from tour_guide_bot.models.guide import (
 )
 
 
-class PurchaseCommandHandler(SelectTourHandler):
+class PurchaseCommandHandler(SelectTourHandler, SelectProductHandler):
     @classmethod
     def get_handlers(cls):
         return [
             CommandHandler("purchase", cls.partial(cls.send_tour_selector)),
-            CallbackQueryHandler(
-                cls.partial(cls.purchase),
-                cls.get_callback_data_pattern("purchase", r"(\d+)"),
-            ),
-            CallbackQueryHandler(
-                cls.partial(cls.cancel),
-                cls.get_callback_data_pattern("cancel_product_selection"),
-            ),
             PreCheckoutQueryHandler(cls.partial(cls.pre_checkout)),
             MessageHandler(
                 filters.SUCCESSFUL_PAYMENT, cls.partial(cls.successful_payment)
             ),
             *cls.get_select_tour_handlers(),
+            *cls.get_select_product_handlers(),
         ]
 
     async def successful_payment(
@@ -123,11 +114,12 @@ class PurchaseCommandHandler(SelectTourHandler):
 
         await query.answer(ok=True)
 
-    async def purchase(
+    async def after_product_selected(
         self,
+        product: Product,
         update: Update,
         context: ContextTypes.DEFAULT_TYPE,
-        product_id: int | None = None,
+        is_single_product: bool,
     ):
         language = await self.get_language(update, context)
         user = await self.get_user(update, context)
@@ -139,23 +131,8 @@ class PurchaseCommandHandler(SelectTourHandler):
                 .selectinload(TourTranslation.sections),
                 selectinload(Product.payment_provider),
             )
-            .where(
-                Product.id
-                == int(product_id if product_id else context.matches[0].group(1))
-            )
+            .where(Product.id == product.id)
         )
-
-        if product is None:
-            await update.callback_query.answer()
-            await self.edit_or_reply_text(
-                update,
-                context,
-                t(language).pgettext(
-                    "bot-generic", "Something went wrong; please try again."
-                ),
-            )
-
-            return
 
         invoice = Invoice(
             product=product,
@@ -165,13 +142,13 @@ class PurchaseCommandHandler(SelectTourHandler):
             currency=product.currency,
             price=product.price,
             duration_days=product.duration_days,
+            guests=product.guests,
         )
 
         self.db_session.add(invoice)
         await self.db_session.commit()
 
         if update.callback_query:
-            await update.callback_query.answer()
             await update.callback_query.message.delete()
 
         await context.bot.send_invoice(
@@ -207,75 +184,7 @@ class PurchaseCommandHandler(SelectTourHandler):
     ):
         language = await self.get_language(update, context)
 
-        all_products = (
-            await self.db_session.scalars(
-                select(Product)
-                .where((Product.tour_id == tour.id) & (Product.available == True))
-                .order_by(Product.price)
-            )
-        ).all()
-
-        products_per_language = {
-            k: list(v) for k, v in groupby(all_products, lambda p: p.language)
-        }
-
-        if language in products_per_language:
-            products = products_per_language[language]
-        elif context.application.default_language in products_per_language:
-            products = products_per_language[context.application.default_language]
-        else:
-            await self.edit_or_reply_text(
-                update,
-                context,
-                t(language).pgettext(
-                    "bot-generic", "Something went wrong; please try again."
-                ),
-            )
-            return
-
-        keyboard = []
-
-        for product in products:
-            keyboard.append(
-                [
-                    InlineKeyboardButton(
-                        text=t(language)
-                        .npgettext(
-                            "guest-tour-purchase",
-                            "{n}-day access for {price}",
-                            "{n}-days access for {price}",
-                            n=product.duration_days,
-                        )
-                        .format(
-                            n=product.duration_days,
-                            price=await Currency.price_from_telegram(
-                                product.currency, product.price
-                            ),
-                        ),
-                        callback_data=self.get_callback_data("purchase", product.id),
-                    )
-                ]
-            )
-
-        keyboard.append(
-            [
-                InlineKeyboardButton(
-                    t(language).pgettext("bot-generic", "Abort"),
-                    callback_data=self.get_callback_data("cancel_product_selection"),
-                )
-            ]
-        )
-
-        msg = get_tour_description(tour, language, context)
-
-        msg += "\n\n" + t(language).pgettext(
-            "guest-tour-purchase",
-            "Please select the access duration you want to purchase.",
-        )
-
-        await self.edit_or_reply_text(
-            update, context, msg, reply_markup=InlineKeyboardMarkup(keyboard)
-        )
+        return await self.send_product_selector(tour.id, language, update, context)
 
     def get_tour_selection_message(self, language: str) -> str:
         return t(language).pgettext(
@@ -283,6 +192,26 @@ class PurchaseCommandHandler(SelectTourHandler):
             "Please select the tour you want to purchase. You'll "
             "see the description of the tour after you select it.",
         )
+
+    async def get_product_selection_message(
+        self,
+        tour_id: int,
+        language: str,
+        context: ContextTypes.DEFAULT_TYPE,
+    ) -> str:
+        tour: Tour = await self.db_session.scalar(
+            select(Tour)
+            .options(selectinload(Tour.translations))
+            .where(Tour.id == tour_id)
+        )
+        msg = get_tour_description(tour, language, context)
+
+        msg += "\n\n" + t(language).pgettext(
+            "guest-tour-purchase",
+            "Please select the product you want to purchase.",
+        )
+
+        return msg
 
     async def get_acceptable_tours(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE

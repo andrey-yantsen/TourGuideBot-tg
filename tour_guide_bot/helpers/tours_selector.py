@@ -138,7 +138,11 @@ class SelectTourHandler(BaseHandlerCallback, ABC):
                 cls.get_callback_data_pattern("select_tour", r"(\d+)"),
             ),
             CallbackQueryHandler(
-                cls.partial(cls.cancel),
+                cls.partial(
+                    cls.cancel
+                    if cls.STATE_SELECT_TOUR
+                    else cls.cancel_without_conversation
+                ),
                 cls.get_callback_data_pattern("cancel_tour_selection"),
             ),
         ]

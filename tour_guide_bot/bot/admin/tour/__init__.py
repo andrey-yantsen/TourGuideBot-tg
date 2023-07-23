@@ -6,7 +6,7 @@ from telegram.ext import (
 from tour_guide_bot import t
 from tour_guide_bot.bot.admin.tour.add import AddHandler
 from tour_guide_bot.bot.admin.tour.delete import DeleteHandler
-from tour_guide_bot.bot.admin.tour.pricing import PricingHandler
+from tour_guide_bot.bot.admin.tour.pricing import PricingMenuHandler
 from tour_guide_bot.helpers.telegram import MenuCommandHandler, SubcommandHandler
 
 
@@ -16,7 +16,7 @@ class TourCommandHandler(MenuCommandHandler):
 
     MENU_ITEMS: list[type[SubcommandHandler]] = [
         AddHandler,
-        PricingHandler,
+        PricingMenuHandler,
         DeleteHandler,
     ]
 
