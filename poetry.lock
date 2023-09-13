@@ -1614,12 +1614,12 @@ sqlcipher = ["sqlcipher3-binary"]
 
 [[package]]
 name = "telethon"
-version = "1.29.3"
+version = "1.30.3"
 description = "Full-featured Telegram client library for Python 3"
 optional = false
 python-versions = ">=3.5"
 files = [
-    {file = "Telethon-1.29.3.tar.gz", hash = "sha256:cac3091ab61bdd2286bdfb72fb3ab7cc86a9e8d3327ff8fec56d215e05009e1e"},
+    {file = "Telethon-1.30.3.tar.gz", hash = "sha256:313e40fa06667b19ced13b379d9988167a8319bc0eb90bf39347cff46919a351"},
 ]
 
 [package.dependencies]
@@ -1769,4 +1769,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10 <3.12"
-content-hash = "cd3c2f2e812ca9bb69f9e9c0555cd872bc00eb281dbdbf0faab84bfbac7c106a"
+content-hash = "d34abe613efffe3785f3de7f094ca66ac709513f12e7424e9e24d11003219731"
