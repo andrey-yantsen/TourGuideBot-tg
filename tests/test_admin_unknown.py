@@ -1,3 +1,4 @@
+import hashlib
 from asyncio import sleep
 
 import pytest
@@ -8,7 +9,9 @@ from .conftest import get_phone_number_request
 
 
 @pytest.mark.usefixtures("app")
-async def test_success_auth_flow_configured_app(conversation: Conversation, bot_token):
+async def test_success_auth_flow_configured_app(
+    conversation: Conversation, bot_token: str
+):
     await conversation.send_message("/admin")
     response: Message = await get_phone_number_request(conversation)
     await response.click(0, share_phone=True)
@@ -16,10 +19,11 @@ async def test_success_auth_flow_configured_app(conversation: Conversation, bot_
 
     response: Message = await conversation.get_response()
     assert (
-        "Please send me the token to confirm ownership" in response.message
+        "Please send me the md5 hash of the token to confirm ownership"
+        in response.message
     ), "Unexpected response to an unknown phone number"
 
-    await conversation.send_message(bot_token)
+    await conversation.send_message(hashlib.md5(bot_token.encode()).hexdigest())
 
     response: Message = await conversation.get_response()
 
@@ -30,7 +34,7 @@ async def test_success_auth_flow_configured_app(conversation: Conversation, bot_
 
 @pytest.mark.usefixtures("unconfigured_app")
 async def test_success_auth_flow_unconfigured_app(
-    conversation: Conversation, bot_token
+    conversation: Conversation, bot_token: str
 ):
     await conversation.send_message("/admin")
     response: Message = await get_phone_number_request(conversation)
@@ -39,10 +43,11 @@ async def test_success_auth_flow_unconfigured_app(
 
     response: Message = await conversation.get_response()
     assert (
-        "Please send me the token to confirm ownership" in response.message
+        "Please send me the md5 hash of the token to confirm ownership"
+        in response.message
     ), "Unexpected response to an unknown phone number"
 
-    await conversation.send_message(bot_token)
+    await conversation.send_message(hashlib.md5(bot_token.encode()).hexdigest())
 
     response: Message = await conversation.get_response()
 
@@ -73,7 +78,8 @@ async def test_incorrect_token(conversation: Conversation):
 
     response: Message = await conversation.get_response()
     assert (
-        "Please send me the token to confirm ownership" in response.message
+        "Please send me the md5 hash of the token to confirm ownership"
+        in response.message
     ), "Unexpected response to an unknown phone number"
 
     await conversation.send_message("foo")

@@ -1,3 +1,4 @@
+import hashlib
 import re
 
 from sqlalchemy import select
@@ -133,7 +134,7 @@ class StartCommandHandler(BaseHandlerCallback):
             await update.message.reply_text(
                 t(user.language).pgettext(
                     "admin-bot-start",
-                    "I don't think you're in the right place. Please send me the token to confirm ownership.",
+                    "I don't think you're in the right place. Please send me the md5 hash of the token to confirm ownership.",
                 ),
                 reply_markup=ReplyKeyboardRemove(),
             )
@@ -142,7 +143,10 @@ class StartCommandHandler(BaseHandlerCallback):
     async def token(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await self.get_user(update, context)
 
-        if update.message.text == context.application.bot.token:
+        entered_token = update.message.text.strip()
+        md5_bot_token = hashlib.md5(context.application.bot.token.encode()).hexdigest()
+
+        if entered_token == md5_bot_token:
             admin = Admin(phone=user.phone, permissions=AdminPermissions.full)
             user.admin = admin
             self.db_session.add_all([admin, user])
@@ -239,7 +243,7 @@ class StartCommandHandler(BaseHandlerCallback):
                 await update.message.reply_text(
                     t(user.language).pgettext(
                         "admin-bot-start",
-                        "I don't think you're in the right place. Please send me the token to confirm ownership.",
+                        "I don't think you're in the right place. Please send me the md5 hash of the token to confirm ownership.",
                     )
                 )
                 return self.STATE_TOKEN
