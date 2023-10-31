@@ -57,6 +57,7 @@ jobs:
           TOUR_GUIDE_TELEGRAM_APP_SESSION_STRING: ${{ secrets.TOUR_GUIDE_TELEGRAM_APP_SESSION_STRING }}
           TOUR_GUIDE_TELEGRAM_APP_API_ID: ${{ secrets.TOUR_GUIDE_TELEGRAM_APP_API_ID }}
           TOUR_GUIDE_TELEGRAM_APP_API_HASH: ${{ secrets.TOUR_GUIDE_TELEGRAM_APP_API_HASH }}
+          TOUR_GUIDE_TELEGRAM_PAYMENT_TOKEN: ${{ secrets.TOUR_GUIDE_TELEGRAM_PAYMENT_TOKEN }}
         run: |
           poetry run pytest --cov=tour_guide_bot --cov-report=xml
 
