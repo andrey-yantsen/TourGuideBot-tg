@@ -32,13 +32,6 @@ from tour_guide_bot.models.telegram import TelegramUser
 
 
 @pytest.fixture(scope="session")
-def event_loop():
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
-
-
-@pytest.fixture(scope="session")
 def bot_token() -> str:
     token = environ.get("TOUR_GUIDE_TELEGRAM_BOT_TOKEN")
     assert (
@@ -334,16 +327,33 @@ def unitialized_app(
 async def unconfigured_app(unitialized_app: Application):
     await unitialized_app.initialize()
     if unitialized_app.post_init:
-        await unitialized_app.post_init()
+        await unitialized_app.post_init(unitialized_app)
     await unitialized_app.updater.start_polling()
     await unitialized_app.start()
 
     yield unitialized_app
 
-    await unitialized_app.updater.stop()
-    await unitialized_app.stop()
+    try:
+        if unitialized_app.updater.running:
+            await unitialized_app.updater.stop()
+    except:
+        pass
 
-    await asyncio.sleep(2)
+    try:
+        if unitialized_app.running:
+            await unitialized_app.stop()
+
+        if unitialized_app.post_stop:
+            await unitialized_app.post_stop(unitialized_app)
+
+        await unitialized_app.shutdown()
+
+        if unitialized_app.post_shutdown:
+            await unitialized_app.post_shutdown(unitialized_app)
+    except:
+        pass
+    finally:
+        await asyncio.sleep(2)
 
 
 @pytest.fixture
@@ -401,7 +411,7 @@ async def app(
     yield unconfigured_app
 
 
-@pytest.fixture()
+@pytest.fixture
 async def payment_provider(db_engine: AsyncEngine, payment_token: str):
     async with AsyncSession(db_engine, expire_on_commit=False) as session:
         stmt = select(PaymentProvider).where(PaymentProvider.enabled == True)
@@ -421,7 +431,7 @@ async def payment_provider(db_engine: AsyncEngine, payment_token: str):
     return payment_token
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 async def telegram_client(
     mtproto_api_id: str, mtproto_api_hash: str, mtproto_session_string: StringSession
 ):
@@ -470,7 +480,7 @@ class ConversationWrapper:
         return ret
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 async def conversation(telegram_client: TelegramClient, bot_id: int):
     async with telegram_client.conversation(
         bot_id, timeout=10, max_messages=10000
