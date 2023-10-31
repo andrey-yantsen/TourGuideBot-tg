@@ -911,13 +911,13 @@ files = [
 
 [[package]]
 name = "httpcore"
-version = "0.17.3"
+version = "0.18.0"
 description = "A minimal low-level HTTP client."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "httpcore-0.17.3-py3-none-any.whl", hash = "sha256:c2789b767ddddfa2a5782e3199b2b7f6894540b17b16ec26b2c4d8e103510b87"},
-    {file = "httpcore-0.17.3.tar.gz", hash = "sha256:a6f30213335e34c1ade7be6ec7c47f19f50c56db36abef1a9dfa3815b1cb3888"},
+    {file = "httpcore-0.18.0-py3-none-any.whl", hash = "sha256:adc5398ee0a476567bf87467063ee63584a8bce86078bf748e48754f60202ced"},
+    {file = "httpcore-0.18.0.tar.gz", hash = "sha256:13b5e5cd1dca1a6636a6aaea212b19f4f85cd88c366a2b82304181b769aab3c9"},
 ]
 
 [package.dependencies]
@@ -932,18 +932,18 @@ socks = ["socksio (==1.*)"]
 
 [[package]]
 name = "httpx"
-version = "0.24.1"
+version = "0.25.0"
 description = "The next generation HTTP client."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "httpx-0.24.1-py3-none-any.whl", hash = "sha256:06781eb9ac53cde990577af654bd990a4949de37a28bdb4a230d434f3a30b9bd"},
-    {file = "httpx-0.24.1.tar.gz", hash = "sha256:5853a43053df830c20f8110c5e69fe44d035d850b2dfe795e196f00fdb774bdd"},
+    {file = "httpx-0.25.0-py3-none-any.whl", hash = "sha256:181ea7f8ba3a82578be86ef4171554dd45fec26a02556a744db029a0a27b7100"},
+    {file = "httpx-0.25.0.tar.gz", hash = "sha256:47ecda285389cb32bb2691cc6e069e3ab0205956f681c5b2ad2325719751d875"},
 ]
 
 [package.dependencies]
 certifi = "*"
-httpcore = ">=0.15.0,<0.18.0"
+httpcore = ">=0.18.0,<0.19.0"
 idna = "*"
 sniffio = "*"
 
@@ -1284,6 +1284,8 @@ files = [
     {file = "psycopg2_binary-2.9.9-cp312-cp312-musllinux_1_1_i686.whl", hash = "sha256:cb16c65dcb648d0a43a2521f2f0a2300f40639f6f8c1ecbc662141e4e3e1ee07"},
     {file = "psycopg2_binary-2.9.9-cp312-cp312-musllinux_1_1_ppc64le.whl", hash = "sha256:911dda9c487075abd54e644ccdf5e5c16773470a6a5d3826fda76699410066fb"},
     {file = "psycopg2_binary-2.9.9-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:57fede879f08d23c85140a360c6a77709113efd1c993923c59fde17aa27599fe"},
+    {file = "psycopg2_binary-2.9.9-cp312-cp312-win32.whl", hash = "sha256:64cf30263844fa208851ebb13b0732ce674d8ec6a0c86a4e160495d299ba3c93"},
+    {file = "psycopg2_binary-2.9.9-cp312-cp312-win_amd64.whl", hash = "sha256:81ff62668af011f9a48787564ab7eded4e9fb17a4a6a74af5ffa6a457400d2ab"},
     {file = "psycopg2_binary-2.9.9-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:2293b001e319ab0d869d660a704942c9e2cce19745262a8aba2115ef41a0a42a"},
     {file = "psycopg2_binary-2.9.9-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:03ef7df18daf2c4c07e2695e8cfd5ee7f748a1d54d802330985a78d2a5a6dca9"},
     {file = "psycopg2_binary-2.9.9-cp37-cp37m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:0a602ea5aff39bb9fac6308e9c9d82b9a35c2bf288e184a816002c9fae930b77"},
@@ -1445,30 +1447,30 @@ dev = ["pre-commit", "pytest-asyncio", "tox"]
 
 [[package]]
 name = "python-telegram-bot"
-version = "20.5"
+version = "20.6"
 description = "We have made you a wrapper you can't refuse"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "python-telegram-bot-20.5.tar.gz", hash = "sha256:2f45a94c861cbd40440ece2be176ef0fc69e10d84e6dfa17f9a456e32aeece13"},
-    {file = "python_telegram_bot-20.5-py3-none-any.whl", hash = "sha256:fc9605a855794231c802cc3948e6f7c319a817b5cd1827371f170bc7ca0ca279"},
+    {file = "python-telegram-bot-20.6.tar.gz", hash = "sha256:c6951dc6b9368d80a17b5d0496ced39bca2c9bafab06cbfdae6226493d8b06fe"},
+    {file = "python_telegram_bot-20.6-py3-none-any.whl", hash = "sha256:be8ebda350fd0c69c3ebdd7ce87b1e6f8b3fb1d218a193dd821d1d6285b9f649"},
 ]
 
 [package.dependencies]
 APScheduler = {version = ">=3.10.4,<3.11.0", optional = true, markers = "extra == \"job-queue\""}
-httpx = ">=0.24.1,<0.25.0"
+httpx = ">=0.25.0,<0.26.0"
 pytz = {version = ">=2018.6", optional = true, markers = "extra == \"job-queue\""}
 
 [package.extras]
-all = ["APScheduler (>=3.10.4,<3.11.0)", "aiolimiter (>=1.1.0,<1.2.0)", "cachetools (>=5.3.1,<5.4.0)", "cryptography (>=39.0.1)", "httpx[http2]", "httpx[socks]", "pytz (>=2018.6)", "tornado (>=6.2,<7.0)"]
+all = ["APScheduler (>=3.10.4,<3.11.0)", "aiolimiter (>=1.1.0,<1.2.0)", "cachetools (>=5.3.1,<5.4.0)", "cryptography (>=39.0.1)", "httpx[http2]", "httpx[socks]", "pytz (>=2018.6)", "tornado (>=6.3.3,<6.4.0)"]
 callback-data = ["cachetools (>=5.3.1,<5.4.0)"]
-ext = ["APScheduler (>=3.10.4,<3.11.0)", "aiolimiter (>=1.1.0,<1.2.0)", "cachetools (>=5.3.1,<5.4.0)", "pytz (>=2018.6)", "tornado (>=6.2,<7.0)"]
+ext = ["APScheduler (>=3.10.4,<3.11.0)", "aiolimiter (>=1.1.0,<1.2.0)", "cachetools (>=5.3.1,<5.4.0)", "pytz (>=2018.6)", "tornado (>=6.3.3,<6.4.0)"]
 http2 = ["httpx[http2]"]
 job-queue = ["APScheduler (>=3.10.4,<3.11.0)", "pytz (>=2018.6)"]
 passport = ["cryptography (>=39.0.1)"]
 rate-limiter = ["aiolimiter (>=1.1.0,<1.2.0)"]
 socks = ["httpx[socks]"]
-webhooks = ["tornado (>=6.2,<7.0)"]
+webhooks = ["tornado (>=6.3.3,<6.4.0)"]
 
 [[package]]
 name = "pytz"
@@ -1789,4 +1791,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10 <3.12"
-content-hash = "e9dc899385620a8277e5cdcaa30f13ec52d8bc61aae59b7d222ccbd09adadb0e"
+content-hash = "01fc98cff8deae4295003fa25ab6ae7f24ee310452295c818a098136a89cce75"
