@@ -1,4 +1,4 @@
-FROM python:3.10-alpine AS builder
+FROM python:3.12-alpine AS builder
 
 RUN apk add build-base libffi-dev libpq-dev mariadb-connector-c-dev curl \
   && adduser -h /home/tg -D -u 1000 tg
@@ -13,7 +13,7 @@ RUN sh <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) -y \
   && poetry config virtualenvs.in-project true \
   && poetry install --only main --no-interaction --no-root --no-ansi
 
-FROM python:3.10-alpine
+FROM python:3.12-alpine
 RUN apk add libpq mariadb-connector-c ffmpeg libogg opus lame \
   && adduser -h /home/tg -D -u 1000 tg
 USER tg
