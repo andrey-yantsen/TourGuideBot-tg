@@ -16,7 +16,7 @@ pull_request_rules:
       - or:
         - "#approved-reviews-by>=1"
         - "author=dependabot[bot]"
-      - check-success=Run tests (3.10, ubuntu-latest)
+      - check-success=Run tests (3.12, ubuntu-latest)
     actions:
       queue:
         name: default
