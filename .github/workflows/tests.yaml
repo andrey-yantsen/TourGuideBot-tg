@@ -9,9 +9,11 @@ on:
       - 'v*'
   pull_request_target:
     branches:
-      - 'main'
+      - main
     types:
-      - 'labeled'
+      - labeled
+      - synchronize
+      - reopened
 
 concurrency:
   group: ${{ github.workflow }}
@@ -20,7 +22,7 @@ jobs:
   tests:
     name: Run tests
 
-    if: "!github.event.pull_request_target || github.event.pull_request_target.label.name == 'S-Run-Protected-Tests'"
+    if: "!github.event.pull_request_target || contains(github.event.pull_request_target.labels.*.name, 'S-Run-Protected-Tests')"
 
     strategy:
       fail-fast: false
