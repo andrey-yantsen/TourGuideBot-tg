@@ -139,17 +139,17 @@ jinja2 = ">=3.0.0"
 
 [[package]]
 name = "aiohttp-session"
-version = "2.12.0"
+version = "2.12.1"
 description = "sessions for aiohttp.web"
 optional = false
-python-versions = ">=3.7"
+python-versions = "*"
 files = [
-    {file = "aiohttp-session-2.12.0.tar.gz", hash = "sha256:0ccd11a7c77cb9e5a61f4daacdc9170d561112f9cfaf9e9a2d9867c0587d1950"},
-    {file = "aiohttp_session-2.12.0-py3-none-any.whl", hash = "sha256:f0bf0caa2f5b5a56cb50a45f98d61f60d8523322099a2857410530149706f5e5"},
+    {file = "aiohttp_session-2.12.1-py3-none-any.whl", hash = "sha256:654df46c3c9b73294312795f558c3bca4a85bfd3b01a8b744d984ae3958dce5f"},
+    {file = "aiohttp_session-2.12.1.tar.gz", hash = "sha256:15e6e0288e9bcccd4b1d0c28aae9c20e19a252b12d0cb682223ca9c83180e899"},
 ]
 
 [package.dependencies]
-aiohttp = ">=3.8"
+aiohttp = ">=3.10"
 
 [package.extras]
 aiomcache = ["aiomcache (>=0.5.2)"]
@@ -1610,4 +1610,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12.0"
-content-hash = "aa68ddd453a01ac9863addc82583dcae09b1914db45a2e6c6e846e833248833f"
+content-hash = "5f1740939a5e174513977b1b3e7bf5db67159d5d6c54d23988941988342ebff9"
